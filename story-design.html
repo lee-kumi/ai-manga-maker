@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ストーリー設計アプリ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { -webkit-tap-highlight-color: transparent; }
+  body { background: #fff; }
+  input, textarea { font-size: 16px; }
+  .slide-in { animation: si 0.22s ease-out; }
+  @keyframes si { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+</style>
+</head>
+<body class="bg-white">
+
+<div id="root">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+    <div><div style="font-size:32px">📖</div><p style="color:#9CA3AF;font-size:13px;margin-top:8px">読み込み中…</p></div>
+  </div>
+</div>
+
+<script type="text/babel">
+const { useState, useCallback } = React;
+
+const P = '#1a56db';
+const PL = '#EEF3FB';
+
+/* ─── 定数 ─── */
+const STORY_TYPES = [
+  { id:'kisho',   label:'起承転結',         desc:'SNS・4コマ・短編向き',     note:'一番シンプル。まずこれから' },
+  { id:'sanmaku', label:'三幕構成',          desc:'Kindle・連載・長編向き',   note:'映画・ドラマと同じ構造' },
+  { id:'mondai',  label:'問題解決型',        desc:'集客・教育・商品紹介向き', note:'売れる漫画はほぼこれ入ってる' },
+  { id:'heroes',  label:'ヒーローズジャーニー', desc:'ファン化・感情重視向き',   note:'読者が「自分ごと」として読む' },
+];
+const STORY_DETAIL = {
+  kisho:   [{ n:'起', d:'主人公の悩みや現状（読者が「あるある！」と思える状況）' },{ n:'承', d:'AIと出会う・試してみる（希望が生まれる）' },{ n:'転', d:'失敗・壁にぶつかる（ここが命。弱いとただの日常になる）' },{ n:'結', d:'小さな成功・気づき（感情の着地を意識して）' }],
+  sanmaku: [{ n:'第1幕', d:'日常・主人公の紹介・問題の発生' },{ n:'第2幕', d:'葛藤・挑戦・最大の試練' },{ n:'第3幕', d:'解決・変化・新しい日常' }],
+  mondai:  [{ n:'問題提起', d:'読者が抱える悩みを明示する' },{ n:'原因分析', d:'なぜその問題が起きているかを示す' },{ n:'解決策', d:'AIを使った具体的な解決方法を提示' },{ n:'実証', d:'実際にやってみて結果が出る' }],
+  heroes:  [{ n:'日常世界', d:'主人公の普通の日常' },{ n:'召喚', d:'AIとの出会い・きっかけ' },{ n:'試練', d:'失敗・壁・葛藤' },{ n:'変容', d:'AIをマスターして成長' },{ n:'帰還', d:'新しい自分として日常へ戻る' }],
+};
+const IB = "w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-blue-500 transition-colors bg-white";
+
+/* ─── 小コンポーネント ─── */
+const Hint = ({ t }) => (
+  <p className="flex gap-1.5 text-sm text-gray-500 mt-2 leading-relaxed">
+    <span className="shrink-0">💡</span><span>{t}</span>
+  </p>
+);
+const Eg = ({ c }) => (
+  <div className="mt-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-100">
+    <span className="text-xs font-bold text-gray-400 mr-1">例）</span>
+    <span className="text-sm text-gray-400">{c}</span>
+  </div>
+);
+const ProgressBar = ({ step, total, goToStep }) => (
+  <div className="mb-6">
+    <div className="flex items-center gap-1 mb-2">
+      {Array.from({length:total},(_,i)=>{
+        const active = i === step;
+        const visited = i < step;
+        return (
+          <button key={i} onClick={()=>goToStep(i)}
+            className="flex-1 py-2 rounded-lg text-xs font-black transition-all active:scale-95"
+            style={{
+              background: active ? P : visited ? '#93B4F0' : '#F3F4F6',
+              color: active || visited ? 'white' : '#9CA3AF'
+            }}>
+            Q{i+1}
+          </button>
+        );
+      })}
+    </div>
+    <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+      <div className="h-full rounded-full transition-all duration-500"
+        style={{width:`${((step+1)/total)*100}%`, background:P}} />
+    </div>
+  </div>
+);
+
+/* ─── 各質問の入力コンポーネント ─── */
+const Q1 = ({ a, u }) => (
+  <div className="mt-5 slide-in">
+    <input className={IB} type="text" value={a.theme}
+      onChange={e=>u({theme:e.target.value})} placeholder="テーマを入力してください" autoFocus />
+    <Eg c="AIを使えば絵が描けなくても漫画が作れる" />
+  </div>
+);
+
+const Q2 = ({ a, u }) => (
+  <div className="mt-5 slide-in">
+    <textarea className={IB+' resize-none'} rows={4} value={a.persona}
+      onChange={e=>u({persona:e.target.value})} placeholder="読者像を入力してください" />
+    <Eg c="40代・主婦・新しいことを始めたいが何からすればいいかわからない" />
+  </div>
+);
+
+const Q3 = ({ a, u }) => {
+  const { problems: pr } = a;
+  const NUMS = ['①','②','③','④','⑤'];
+  const PH = ['例：絵が描けないので漫画なんて無理','例：AIは難しそうで自分には使えない','例：何から始めればいいかわからない','悩みを入力','悩みを入力'];
+  const set = (i,v) => { const n=[...pr]; n[i]=v; u({problems:n}); };
+  const add = () => { if(pr.length<5) u({problems:[...pr,'']}); };
+  const del = (i) => { if(pr.length>3) u({problems:pr.filter((_,j)=>j!==i)}); };
+  return (
+    <div className="mt-5 space-y-3 slide-in">
+      {pr.map((p,i)=>(
+        <div key={i} className="flex items-center gap-2">
+          <span className="text-gray-400 font-bold text-base w-7 text-center shrink-0">{NUMS[i]}</span>
+          <input className={IB+' flex-1'} type="text" value={p}
+            onChange={e=>set(i,e.target.value)} placeholder={PH[i]} />
+          {pr.length>3 &&
+            <button onClick={()=>del(i)}
+              className="text-gray-300 hover:text-red-400 transition-colors text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 shrink-0">
+              ×
+            </button>}
+        </div>
+      ))}
+      {pr.length<5 &&
+        <button onClick={add}
+          className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm font-bold text-gray-400 hover:border-blue-400 hover:text-blue-500 transition-colors flex items-center justify-center gap-1">
+          <span className="text-lg leading-none">＋</span><span>追加（最大5個）</span>
+        </button>}
+    </div>
+  );
+};
+
+const Q4 = ({ a, u }) => (
+  <div className="mt-5 space-y-4 slide-in">
+    <div>
+      <label className="block text-sm font-bold text-gray-600 mb-1.5">ビフォー（読む前）</label>
+      <input className={IB} type="text" value={a.before}
+        onChange={e=>u({before:e.target.value})} placeholder="例：AIで漫画なんて自分には絶対無理" />
+    </div>
+    <div className="flex items-center gap-3 py-1">
+      <div className="flex-1 h-px bg-gray-200" />
+      <span className="text-2xl text-gray-300">↓</span>
+      <div className="flex-1 h-px bg-gray-200" />
+    </div>
+    <div>
+      <label className="block text-sm font-bold text-gray-600 mb-1.5">アフター（読んだ後）</label>
+      <input className={IB} type="text" value={a.after}
+        onChange={e=>u({after:e.target.value})} placeholder="例：AIを使って4コマ漫画を1本完成できた" />
+    </div>
+  </div>
+);
+
+const Q5 = ({ a, u }) => (
+  <div className="mt-5 slide-in">
+    <input className={IB} type="text" value={a.benefit}
+      onChange={e=>u({benefit:e.target.value})} placeholder="読者への約束を1行で" autoFocus />
+    <Eg c="絵が描けなくてもAIを使えば誰でも漫画が作れる" />
+  </div>
+);
+
+const Q6 = ({ a, u }) => {
+  const sel = a.storyType;
+  const detail = sel ? STORY_DETAIL[sel] : null;
+  const selLabel = STORY_TYPES.find(t=>t.id===sel)?.label||'';
+  return (
+    <div className="mt-5 slide-in">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {STORY_TYPES.map(t=>{
+          const on = sel===t.id;
+          return (
+            <button key={t.id} onClick={()=>u({storyType:t.id})}
+              className={`p-4 rounded-xl border-2 text-left transition-all ${on?'bg-blue-50':'bg-white hover:border-blue-300 hover:bg-gray-50'}`}
+              style={{borderColor:on?P:'#E5E7EB'}}>
+              <p className="font-black text-base" style={{color:on?P:'#111827'}}>{t.label}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{t.desc}</p>
+              <p className="text-xs text-gray-400 mt-0.5 italic">{t.note}</p>
+            </button>
+          );
+        })}
+      </div>
+      {detail && (
+        <div className="mt-4 rounded-xl p-4 border slide-in" style={{background:PL, borderColor:'#C3D8F7'}}>
+          <p className="text-sm font-black mb-3" style={{color:P}}>{selLabel} の構成</p>
+          <div className="space-y-2">
+            {detail.map((d,i)=>(
+              <div key={i} className="flex gap-3 items-start">
+                <span className="shrink-0 text-white text-xs font-bold px-2.5 py-1 rounded-lg text-center"
+                  style={{background:P, minWidth:'3.5rem'}}>{d.n}</span>
+                <span className="text-sm text-gray-600 pt-0.5 leading-relaxed">{d.d}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const Q7 = ({ a, u }) => {
+  const { chapterCount: cnt, chapters } = a;
+  const setCount = n => u({chapterCount:n});
+  const upCh = (i,f,v) => { const n=chapters.map((c,j)=>j===i?{...c,[f]:v}:c); u({chapters:n}); };
+  const TPH=['例：AIを知らない主人公の日常','例：AIと出会う・試してみる','例：壁にぶつかる・失敗する','例：乗り越えて成長する','例：完成・新しい日常'];
+  const RPH=['例：読者が共感する導入章','例：希望が生まれる転換点','例：感情の山場','例：変化を実感する章','例：感動の着地'];
+  const CPH=['例：主人公に自分を重ねて共感する','例：「自分にもできるかも」と思う','例：一緒に悩んで考える','例：「やってみよう」と決意する','例：「よかった」と感じる'];
+  return (
+    <div className="mt-5 slide-in">
+      <div className="mb-5">
+        <p className="text-sm font-bold text-gray-600 mb-3">まず章数を選んでください</p>
+        <div className="flex gap-3">
+          {[3,4,5].map(n=>{
+            const on=cnt===n;
+            return (
+              <button key={n} onClick={()=>setCount(n)}
+                className={`flex-1 py-3.5 rounded-xl border-2 font-black text-xl transition-all active:scale-95 ${on?'text-white':'text-gray-500 bg-white hover:border-blue-300'}`}
+                style={{background:on?P:'white', borderColor:on?P:'#E5E7EB'}}>
+                {n}<span className="text-sm font-bold ml-0.5">章</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      {cnt && (
+        <div className="space-y-4">
+          {Array.from({length:cnt},(_,i)=>(
+            <div key={i} className="p-4 rounded-xl border-2 border-gray-200">
+              <p className="font-black text-sm mb-3.5 flex items-center gap-2">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-white text-xs font-black"
+                  style={{background:P}}>{i+1}</span>
+                <span style={{color:P}}>第{i+1}章</span>
+              </p>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wide">
+                    タイトル <span className="text-red-400 normal-case font-normal">*必須</span>
+                  </label>
+                  <input className={IB} type="text" value={chapters[i].title}
+                    onChange={e=>upCh(i,'title',e.target.value)} placeholder={TPH[i]} />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wide">章の役割</label>
+                  <input className={IB} type="text" value={chapters[i].role}
+                    onChange={e=>upCh(i,'role',e.target.value)} placeholder={RPH[i]} />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wide">読後変化</label>
+                  <input className={IB} type="text" value={chapters[i].change}
+                    onChange={e=>upCh(i,'change',e.target.value)} placeholder={CPH[i]} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+/* ─── 設問定義 ─── */
+const QUESTIONS = [
+  { title:'この漫画のテーマを\n1行で書いてください',    hint:'「誰に・何を伝えるか」を一言で',          C:Q1, ok:a=>a.theme.trim()!=='',    err:'テーマを入力してください' },
+  { title:'読者はどんな人ですか？',                     hint:'年齢・状況・悩みを具体的に書く',           C:Q2, ok:a=>a.persona.trim()!=='',  err:'読者像を入力してください' },
+  { title:'読者の悩みを\n教えてください',               hint:'3〜5つ書くと効果的です',                   C:Q3, ok:a=>a.problems.some(p=>p.trim()!==''), err:'悩みを1つ以上入力してください' },
+  { title:'読者のビフォー → アフターを\n教えてください', hint:'読む前と読んだ後の変化を書く',             C:Q4, ok:a=>a.before.trim()!==''&&a.after.trim()!=='', err:'ビフォーとアフターを両方入力してください' },
+  { title:'この漫画の約束（ベネフィット）を\n1行で言い切ってください', hint:'読者に約束できることを1行で',  C:Q5, ok:a=>a.benefit.trim()!=='',  err:'ベネフィットを入力してください' },
+  { title:'構成の型を\n選んでください',                 hint:'漫画の目的や長さに合わせて選ぼう',          C:Q6, ok:a=>a.storyType!=='',       err:'構成の型を選んでください' },
+  { title:'章立てを\n決めましょう',                    hint:'章数を選んでから各章を入力してください',     C:Q7,
+    ok:a=>{if(!a.chapterCount)return false; return a.chapters.slice(0,a.chapterCount).every(c=>c.title.trim()!=='');},
+    err:a=>!a.chapterCount?'章数を選んでください':'各章のタイトルを入力してください' },
+];
+const TOTAL = QUESTIONS.length;
+
+/* ─── 出力生成 ─── */
+const genOutput = a => {
+  const typeLabel = STORY_TYPES.find(t=>t.id===a.storyType)?.label||'';
+  const probs = a.problems.filter(p=>p.trim()!=='');
+  const cnt = a.chapterCount||3;
+  const chs = a.chapters.slice(0,cnt);
+  const chText = chs.map((c,i)=>{
+    let s=`第${i+1}章：${c.title}`;
+    if(c.role.trim()) s+=`\n　章の役割：${c.role}`;
+    if(c.change.trim()) s+=`\n　読後変化：${c.change}`;
+    return s;
+  }).join('\n\n');
+  return `【おかくみ流｜ストーリー設計シート】
+
+■ テーマ
+${a.theme}
+
+■ ペルソナ
+${a.persona}
+
+■ 読者の悩み
+${probs.map(p=>`・${p}`).join('\n')}
+
+■ ビフォー → アフター
+Before：${a.before}
+After：${a.after}
+
+■ この本の約束（ベネフィット）
+${a.benefit}
+
+■ 構成の型
+${typeLabel}
+
+■ 目次
+${chText}
+
+`;
+};
+
+/* ─── 画面コンポーネント ─── */
+const StartScreen = ({ onStart }) => (
+  <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 text-center bg-white">
+    <div className="max-w-sm w-full">
+      <div className="text-6xl mb-5 leading-none">📖</div>
+      <h1 className="text-3xl font-black text-gray-900 leading-tight mb-4">
+        ストーリー<br />設計アプリ
+      </h1>
+      <p className="text-gray-500 leading-relaxed mb-10">
+        8つの質問に答えるだけで<br />
+        ストーリー設計シートが完成します
+      </p>
+      <button onClick={onStart}
+        className="w-full py-4 rounded-2xl text-white font-black text-lg shadow-lg transition-transform active:scale-95"
+        style={{background:P}}>
+        はじめる →
+      </button>
+      <p className="text-xs text-gray-400 mt-4">入力データは外部に送信されません</p>
+    </div>
+  </div>
+);
+
+const QuestionScreen = ({ step, a, update, onNext, onBack, goToStep, error }) => {
+  const q = QUESTIONS[step];
+  const Comp = q.C;
+  return (
+    <div className="min-h-screen flex flex-col bg-white">
+      <div className="flex-1 px-5 pt-6 pb-4 max-w-lg mx-auto w-full">
+        <ProgressBar step={step} total={TOTAL} goToStep={goToStep} />
+        <div className="slide-in">
+          <h2 className="text-2xl font-black text-gray-900 leading-snug whitespace-pre-line">{q.title}</h2>
+          <Hint t={q.hint} />
+        </div>
+        <Comp a={a} u={update} />
+        {error && (
+          <div className="mt-4 flex items-center gap-2 text-red-500">
+            <span className="text-sm">⚠️</span>
+            <p className="text-sm font-semibold">{error}</p>
+          </div>
+        )}
+      </div>
+      <div className="sticky bottom-0 bg-white border-t border-gray-100 px-5 py-4">
+        <div className="flex gap-3 max-w-lg mx-auto">
+          <button onClick={onBack}
+            className="flex-1 py-3.5 rounded-xl border-2 border-gray-200 text-gray-500 font-bold text-base hover:border-gray-300 transition-all active:scale-95">
+            ← 戻る
+          </button>
+          <button onClick={onNext}
+            className="flex-1 py-3.5 rounded-xl text-white font-black text-base transition-all active:scale-95 shadow-md"
+            style={{background:P}}>
+            {step===TOTAL-1 ? '完成！🎉' : '次へ →'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CompleteScreen = ({ a, onRestart, goToStep }) => {
+  const output = genOutput(a);
+  const [msg, setMsg] = useState('');
+
+  const doCopy = (url, m) => {
+    // ① 先に新しいタブを開く（クリックと同期・ポップアップブロック回避）
+    window.open(url, '_blank');
+    // ② テキストをクリップボードにコピー
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(output).catch(() => {
+        const t=document.createElement('textarea'); t.value=output;
+        document.body.appendChild(t); t.select(); document.execCommand('copy');
+        document.body.removeChild(t);
+      });
+    } else {
+      const t=document.createElement('textarea'); t.value=output;
+      document.body.appendChild(t); t.select(); document.execCommand('copy');
+      document.body.removeChild(t);
+    }
+    setMsg(m);
+    setTimeout(()=>setMsg(''), 5000);
+  };
+
+  return (
+    <div className="min-h-screen bg-white px-5 py-8 max-w-lg mx-auto">
+      <div className="text-center mb-6">
+        <div className="text-5xl leading-none mb-3">🎉</div>
+        <h2 className="text-2xl font-black text-gray-900">完成しました！</h2>
+        <p className="text-gray-500 text-sm mt-1">ストーリー設計シートが完成しました</p>
+      </div>
+
+      <div className="bg-gray-50 rounded-2xl p-5 mb-5 border border-gray-200 overflow-x-auto">
+        <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">{output}</pre>
+      </div>
+
+      {msg && (
+        <div className="mb-4 p-3 rounded-xl text-sm font-semibold text-center"
+          style={{background:'#ECFDF5', color:'#065F46', border:'1px solid #A7F3D0'}}>
+          ✅ {msg}
+        </div>
+      )}
+
+      {/* 見直しナビ */}
+      <div className="mb-5">
+        <p className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wide">✏️ 見直したい質問へ戻る</p>
+        <div className="grid grid-cols-4 gap-1.5">
+          {QUESTIONS.map((q,i)=>(
+            <button key={i} onClick={()=>goToStep(i)}
+              className="py-2.5 px-1 rounded-xl border-2 border-gray-200 text-center hover:border-blue-400 hover:bg-blue-50 transition-all active:scale-95">
+              <span className="block text-xs font-black" style={{color:P}}>Q{i+1}</span>
+              <span className="block text-gray-400 leading-tight mt-0.5" style={{fontSize:'9px'}}>{q.title.split('\n')[0]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <button
+          onClick={()=>doCopy('https://docs.google.com/document/create','コピーしました！Googleドキュメントに貼り付けてください')}
+          className="w-full py-4 rounded-xl text-white font-bold text-base transition-all active:scale-95 shadow-md flex items-center justify-center gap-2"
+          style={{background:P}}>
+          📄 Googleドキュメントに保存
+        </button>
+        <button
+          onClick={()=>doCopy('https://notebooklm.google.com','コピーしました！NotebookLMのソースに貼り付けてください')}
+          className="w-full py-4 rounded-xl font-bold text-base transition-all active:scale-95 border-2 flex items-center justify-center gap-2 bg-white"
+          style={{borderColor:P, color:P}}>
+          🔖 NotebookLMに追加
+        </button>
+        <button onClick={onRestart}
+          className="w-full py-3.5 rounded-xl border-2 border-gray-200 text-gray-500 font-bold text-base transition-all active:scale-95 hover:border-gray-300 bg-white">
+          最初からやり直す
+        </button>
+      </div>
+    </div>
+  );
+};
+
+/* ─── メインアプリ ─── */
+const INIT = {
+  theme:'', persona:'', problems:['','',''],
+  before:'', after:'', benefit:'', storyType:'',
+  chapterCount:null,
+  chapters:Array(5).fill(null).map(()=>({title:'',role:'',change:''})),
+};
+
+const App = () => {
+  const [screen, setScreen] = useState('start');
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState(INIT);
+  const [error, setError] = useState('');
+
+  const update = useCallback(partial => {
+    setAnswers(p=>({...p,...partial}));
+    setError('');
+  }, []);
+
+  const handleNext = () => {
+    const q = QUESTIONS[step];
+    if (!q.ok(answers)) {
+      setError(typeof q.err==='function' ? q.err(answers) : q.err);
+      return;
+    }
+    setError('');
+    if (step === TOTAL-1) setScreen('complete');
+    else setStep(s=>s+1);
+  };
+
+  const handleBack = () => {
+    if (step>0) { setStep(s=>s-1); setError(''); }
+    else { setScreen('start'); setError(''); }
+  };
+
+  const handleGoToStep = (n) => {
+    setStep(n);
+    setScreen('question');
+    setError('');
+  };
+
+  const handleRestart = () => {
+    setScreen('start'); setStep(0); setAnswers(INIT); setError('');
+  };
+
+  if (screen==='start')    return <StartScreen onStart={()=>setScreen('question')} />;
+  if (screen==='complete') return <CompleteScreen a={answers} onRestart={handleRestart} goToStep={handleGoToStep} />;
+  return <QuestionScreen step={step} a={answers} update={update}
+           onNext={handleNext} onBack={handleBack} goToStep={handleGoToStep} error={error} />;
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
