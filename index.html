@@ -166,6 +166,18 @@ textarea { resize: vertical; min-height: 72px; }
 .nav-btn.next.green:hover { background: #359e85; }
 .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
+/* STEP1 wizard */
+.s1-progress { margin-bottom: 22px; }
+.s1-prog-btns { display: flex; gap: 4px; margin-bottom: 8px; }
+.s1-prog-btn { flex: 1; padding: 7px 2px; border-radius: 8px; border: none; background: #F3F4F6; color: var(--text-muted); font-family: inherit; font-size: 11px; font-weight: 900; cursor: pointer; transition: all 0.2s; }
+.s1-prog-btn.visited { background: #C7C3FF; color: white; }
+.s1-prog-btn.active { background: var(--primary); color: white; }
+.s1-bar { width: 100%; height: 6px; background: var(--primary-light); border-radius: 3px; overflow: hidden; }
+.s1-bar-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.4s; width: 14%; }
+.s1-substep { display: none; }
+.s1-substep.active { display: block; animation: s1fade 0.25s ease-out; }
+@keyframes s1fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
 /* Toast */
 .toast { position: fixed; bottom: 20px; right: 20px; background: #1A1A2E; color: white; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; z-index: 9999; transform: translateY(70px); opacity: 0; transition: all 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
 .toast.visible { transform: translateY(0); opacity: 1; }
@@ -235,118 +247,181 @@ textarea { resize: vertical; min-height: 72px; }
   </div>
 </div>
 
-<!-- ===== PAGE 1: Story Design ===== -->
+<!-- ===== PAGE 1: Story Design (Wizard) ===== -->
 <div class="step-page" id="page-1">
   <div class="step-header">
     <div class="step-badge">STEP 1</div>
     <h1>ストーリーを設計する</h1>
-    <p>漫画の骨組みをつくる<strong>最重要ステップ</strong>です。ここが固まると、あとのAIへの指示がぐっと楽になります。</p>
+    <p>漫画の骨組みをつくる<strong>最重要ステップ</strong>です。1問ずつ答えていけばOK。いつでも前の質問に戻れます。</p>
     <div class="tool-links">
       <a href="https://gemini.google.com/" target="_blank" class="tool-link">🔵 Gemini</a>
       <a href="https://chatgpt.com/" target="_blank" class="tool-link">🟢 ChatGPT</a>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title"><span class="icon">🎯</span> テーマ</div>
-    <div class="form-group">
-      <label>この漫画が伝えること（1行で）</label>
-      <input type="text" id="s1_theme" placeholder="例：AIで漫画を作る方法" oninput="autoSave()">
-    </div>
+  <!-- 進捗バー -->
+  <div class="s1-progress">
+    <div class="s1-prog-btns" id="s1ProgBtns"></div>
+    <div class="s1-bar"><div class="s1-bar-fill" id="s1BarFill"></div></div>
   </div>
 
-  <div class="card">
-    <div class="card-title"><span class="icon">👤</span> ペルソナ（読者像）</div>
-    <div class="form-group">
-      <label>読者の年齢・状況</label>
-      <input type="text" id="s1_persona_profile" placeholder="例：40代・会社員・副業を始めたいが何からすればいいかわからない" oninput="autoSave()">
-    </div>
-    <div class="form-group">
-      <label>具体的な悩み</label>
-      <textarea id="s1_persona_problem" rows="2" placeholder="例：時間がない、スキルがない、何から手を付ければいいかわからない" oninput="autoSave()"></textarea>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">😰</span> 読者の悩み（3〜5個）</div>
-    <div class="form-group"><label>悩み ①</label><input type="text" id="s1_prob1" placeholder="例：絵が描けない" oninput="autoSave()"></div>
-    <div class="form-group"><label>悩み ②</label><input type="text" id="s1_prob2" placeholder="例：時間がない" oninput="autoSave()"></div>
-    <div class="form-group"><label>悩み ③</label><input type="text" id="s1_prob3" placeholder="例：どのAIを使えばいいかわからない" oninput="autoSave()"></div>
-    <div class="form-group"><label>悩み ④（任意）</label><input type="text" id="s1_prob4" oninput="autoSave()"></div>
-    <div class="form-group"><label>悩み ⑤（任意）</label><input type="text" id="s1_prob5" oninput="autoSave()"></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">🔄</span> 現在地 → ゴール（ビフォー → アフター）</div>
-    <div class="ba-grid">
-      <div>
-        <label>ビフォー（読む前）</label>
-        <textarea id="s1_before" rows="3" placeholder="例：AIで漫画なんて自分には無理と思っている" oninput="autoSave()"></textarea>
+  <!-- Q1: テーマ -->
+  <div class="s1-substep active" id="s1sub-1">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> テーマ（Q1 / 7）</div>
+      <div class="form-group">
+        <label>この漫画が伝えること（1行で）</label>
+        <input type="text" id="s1_theme" placeholder="例：AIで漫画を作る方法" oninput="autoSave()">
       </div>
-      <div class="ba-arrow">→</div>
-      <div>
-        <label>アフター（読んだ後）</label>
-        <textarea id="s1_after" rows="3" placeholder="例：4コマ1本を自分で完成できた" oninput="autoSave()"></textarea>
+      <div class="info-box">💡 「誰に・何を伝えるか」を一言で。難しく考えず、思いついた言葉でOKです。</div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn prev" onclick="s1Back()">◀ 全体の流れへ</button>
+      <button class="nav-btn next" onclick="s1Next()">次へ ▶</button>
+    </div>
+  </div>
+
+  <!-- Q2: ペルソナ -->
+  <div class="s1-substep" id="s1sub-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">👤</span> ペルソナ（読者像）（Q2 / 7）</div>
+      <div class="form-group">
+        <label>読者の年齢・状況</label>
+        <input type="text" id="s1_persona_profile" placeholder="例：40代・会社員・副業を始めたいが何からすればいいかわからない" oninput="autoSave()">
+      </div>
+      <div class="form-group">
+        <label>具体的な悩み</label>
+        <textarea id="s1_persona_problem" rows="2" placeholder="例：時間がない、スキルがない、何から手を付ければいいかわからない" oninput="autoSave()"></textarea>
+      </div>
+      <div class="info-box">💡 年齢・状況・悩みを具体的に書くほど、読者に刺さる漫画になります。</div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
+      <button class="nav-btn next" onclick="s1Next()">次へ ▶</button>
+    </div>
+  </div>
+
+  <!-- Q3: 読者の悩み -->
+  <div class="s1-substep" id="s1sub-3">
+    <div class="card">
+      <div class="card-title"><span class="icon">😰</span> 読者の悩み（Q3 / 7）</div>
+      <div class="form-group"><label>悩み ①</label><input type="text" id="s1_prob1" placeholder="例：絵が描けない" oninput="autoSave()"></div>
+      <div class="form-group"><label>悩み ②</label><input type="text" id="s1_prob2" placeholder="例：時間がない" oninput="autoSave()"></div>
+      <div class="form-group"><label>悩み ③</label><input type="text" id="s1_prob3" placeholder="例：どのAIを使えばいいかわからない" oninput="autoSave()"></div>
+      <div class="form-group"><label>悩み ④（任意）</label><input type="text" id="s1_prob4" oninput="autoSave()"></div>
+      <div class="form-group"><label>悩み ⑤（任意）</label><input type="text" id="s1_prob5" oninput="autoSave()"></div>
+      <div class="info-box">💡 3〜5個書くと効果的。読者が「あるある！」と思える悩みを挙げましょう。</div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
+      <button class="nav-btn next" onclick="s1Next()">次へ ▶</button>
+    </div>
+  </div>
+
+  <!-- Q4: ビフォー → アフター -->
+  <div class="s1-substep" id="s1sub-4">
+    <div class="card">
+      <div class="card-title"><span class="icon">🔄</span> 現在地 → ゴール（Q4 / 7）</div>
+      <div class="ba-grid">
+        <div>
+          <label>ビフォー（読む前）</label>
+          <textarea id="s1_before" rows="3" placeholder="例：AIで漫画なんて自分には無理と思っている" oninput="autoSave()"></textarea>
+        </div>
+        <div class="ba-arrow">→</div>
+        <div>
+          <label>アフター（読んだ後）</label>
+          <textarea id="s1_after" rows="3" placeholder="例：4コマ1本を自分で完成できた" oninput="autoSave()"></textarea>
+        </div>
+      </div>
+      <div class="info-box">💡 読む前と読んだ後の「変化」を書きます。この差が大きいほど良い漫画です。</div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
+      <button class="nav-btn next" onclick="s1Next()">次へ ▶</button>
+    </div>
+  </div>
+
+  <!-- Q5: ベネフィット -->
+  <div class="s1-substep" id="s1sub-5">
+    <div class="card">
+      <div class="card-title"><span class="icon">💎</span> この漫画の約束（Q5 / 7）</div>
+      <div class="form-group">
+        <label>読者に約束できること（1行で言い切る）</label>
+        <input type="text" id="s1_benefit" placeholder="例：絵が描けなくてもAIを使えば漫画が作れる" oninput="autoSave()">
+      </div>
+      <div class="info-box">💡 「この漫画を読めば○○になれる」と言い切りましょう。</div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
+      <button class="nav-btn next" onclick="s1Next()">次へ ▶</button>
+    </div>
+  </div>
+
+  <!-- Q6: 構成の型 -->
+  <div class="s1-substep" id="s1sub-6">
+    <div class="card">
+      <div class="card-title"><span class="icon">🏗️</span> 構成の「型」を選ぶ（Q6 / 7）</div>
+      <div class="info-box">💡 ストーリーの骨格となる構成パターンを1つ選びましょう。迷ったら「起承転結」でOK。</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:4px;" id="structureTypeGrid">
+        <label id="st_label_1" style="border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;">
+          <input type="radio" name="s1_structure" id="s1_st1" value="起承転結" onchange="selectStructure(this)" style="display:none;">
+          <div style="font-weight:900;color:var(--primary);margin-bottom:4px;">起承転結</div>
+          <div style="font-size:12px;color:var(--text-muted);">導入→展開→転換→結末。最もシンプルで伝わりやすい。初めての漫画に最適。</div>
+        </label>
+        <label id="st_label_2" style="border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;">
+          <input type="radio" name="s1_structure" id="s1_st2" value="三幕構成" onchange="selectStructure(this)" style="display:none;">
+          <div style="font-weight:900;color:var(--primary);margin-bottom:4px;">三幕構成</div>
+          <div style="font-size:12px;color:var(--text-muted);">設定→対立→解決。映画的な構成。感情の山谷を作りやすい。</div>
+        </label>
+        <label id="st_label_3" style="border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;">
+          <input type="radio" name="s1_structure" id="s1_st3" value="問題解決型" onchange="selectStructure(this)" style="display:none;">
+          <div style="font-weight:900;color:var(--primary);margin-bottom:4px;">問題解決型</div>
+          <div style="font-size:12px;color:var(--text-muted);">悩み→原因→解決策→結果。ハウツー・教育系漫画に向いている。</div>
+        </label>
+        <label id="st_label_4" style="border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;">
+          <input type="radio" name="s1_structure" id="s1_st4" value="ファン化・感情重視" onchange="selectStructure(this)" style="display:none;">
+          <div style="font-weight:900;color:var(--primary);margin-bottom:4px;">ファン化・感情重視</div>
+          <div style="font-size:12px;color:var(--text-muted);">共感→感情移入→応援→行動。SNS漫画・ファン獲得に向いている。</div>
+        </label>
       </div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">💎</span> この漫画の約束（ベネフィット）</div>
-    <div class="form-group">
-      <label>読者に約束できること（1行で言い切る）</label>
-      <input type="text" id="s1_benefit" placeholder="例：絵が描けなくてもAIを使えば漫画が作れる" oninput="autoSave()">
+    <div class="nav-buttons">
+      <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
+      <button class="nav-btn next" onclick="s1Next()">次へ ▶</button>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title"><span class="icon">🏗️</span> 構成の「型」を選ぶ（LMソース②）</div>
-    <div class="info-box">💡 ストーリーの骨格となる構成パターンを1つ選びましょう。選んだ型がNotebookLMへのソースになります。</div>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:4px;" id="structureTypeGrid">
-      <label id="st_label_1" style="border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;">
-        <input type="radio" name="s1_structure" id="s1_st1" value="起承転結" onchange="selectStructure(this)" style="display:none;">
-        <div style="font-weight:900;color:var(--primary);margin-bottom:4px;">起承転結</div>
-        <div style="font-size:12px;color:var(--text-muted);">導入→展開→転換→結末。最もシンプルで伝わりやすい。初めての漫画に最適。</div>
-      </label>
-      <label id="st_label_2" style="border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;">
-        <input type="radio" name="s1_structure" id="s1_st2" value="三幕構成" onchange="selectStructure(this)" style="display:none;">
-        <div style="font-weight:900;color:var(--primary);margin-bottom:4px;">三幕構成</div>
-        <div style="font-size:12px;color:var(--text-muted);">設定→対立→解決。映画的な構成。感情の山谷を作りやすい。</div>
-      </label>
-      <label id="st_label_3" style="border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;">
-        <input type="radio" name="s1_structure" id="s1_st3" value="問題解決型" onchange="selectStructure(this)" style="display:none;">
-        <div style="font-weight:900;color:var(--primary);margin-bottom:4px;">問題解決型</div>
-        <div style="font-size:12px;color:var(--text-muted);">悩み→原因→解決策→結果。ハウツー・教育系漫画に向いている。</div>
-      </label>
-      <label id="st_label_4" style="border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;">
-        <input type="radio" name="s1_structure" id="s1_st4" value="ファン化・感情重視" onchange="selectStructure(this)" style="display:none;">
-        <div style="font-weight:900;color:var(--primary);margin-bottom:4px;">ファン化・感情重視</div>
-        <div style="font-size:12px;color:var(--text-muted);">共感→感情移入→応援→行動。SNS漫画・ファン獲得に向いている。</div>
-      </label>
+  <!-- Q7: 章立て -->
+  <div class="s1-substep" id="s1sub-7">
+    <div class="card">
+      <div class="card-title"><span class="icon">📚</span> 目次・各章の役割・読後変化（Q7 / 7）</div>
+      <div class="info-box">💡 ストーリー全体を3〜5章に分けて、各章のタイトル・役割・読後変化を書きましょう。迷ったら4章構成が一番シンプルです。</div>
+      <div id="chaptersContainer"></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
+      <button class="nav-btn next" onclick="s1Next()">完成！🎉</button>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title"><span class="icon">📚</span> 目次・各章の役割・読後変化</div>
-    <div class="info-box">💡 ストーリー全体を3〜5章に分けて、各章のタイトル・役割・読後変化を書きましょう。迷ったら「起承転結」で4章構成にするのが一番シンプルです。</div>
-    <div id="chaptersContainer"></div>
-  </div>
-
-  <div class="card highlight">
-    <div class="card-title"><span class="icon">📖</span> NotebookLM ソースシート生成</div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">入力内容をもとに、NotebookLM に投入するソースシートを生成します。</p>
-    <button class="generate-btn accent" onclick="generateStep1Prompt('notebooklm')">📖 NotebookLM ソースシートを生成</button>
-    <div id="step1PromptOutput" style="display:none;">
-      <div class="prompt-box">
-        <button class="copy-btn" onclick="copyPrompt('step1PromptText',this)">コピー</button>
-        <pre id="step1PromptText"></pre>
+  <!-- 完成: NotebookLMソースシート生成 -->
+  <div class="s1-substep" id="s1sub-8">
+    <div class="card highlight">
+      <div class="card-title"><span class="icon">🎉</span> ストーリー設計シート完成！</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">入力内容をもとに、NotebookLM に投入するソースシートを生成します。コピーしてGoogle Docsとして保存しておきましょう。</p>
+      <button class="generate-btn accent" onclick="generateStep1Prompt('notebooklm')">📖 NotebookLM ソースシートを生成</button>
+      <div id="step1PromptOutput" style="display:none;">
+        <div class="prompt-box">
+          <button class="copy-btn" onclick="copyPrompt('step1PromptText',this)">コピー</button>
+          <pre id="step1PromptText"></pre>
+        </div>
       </div>
+      <div class="info-box" style="margin-top:14px;">✅ 生成できたら、次のSTEP2でキャラクターと背景を決めましょう。</div>
     </div>
-  </div>
-
-  <div class="nav-buttons">
-    <button class="nav-btn prev" onclick="goToStep(0)">◀ 全体の流れへ</button>
-    <button class="nav-btn next" onclick="goToStep(2)">STEP 2 へ ▶</button>
+    <div class="nav-buttons">
+      <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
+      <button class="nav-btn next green" onclick="goToStep(2)">STEP 2 へ ▶</button>
+    </div>
   </div>
 </div>
 
@@ -969,6 +1044,8 @@ const CHECK_IDS = [
 
 let currentStep = 0;
 let panelRows = [];
+let s1Step = 1;
+const S1_TOTAL = 8;
 
 // =============== INIT ===============
 function init() {
@@ -978,6 +1055,32 @@ function init() {
   loadFromStorage();
   if (panelRows.length === 0) { addPanelRow(false); addPanelRow(false); addPanelRow(false); }
   renderPanelTable();
+  renderS1Progress();
+}
+
+// =============== STEP1 WIZARD ===============
+function goToS1Step(n) {
+  n = Math.max(1, Math.min(S1_TOTAL, n));
+  s1Step = n;
+  document.querySelectorAll('#page-1 .s1-substep').forEach(el => el.classList.remove('active'));
+  const cur = document.getElementById('s1sub-' + n);
+  if (cur) cur.classList.add('active');
+  renderS1Progress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function s1Next() { if (s1Step >= S1_TOTAL) { goToStep(2); } else { goToS1Step(s1Step + 1); } }
+function s1Back() { if (s1Step <= 1) { goToStep(0); } else { goToS1Step(s1Step - 1); } }
+function renderS1Progress() {
+  const labels = ['テーマ', 'ペルソナ', '悩み', 'BA', '約束', '構成', '章立て'];
+  const wrap = document.getElementById('s1ProgBtns');
+  if (wrap) {
+    wrap.innerHTML = labels.map((l, i) => {
+      const m = i + 1, active = m === s1Step, visited = m < s1Step;
+      return `<button class="s1-prog-btn ${active ? 'active' : ''} ${visited ? 'visited' : ''}" onclick="goToS1Step(${m})" title="${l}">Q${m}</button>`;
+    }).join('');
+  }
+  const fill = document.getElementById('s1BarFill');
+  if (fill) fill.style.width = (Math.min(s1Step, 7) / 7 * 100) + '%';
 }
 
 function renderStepNav() {
