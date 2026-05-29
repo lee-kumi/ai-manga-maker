@@ -232,9 +232,9 @@ textarea { resize: vertical; min-height: 72px; }
     <table class="data-table">
       <thead><tr><th>ツール</th><th>役割</th></tr></thead>
       <tbody>
-        <tr><td><strong>Gemini / GPT</strong></td><td>ゼロから作る（ストーリー・セリフ・大まかなコマ割り）</td></tr>
-        <tr><td><strong>NotebookLM</strong></td><td>記憶して応用する（プロンプト生成・コマ割り調整・編集）</td></tr>
-        <tr><td><strong>Nano Banana / Anifusion / GPT</strong></td><td>画像を生成する</td></tr>
+        <tr><td><strong>Gemini / GPT</strong></td><td>作る・量産する（ストーリー・コマ割り・画像プロンプト・修正）</td></tr>
+        <tr><td><strong>NotebookLM</strong></td><td>設定を記憶して一貫性を保つ（キャラ・背景・構成のブレ防止）</td></tr>
+        <tr><td><strong>Nano Banana / Anifusion / GPT</strong></td><td>画像を生成する（キャラシートを添付して見た目を固定）</td></tr>
       </tbody>
     </table>
   </div>
@@ -532,14 +532,16 @@ textarea { resize: vertical; min-height: 72px; }
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🤖</span> NotebookLMの4つの役割</div>
+    <div class="card-title"><span class="icon">🤖</span> NotebookLMの本領は「設定の番人」</div>
+    <div class="info-box">💡 NotebookLMが本当に得意なのは <strong>設定の一貫性キープ</strong> だけ。変換・プロンプト生成・量産は <strong>Gemini / GPT の方が速い</strong>ので、NotebookLMは"設定の番人"として使うのがコツです。</div>
     <table class="data-table">
-      <thead><tr><th>役割</th><th>内容</th></tr></thead>
+      <thead><tr><th>タスク</th><th>任せるツール</th><th>ひとこと</th></tr></thead>
       <tbody>
-        <tr><td>① 設定の保管庫</td><td>キャラ・背景・構成ルールを記憶して一貫性を保つ</td></tr>
-        <tr><td>② コマ割り変換</td><td>シナリオをコマ単位の演出指示に変換する</td></tr>
-        <tr><td>③ 画像プロンプト生成</td><td>各コマの画像生成AIに渡すプロンプトを出力する</td></tr>
-        <tr><td>④ 編集・フィードバック</td><td>構成改善・セリフ修正・フォーマット量産</td></tr>
+        <tr><td>設定の保管・一貫性チェック</td><td><strong>NotebookLM</strong> ◎</td><td>ソースを記憶して「設定どおりか」を確認できる本領</td></tr>
+        <tr><td>コマ割り変換</td><td>Gemini / GPT</td><td>チャットの方が速い（NotebookLMでも可）</td></tr>
+        <tr><td>画像プロンプト生成・量産</td><td>Gemini / GPT</td><td>何度も差し替える反復はチャットがテンポ良い</td></tr>
+        <tr><td>セリフ・構成の修正</td><td>Gemini / GPT</td><td>細かい直しはチャットが速い</td></tr>
+        <tr><td>見た目の一貫性</td><td>参照画像（画像AI）</td><td>テキストでは保てない。キャラシートを添付する</td></tr>
       </tbody>
     </table>
   </div>
