@@ -575,13 +575,11 @@ textarea { resize: vertical; min-height: 72px; }
     </div>
   </div>
 
-  <div class="info-box">📌 <strong>使い方：</strong>まず「ルートA：いきなりコマ割り」を試してください。出力が薄い・違和感がある場合は「ルートB：シナリオから作る」に切り替えます。</div>
+  <div class="info-box">📌 <strong>流れは1本道：</strong>① まずシナリオ（文章で物語）を作る → ② それをコマ割りに変換する。STEP1で作った<strong>本音・壁・カギ</strong>は、一度シナリオにすることで活きてきます。</div>
 
-  <!-- ルートA -->
-  <div class="card highlight">
-    <div class="card-title"><span class="icon">⚡</span> ルートA：いきなりコマ割り（まず試す）</div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">NotebookLMに「コマ割りシナリオを生成するためのプロンプト」を作ってもらい、それをGemini / GPTに貼ります。</p>
-
+  <!-- 共通設定 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">⚙️</span> この章の設定</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
       <div>
         <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">対象章</label>
@@ -606,41 +604,34 @@ textarea { resize: vertical; min-height: 72px; }
         <input type="number" id="s4_panels_per_page" value="3" min="1" max="6" style="width:80px;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
       </div>
     </div>
-
     <div class="form-group">
       <label>この章の内容メモ（補足があれば）</label>
       <textarea id="s4_chapter_notes" rows="3" placeholder="例：主人公が○○に出会い、△△という気持ちの変化が起きる章" oninput="autoSave()"></textarea>
     </div>
-
-    <button class="generate-btn accent" onclick="generatePanelPromptA()">📋 コマ割りプロンプトを生成（ルートA）</button>
-    <div id="panelPromptAOutput" style="display:none;">
-      <div class="prompt-box">
-        <button class="copy-btn" onclick="copyPrompt('panelPromptAText',this)">コピー</button>
-        <pre id="panelPromptAText"></pre>
-      </div>
-      <div class="info-box" style="margin-top:10px;">👆 このプロンプトをNotebookLMまたはGemini / GPTに貼り付けて実行→出力をGoogle Docsに保存してください。</div>
-    </div>
   </div>
 
-  <!-- ルートB -->
-  <div class="card">
-    <div class="card-title"><span class="icon">📝</span> ルートB：シナリオから作る（補強ルート）</div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">ルートAの出力が薄い場合は、先にシナリオ（文章）を作ってからコマ割りに変換します。</p>
-
-    <div class="divider"><span>Step 1：シナリオを作る</span></div>
+  <!-- ① シナリオを作る -->
+  <div class="card highlight">
+    <div class="card-title"><span class="icon">📖</span> ① シナリオを作る（文章で物語を起こす）</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">まず章の物語を<strong>文章</strong>で書き起こします。ここで感情・本音をしっかり描くのが良い漫画のコツ。</p>
     <button class="generate-btn" onclick="generateScenarioPrompt()">📖 シナリオ作成プロンプトを生成</button>
     <div id="scenarioPromptOutput" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyPrompt('scenarioPromptText',this)">コピー</button>
         <pre id="scenarioPromptText"></pre>
       </div>
+      <div class="info-box" style="margin-top:10px;">👆 このプロンプトをGemini / GPTに貼り付けて実行→出力されたシナリオを下の欄に貼ってください。</div>
     </div>
+  </div>
 
-    <div class="divider" style="margin-top:18px;"><span>Step 2：シナリオ出力をここに貼る</span></div>
-    <textarea id="s4_scenario_output" rows="8" placeholder="Gemini / GPTが出力したシナリオをここに貼り付ける..." oninput="autoSave()"></textarea>
+  <!-- ② コマ割りに変換 -->
+  <div class="card highlight">
+    <div class="card-title"><span class="icon">📋</span> ② コマ割りに変換する</div>
+    <div class="divider"><span>シナリオ出力をここに貼る</span></div>
+    <textarea id="s4_scenario_output" rows="8" placeholder="①でGemini / GPTが出力したシナリオをここに貼り付ける..." oninput="autoSave()"></textarea>
 
-    <div class="divider" style="margin-top:18px;"><span>Step 3：シナリオ→コマ割りに変換</span></div>
-    <button class="generate-btn accent" onclick="generatePanelPromptB()">📋 コマ割り変換プロンプトを生成（ルートB）</button>
+    <div class="divider" style="margin-top:18px;"><span>コマ割りに変換</span></div>
+    <button class="generate-btn accent" onclick="generatePanelPromptB()">📋 コマ割り変換プロンプトを生成</button>
     <div id="panelPromptBOutput" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyPrompt('panelPromptBText',this)">コピー</button>
@@ -648,6 +639,7 @@ textarea { resize: vertical; min-height: 72px; }
       </div>
       <div class="info-box" style="margin-top:10px;">👆 このプロンプトをNotebookLMに貼り付けて実行→出力をGoogle Docsに保存してください。</div>
     </div>
+    <div class="info-box" style="margin-top:14px;">⚡ <strong>4コマ・1ページなど超短い漫画なら</strong>、シナリオを飛ばして、このコマ割り変換にいきなり章メモを貼ってもOKです。</div>
   </div>
 
   <div class="card">
@@ -656,7 +648,7 @@ textarea { resize: vertical; min-height: 72px; }
     <table class="data-table">
       <thead><tr><th>保存する内容</th><th>タイミング</th></tr></thead>
       <tbody>
-        <tr><td>第1章コマ割りシナリオ</td><td>ルートA or B の出力後</td></tr>
+        <tr><td>第1章コマ割りシナリオ</td><td>コマ割り変換の出力後</td></tr>
         <tr><td>第2章・3章…</td><td>同じ手順で繰り返す</td></tr>
       </tbody>
     </table>
@@ -1272,58 +1264,26 @@ function getChapterInfo() {
   return { ch, from, to, ppp, notes, theme, title, role, change, charBase, bgBase };
 }
 
-function generatePanelPromptA() {
-  const { ch, from, to, ppp, notes, theme, title, role, change } = getChapterInfo();
-  const struct = document.querySelector('input[name="s1_structure"]:checked');
-  const structVal = struct ? struct.value : '（未選択）';
-  const charName = getVal('s2_char_name');
-  const charBase = getVal('s2_char_base_prompt');
-  const bgBase = getVal('s2_bg_base_prompt');
-
-  const prompt = `以下のストーリー設計をもとに、第${ch}章のコマ割りシナリオを作成してください。
-
-【ストーリー設計】
-テーマ：${theme||'（未入力）'}
-構成の型：${structVal}
-第${ch}章タイトル：${title||'（未入力）'}
-第${ch}章の役割：${role||'（未入力）'}
-第${ch}章の読後変化：${change||'（未入力）'}
-${notes?`補足：${notes}`:''}
-
-【登場キャラクター】
-キャラクター名：${charName||'（未入力）'}
-外見設定：${charBase||'（未入力）'}
-背景：${bgBase||'（未入力）'}
-
-【出力条件】
-・ページ範囲：P${from}〜P${to}
-・1ページのコマ数：${ppp}コマ
-・合計：約${(parseInt(to)-parseInt(from)+1)*parseInt(ppp)}コマ
-
-【出力フォーマット（必ずこの形式で）】
-P○-コマ○（大／中／小　演出の種類）
-キャラクター：（登場するキャラ名、なし の場合は「なし」）
-構図：（場面・動作・表情の説明）
-アングル：（ハイアングル・ローアングル・正面・俯瞰・クローズアップ など）
-セリフ：（セリフまたはモノローグ。1コマ30文字以内。なし の場合は「なし」）
-
-※感情の流れ（表情変化）を明確に反映してください
-※冗長な説明は削り、視覚的にわかる形で整理してください
-※章の最後は次章への期待感が高まる場面で終えてください`;
-
-  showOutput('panelPromptAOutput','panelPromptAText', prompt);
-}
-
 function generateScenarioPrompt() {
   const { ch, from, to, notes, theme, title, role, change } = getChapterInfo();
   const struct = document.querySelector('input[name="s1_structure"]:checked');
   const structVal = struct ? struct.value : '（未選択）';
+  const honne = getVal('s1_honne');
+  const wall = getVal('s1_wall');
+  const key = getVal('s1_key');
+  const after = getVal('s1_after');
 
-  const prompt = `以下のストーリー設計をもとに、第${ch}章のシナリオを文章で書いてください。
+  const prompt = `以下のストーリー設計（背骨）をもとに、第${ch}章のシナリオを文章で書いてください。
 
-【ストーリー設計】
+【作品全体の背骨】
 テーマ：${theme||'（未入力）'}
 構成の型：${structVal}
+主人公の本音（心の声）：${honne||'（未入力）'}
+🧱 壁（つまずき）：${wall||'（未入力）'}
+🔑 カギ（気づき）：${key||'（未入力）'}
+③ 理想の未来：${after||'（未入力）'}
+
+【この章】
 第${ch}章タイトル：${title||'（未入力）'}
 第${ch}章の役割：${role||'（未入力）'}
 第${ch}章の読後変化：${change||'（未入力）'}
@@ -1331,9 +1291,10 @@ ${notes?`補足：${notes}`:''}
 
 【出力形式】
 ・各場面の説明（誰が、どこで、何をしているか）
-・キャラクターの感情の動き
+・キャラクターの感情の動き（特に「本音」を心の声＝モノローグとして描く）
 ・主要なセリフ・モノローグ（1行30文字以内を目安に）
-・章全体を通した感情の流れが伝わるように書いてください`;
+・章全体を通した感情の流れが伝わるように書いてください
+・読者が「これ私だ」と共感し、最後に前を向ける展開にしてください`;
 
   showOutput('scenarioPromptOutput','scenarioPromptText', prompt);
 }
