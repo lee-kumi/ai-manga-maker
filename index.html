@@ -305,7 +305,7 @@ textarea { resize: vertical; min-height: 72px; }
   <!-- Q3: ②本音（中盤で刺さる） -->
   <div class="s1-substep" id="s1sub-3">
     <div class="card">
-      <div class="card-title"><span class="icon">💭</span> ②本音｜中盤で「わかる…！」（Q3 / 7）</div>
+      <div class="card-title"><span class="icon">💭</span> ②-1 本音｜中盤で「わかる…！」（Q3 / 7）</div>
       <div class="info-box" style="margin-top:0;">📖 <strong>物語の心臓</strong>。建前ではなく、人には言えない<strong>泥臭い本音</strong>。ここがそのまま主人公の<strong>心の声（モノローグ）</strong>になります。</div>
       <div class="form-group">
         <label>主人公が心の中で思っている本音</label>
@@ -321,7 +321,7 @@ textarea { resize: vertical; min-height: 72px; }
   <!-- Q4: ②葛藤 壁＋カギ -->
   <div class="s1-substep" id="s1sub-4">
     <div class="card">
-      <div class="card-title"><span class="icon">🔑</span> ②葛藤｜壁とカギ（Q4 / 7）</div>
+      <div class="card-title"><span class="icon">🔑</span> ②-2 葛藤｜壁とカギ（Q4 / 7）</div>
       <div class="info-box" style="margin-top:0;">📖 本音から理想への<strong>橋渡し</strong>。ここが空だと「都合よすぎ」な話に。主人公がつまずき（壁）、気づいて前へ進む（カギ）。</div>
       <div class="form-group">
         <label>🧱 壁：主人公がつまずく失敗・挫折</label>
@@ -1075,7 +1075,7 @@ function goToS1Step(n) {
 function s1Next() { if (s1Step >= S1_TOTAL) { goToStep(2); } else { goToS1Step(s1Step + 1); } }
 function s1Back() { if (s1Step <= 1) { goToStep(0); } else { goToS1Step(s1Step - 1); } }
 function renderS1Progress() {
-  const labels = ['誰に', '①悩み', '②本音', '壁・カギ', '③理想', '構成', '章立て'];
+  const labels = ['誰に', '①悩み', '②-1本音', '②-2葛藤', '③理想', '構成', '章立て'];
   const wrap = document.getElementById('s1ProgBtns');
   if (wrap) {
     wrap.innerHTML = labels.map((l, i) => {
