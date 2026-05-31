@@ -265,15 +265,19 @@ textarea { resize: vertical; min-height: 72px; }
     <div class="s1-bar"><div class="s1-bar-fill" id="s1BarFill"></div></div>
   </div>
 
-  <!-- Q1: テーマ -->
+  <!-- Q1: 誰に届ける？（テーマ＋読者を一人に） -->
   <div class="s1-substep active" id="s1sub-1">
     <div class="card">
-      <div class="card-title"><span class="icon">🎯</span> テーマ（Q1 / 7）</div>
+      <div class="card-title"><span class="icon">🎯</span> 誰に届ける？（Q1 / 7）</div>
       <div class="form-group">
-        <label>この漫画が伝えること（1行で）</label>
-        <input type="text" id="s1_theme" placeholder="例：AIで漫画を作る方法" oninput="autoSave()">
+        <label>この漫画で伝えたいこと（1行で）</label>
+        <input type="text" id="s1_theme" placeholder="例：絵が描けなくても、諦めなければ形になる" oninput="autoSave()">
       </div>
-      <div class="info-box">💡 「誰に・何を伝えるか」を一言で。難しく考えず、思いついた言葉でOKです。</div>
+      <div class="form-group">
+        <label>読者をたった一人に絞る（年齢・状況）</label>
+        <input type="text" id="s1_persona_profile" placeholder="例：40代会社員の佐藤さん。副業を始めたいが何からすればいいかわからない" oninput="autoSave()">
+      </div>
+      <div class="info-box">💡 読者は「みんな」ではなく<strong>たった一人</strong>に絞るほど刺さります。実在の知人を思い浮かべてOK。この人があなたの漫画の<strong>主人公の原型</strong>になります。</div>
     </div>
     <div class="nav-buttons">
       <button class="nav-btn prev" onclick="s1Back()">◀ 全体の流れへ</button>
@@ -281,36 +285,16 @@ textarea { resize: vertical; min-height: 72px; }
     </div>
   </div>
 
-  <!-- Q2: ペルソナ -->
+  <!-- Q2: ①悩み（導入で共感） -->
   <div class="s1-substep" id="s1sub-2">
     <div class="card">
-      <div class="card-title"><span class="icon">👤</span> ペルソナ（読者像）（Q2 / 7）</div>
-      <div class="form-group">
-        <label>読者の年齢・状況</label>
-        <input type="text" id="s1_persona_profile" placeholder="例：40代・会社員・副業を始めたいが何からすればいいかわからない" oninput="autoSave()">
-      </div>
-      <div class="form-group">
-        <label>具体的な悩み</label>
-        <textarea id="s1_persona_problem" rows="2" placeholder="例：時間がない、スキルがない、何から手を付ければいいかわからない" oninput="autoSave()"></textarea>
-      </div>
-      <div class="info-box">💡 年齢・状況・悩みを具体的に書くほど、読者に刺さる漫画になります。</div>
-    </div>
-    <div class="nav-buttons">
-      <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
-      <button class="nav-btn next" onclick="s1Next()">次へ ▶</button>
-    </div>
-  </div>
-
-  <!-- Q3: 読者の悩み -->
-  <div class="s1-substep" id="s1sub-3">
-    <div class="card">
-      <div class="card-title"><span class="icon">😰</span> 読者の悩み（Q3 / 7）</div>
+      <div class="card-title"><span class="icon">😰</span> ①悩み｜導入で「これ私だ」（Q2 / 7）</div>
+      <div class="info-box" style="margin-top:0;">📖 <strong>物語の冒頭</strong>。読者が「あるある！」と共感して引き込まれる<strong>表面の困りごと</strong>を3〜5個。</div>
       <div class="form-group"><label>悩み ①</label><input type="text" id="s1_prob1" placeholder="例：絵が描けない" oninput="autoSave()"></div>
       <div class="form-group"><label>悩み ②</label><input type="text" id="s1_prob2" placeholder="例：時間がない" oninput="autoSave()"></div>
       <div class="form-group"><label>悩み ③</label><input type="text" id="s1_prob3" placeholder="例：どのAIを使えばいいかわからない" oninput="autoSave()"></div>
       <div class="form-group"><label>悩み ④（任意）</label><input type="text" id="s1_prob4" oninput="autoSave()"></div>
       <div class="form-group"><label>悩み ⑤（任意）</label><input type="text" id="s1_prob5" oninput="autoSave()"></div>
-      <div class="info-box">💡 3〜5個書くと効果的。読者が「あるある！」と思える悩みを挙げましょう。</div>
     </div>
     <div class="nav-buttons">
       <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
@@ -318,22 +302,43 @@ textarea { resize: vertical; min-height: 72px; }
     </div>
   </div>
 
-  <!-- Q4: ビフォー → アフター -->
+  <!-- Q3: ②本音（中盤で刺さる） -->
+  <div class="s1-substep" id="s1sub-3">
+    <div class="card">
+      <div class="card-title"><span class="icon">💭</span> ②本音｜中盤で「わかる…！」（Q3 / 7）</div>
+      <div class="info-box" style="margin-top:0;">📖 <strong>物語の心臓</strong>。建前ではなく、人には言えない<strong>泥臭い本音</strong>。ここがそのまま主人公の<strong>心の声（モノローグ）</strong>になります。</div>
+      <div class="form-group">
+        <label>主人公が心の中で思っている本音</label>
+        <textarea id="s1_honne" rows="3" placeholder="例：本当は怖い。このまま何者にもなれずに終わるのが。でも今さら挑戦して失敗するのも怖くて動けない…" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
+      <button class="nav-btn next" onclick="s1Next()">次へ ▶</button>
+    </div>
+  </div>
+
+  <!-- Q4: ②葛藤 壁＋カギ -->
   <div class="s1-substep" id="s1sub-4">
     <div class="card">
-      <div class="card-title"><span class="icon">🔄</span> 現在地 → ゴール（Q4 / 7）</div>
-      <div class="ba-grid">
-        <div>
-          <label>ビフォー（読む前）</label>
-          <textarea id="s1_before" rows="3" placeholder="例：AIで漫画なんて自分には無理と思っている" oninput="autoSave()"></textarea>
-        </div>
-        <div class="ba-arrow">→</div>
-        <div>
-          <label>アフター（読んだ後）</label>
-          <textarea id="s1_after" rows="3" placeholder="例：4コマ1本を自分で完成できた" oninput="autoSave()"></textarea>
-        </div>
+      <div class="card-title"><span class="icon">🔑</span> ②葛藤｜壁とカギ（Q4 / 7）</div>
+      <div class="info-box" style="margin-top:0;">📖 本音から理想への<strong>橋渡し</strong>。ここが空だと「都合よすぎ」な話に。主人公がつまずき（壁）、気づいて前へ進む（カギ）。</div>
+      <div class="form-group">
+        <label>🧱 壁：主人公がつまずく失敗・挫折</label>
+        <textarea id="s1_wall" rows="2" placeholder="例：AIを試したけど変な画像しか出ず、やっぱり自分には無理だと心が折れる" oninput="autoSave()"></textarea>
       </div>
-      <div class="info-box">💡 読む前と読んだ後の「変化」を書きます。この差が大きいほど良い漫画です。</div>
+      <div class="form-group">
+        <label>🔑 カギ：前に進むきっかけ・気づき</label>
+        <textarea id="s1_key" rows="2" placeholder="例：「完璧じゃなくていい」と気づく。キャラシートを添付すれば顔がブレないと知る" oninput="autoSave()"></textarea>
+      </div>
+      <button class="generate-btn" onclick="generateWallKeyIdeas()">🤖 壁・カギの候補をAIに出してもらう</button>
+      <div id="wallKeyOutput" style="display:none;">
+        <div class="prompt-box">
+          <button class="copy-btn" onclick="copyPrompt('wallKeyText',this)">コピー</button>
+          <pre id="wallKeyText"></pre>
+        </div>
+        <div class="info-box" style="margin-top:10px;">👆 このプロンプトをGemini / GPTに貼ると、壁・カギの候補が出ます。気に入ったものを上の欄に書きましょう。</div>
+      </div>
     </div>
     <div class="nav-buttons">
       <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
@@ -341,15 +346,19 @@ textarea { resize: vertical; min-height: 72px; }
     </div>
   </div>
 
-  <!-- Q5: ベネフィット -->
+  <!-- Q5: ③理想の未来（結末・メッセージ） -->
   <div class="s1-substep" id="s1sub-5">
     <div class="card">
-      <div class="card-title"><span class="icon">💎</span> この漫画の約束（Q5 / 7）</div>
+      <div class="card-title"><span class="icon">🌅</span> ③理想の未来｜結末で「こうなれる！」（Q5 / 7）</div>
+      <div class="info-box" style="margin-top:0;">📖 <strong>物語の結末</strong>。読者に「自分もこうなれる」という希望を渡します。実用・集客漫画なら、これがそのまま<strong>商品の価値・伝えたいこと</strong>になります。</div>
       <div class="form-group">
-        <label>読者に約束できること（1行で言い切る）</label>
-        <input type="text" id="s1_benefit" placeholder="例：絵が描けなくてもAIを使えば漫画が作れる" oninput="autoSave()">
+        <label>主人公がたどり着く理想の姿</label>
+        <textarea id="s1_after" rows="2" placeholder="例：4コマ1本を自分の手で完成させ、家族に見せて『すごいね』と言われる" oninput="autoSave()"></textarea>
       </div>
-      <div class="info-box">💡 「この漫画を読めば○○になれる」と言い切りましょう。</div>
+      <div class="form-group">
+        <label>読者に渡すメッセージ・約束（1行で言い切る）</label>
+        <input type="text" id="s1_benefit" placeholder="例：絵が描けなくても、AIを使えば誰でも漫画は作れる" oninput="autoSave()">
+      </div>
     </div>
     <div class="nav-buttons">
       <button class="nav-btn prev" onclick="s1Back()">◀ 戻る</button>
@@ -394,8 +403,8 @@ textarea { resize: vertical; min-height: 72px; }
   <!-- Q7: 章立て -->
   <div class="s1-substep" id="s1sub-7">
     <div class="card">
-      <div class="card-title"><span class="icon">📚</span> 目次・各章の役割・読後変化（Q7 / 7）</div>
-      <div class="info-box">💡 ストーリー全体を3〜5章に分けて、各章のタイトル・役割・読後変化を書きましょう。迷ったら4章構成が一番シンプルです。</div>
+      <div class="card-title"><span class="icon">📚</span> 章立て｜背骨を章に分ける（Q7 / 7）</div>
+      <div class="info-box">💡 ここまでの<strong>①悩み → ②本音・壁・カギ → ③理想</strong>を何章に分けるかを決めます。迷ったら4章（悩み／本音／壁・カギ／理想）が一番シンプルです。</div>
       <div id="chaptersContainer"></div>
     </div>
     <div class="nav-buttons">
@@ -1031,6 +1040,7 @@ const STEPS = [
 const INPUT_IDS = [
   's1_theme','s1_persona_profile','s1_persona_problem',
   's1_prob1','s1_prob2','s1_prob3','s1_prob4','s1_prob5',
+  's1_honne','s1_wall','s1_key',
   's1_before','s1_after','s1_benefit',
   ...[1,2,3,4,5].flatMap(n=>[`s1_ch${n}_title`,`s1_ch${n}_role`,`s1_ch${n}_change`]),
   's2_char_name','s2_hair_style','s2_hair_color','s2_eye_color',
@@ -1073,7 +1083,7 @@ function goToS1Step(n) {
 function s1Next() { if (s1Step >= S1_TOTAL) { goToStep(2); } else { goToS1Step(s1Step + 1); } }
 function s1Back() { if (s1Step <= 1) { goToStep(0); } else { goToS1Step(s1Step - 1); } }
 function renderS1Progress() {
-  const labels = ['テーマ', 'ペルソナ', '悩み', 'BA', '約束', '構成', '章立て'];
+  const labels = ['誰に', '①悩み', '②本音', '壁・カギ', '③理想', '構成', '章立て'];
   const wrap = document.getElementById('s1ProgBtns');
   if (wrap) {
     wrap.innerHTML = labels.map((l, i) => {
@@ -1104,21 +1114,24 @@ function renderOverviewGrid() {
 }
 
 function renderChapters() {
+  const TPH = ['例：何者にもなれない毎日', '例：AIとの出会い', '例：つまずき、そして気づき', '例：はじめての完成', '例：新しい日常'];
+  const RPH = ['①悩み：読者が共感する導入', '①→②：本音が見え始める', '②葛藤：壁にぶつかり、カギをつかむ', '②→③：理想へ動き出す', '③理想：希望のラスト'];
+  const CPH = ['「これ私だ」と引き込まれる', '「わかる…」と心を重ねる', '「自分も頑張ろう」と思える', '「私にもできるかも」と感じる', '「読んでよかった」と満たされる'];
   document.getElementById('chaptersContainer').innerHTML = [1,2,3,4,5].map(n => `
     <div class="chapter-item">
       <div class="chapter-num">第${n}章${n>3?' （任意）':''}</div>
       <div class="chapter-fields">
         <div class="form-group">
           <label>タイトル</label>
-          <input type="text" id="s1_ch${n}_title" placeholder="例：主人公の日常" oninput="autoSave()">
+          <input type="text" id="s1_ch${n}_title" placeholder="${TPH[n-1]}" oninput="autoSave()">
         </div>
         <div class="form-group">
-          <label>章の役割</label>
-          <input type="text" id="s1_ch${n}_role" placeholder="例：読者が共感する導入" oninput="autoSave()">
+          <label>章の役割（背骨のどこ？）</label>
+          <input type="text" id="s1_ch${n}_role" placeholder="${RPH[n-1]}" oninput="autoSave()">
         </div>
         <div class="form-group">
           <label>読後変化</label>
-          <input type="text" id="s1_ch${n}_change" placeholder="例：主人公に自分を重ねる" oninput="autoSave()">
+          <input type="text" id="s1_ch${n}_change" placeholder="${CPH[n-1]}" oninput="autoSave()">
         </div>
       </div>
     </div>
@@ -1484,72 +1497,116 @@ function copyPrompt(textId, btn) {
 }
 
 // =============== PROMPT GENERATORS ===============
+function generateWallKeyIdeas() {
+  const theme = getVal('s1_theme');
+  const pp = getVal('s1_persona_profile');
+  const probs = [1,2,3,4,5].map(n=>getVal(`s1_prob${n}`)).filter(Boolean);
+  const honne = getVal('s1_honne');
+  const after = getVal('s1_after');
+
+  const prompt = `あなたは漫画の物語作りのプロです。以下の設定の主人公について、「🧱 壁（つまずき・挫折）」と「🔑 カギ（前に進むきっかけ・気づき）」の案をそれぞれ3つずつ提案してください。
+
+【テーマ】
+${theme||'（未入力）'}
+
+【主人公（読者の原型）】
+${pp||'（未入力）'}
+
+【主人公の悩み】
+${probs.length?probs.map((p,i)=>`${i+1}. ${p}`).join('\n'):'（未入力）'}
+
+【主人公の本音】
+${honne||'（未入力）'}
+
+【たどり着きたい理想】
+${after||'（未入力）'}
+
+【出してほしいもの】
+■ 🧱 壁の案（3つ）
+　主人公が理想に向かう途中でつまずく、リアルな失敗・挫折。読者が「わかる…私もそこで詰まった」と共感できるもの。
+
+■ 🔑 カギの案（3つ）
+　その壁を乗り越えるきっかけ・気づき。読者が「自分もこうすればいいんだ！」と前向きになれるもの。各カギは、対応する壁を踏まえた現実的なものにしてください。
+
+※ それぞれ1〜2行で簡潔に。説明的になりすぎず、物語のワンシーンが浮かぶように書いてください。`;
+  showOutput('wallKeyOutput','wallKeyText', prompt);
+}
+
 function generateStep1Prompt(type) {
   const theme = getVal('s1_theme');
   const pp = getVal('s1_persona_profile');
-  const pm = getVal('s1_persona_problem');
   const probs = [1,2,3,4,5].map(n=>getVal(`s1_prob${n}`)).filter(Boolean);
-  const before = getVal('s1_before');
+  const honne = getVal('s1_honne');
+  const wall = getVal('s1_wall');
+  const key = getVal('s1_key');
   const after = getVal('s1_after');
   const benefit = getVal('s1_benefit');
   const chapters = [1,2,3,4,5].map(n=>({t:getVal(`s1_ch${n}_title`),r:getVal(`s1_ch${n}_role`),c:getVal(`s1_ch${n}_change`)})).filter(c=>c.t);
 
   let prompt;
   if(type === 'gemini') {
-    prompt = `以下のストーリー設計をもとに、漫画のストーリーを作ってください。
+    prompt = `以下のストーリー設計（背骨）をもとに、漫画のストーリーを作ってください。
 
-【テーマ】
+【テーマ（伝えたいこと）】
 ${theme||'（未入力）'}
 
-【ターゲット読者（ペルソナ）】
-年齢・状況：${pp||'（未入力）'}
-悩み：${pm||'（未入力）'}
+【読者＝主人公の原型】
+${pp||'（未入力）'}
 
-【読者の悩み】
+【① 悩み（導入で共感させる表面の困りごと）】
 ${probs.length?probs.map((p,i)=>`${i+1}. ${p}`).join('\n'):'（未入力）'}
 
-【ビフォー → アフター】
-読む前：${before||'（未入力）'}
-読んだ後：${after||'（未入力）'}
+【② 本音（主人公の泥臭い心の声・モノローグ）】
+${honne||'（未入力）'}
 
-【この漫画の約束（ベネフィット）】
-${benefit||'（未入力）'}
+【② 葛藤】
+🧱 壁（つまずき・挫折）：${wall||'（未入力）'}
+🔑 カギ（前に進むきっかけ・気づき）：${key||'（未入力）'}
 
-【目次・章構成】
+【③ 理想の未来（結末・読者に渡す希望）】
+理想の姿：${after||'（未入力）'}
+メッセージ：${benefit||'（未入力）'}
+
+【章構成】
 ${chapters.length?chapters.map((c,i)=>`第${i+1}章「${c.t}」\n  役割：${c.r}\n  読後変化：${c.c}`).join('\n\n'):'（未入力）'}
 
-上記の設計をもとに、各章のざっくりとしたストーリーを書いてください。
-・キャラクターが読者に共感されやすい場面設定を意識してください
+上記の背骨（①悩み→②本音・壁・カギ→③理想）に沿って、各章のストーリーを書いてください。
+・①で読者を引き込み、②で本音に深く共感させ、③で希望を感じさせる流れにしてください
+・主人公の本音はモノローグとして活かしてください
 ・セリフは1コマ30文字以内を目安にしてください
 ・感情の変化が分かりやすい展開にしてください`;
   } else {
-    prompt = `【AI漫画制作ガイド｜ストーリー設計シート】
+    prompt = `【AI漫画制作ガイド｜ストーリー設計シート（背骨）】
 作成日：${new Date().toLocaleDateString('ja-JP')}
 
 ${'━'.repeat(50)}
-■ テーマ
+■ テーマ（伝えたいこと）
 ${theme||'（未入力）'}
 
 ${'━'.repeat(50)}
-■ ペルソナ（ターゲット読者）
-年齢・状況：${pp||'（未入力）'}
-悩み：${pm||'（未入力）'}
+■ 読者＝主人公の原型
+${pp||'（未入力）'}
 
 ${'━'.repeat(50)}
-■ 読者の悩み
+■ ① 悩み（導入・共感フック）
 ${probs.length?probs.map((p,i)=>`悩み${i+1}：${p}`).join('\n'):'（未入力）'}
 
 ${'━'.repeat(50)}
-■ 現在地 → ゴール（ビフォー → アフター）
-ビフォー（読む前）：${before||'（未入力）'}
-アフター（読んだ後）：${after||'（未入力）'}
+■ ② 本音（主人公の心の声・モノローグ）
+${honne||'（未入力）'}
 
 ${'━'.repeat(50)}
-■ この漫画の約束（ベネフィット）
-${benefit||'（未入力）'}
+■ ② 葛藤（壁とカギ）
+🧱 壁：${wall||'（未入力）'}
+🔑 カギ：${key||'（未入力）'}
 
 ${'━'.repeat(50)}
-■ 目次・各章の役割・読後変化
+■ ③ 理想の未来（結末・メッセージ）
+理想の姿：${after||'（未入力）'}
+メッセージ：${benefit||'（未入力）'}
+
+${'━'.repeat(50)}
+■ 章立て（各章の役割・読後変化）
 ${chapters.length?chapters.map((c,i)=>`
 第${i+1}章「${c.t}」
   役割：${c.r}
@@ -1557,7 +1614,7 @@ ${chapters.length?chapters.map((c,i)=>`
 
 ${'━'.repeat(50)}
 ※ このシートをNotebookLMのソースとして追加してください。
-ストーリー・セリフ・プロンプトを生成する際の基本情報として使用します。`;
+ストーリー・セリフ・プロンプトを生成する際の基本情報（物語の背骨）として使用します。`;
   }
   showOutput('step1PromptOutput','step1PromptText', prompt);
 }
@@ -1652,18 +1709,23 @@ function generateNotebookLMSource() {
   const bgPrompt = getVal('s2_bg_base_prompt');
   const scenario = getVal('s3_scenario_output');
   const benefit = getVal('s1_benefit');
-  const before = getVal('s1_before');
+  const honne = getVal('s1_honne');
+  const wall = getVal('s1_wall');
+  const key = getVal('s1_key');
   const after = getVal('s1_after');
 
   const source = `【AI漫画制作 NotebookLMソース】
 作成日：${new Date().toLocaleDateString('ja-JP')}
 
 ${'━'.repeat(50)}
-■ 作品基本設定
+■ 作品の背骨
 テーマ：${theme||'（未入力）'}
-約束：${benefit||'（未入力）'}
-読者ビフォー：${before||'（未入力）'}
-読者アフター：${after||'（未入力）'}
+① 悩み（導入）：※読者の共感フック
+② 本音（主人公の心の声）：${honne||'（未入力）'}
+　🧱 壁：${wall||'（未入力）'}
+　🔑 カギ：${key||'（未入力）'}
+③ 理想（結末）：${after||'（未入力）'}
+メッセージ：${benefit||'（未入力）'}
 画風：${art||'（未入力）'}
 
 ${'━'.repeat(50)}
