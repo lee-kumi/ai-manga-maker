@@ -274,10 +274,18 @@ textarea { resize: vertical; min-height: 72px; }
         <input type="text" id="s1_theme" placeholder="例：絵が描けなくても、諦めなければ形になる" oninput="autoSave()">
       </div>
       <div class="form-group">
-        <label>読者をたった一人に絞る（年齢・状況）</label>
-        <input type="text" id="s1_persona_profile" placeholder="例：40代会社員の佐藤さん。副業を始めたいが何からすればいいかわからない" oninput="autoSave()">
+        <label>主人公＝読者は誰？（名前・年齢・立場をたった一人に）</label>
+        <input type="text" id="s1_persona_profile" placeholder="例：佐藤みなこ・42歳・事務職・夫と子ども2人" oninput="autoSave()">
       </div>
-      <div class="info-box">💡 読者は「みんな」ではなく<strong>たった一人</strong>に絞るほど刺さります。実在の知人を思い浮かべてOK。この人があなたの漫画の<strong>主人公の原型</strong>になります。</div>
+      <div class="form-group">
+        <label>どんな毎日を送っている？（日常・性格・口グセ）</label>
+        <textarea id="s1_daily" rows="2" placeholder="例：満員電車で出社→ルーティン作業→残業帰り。口グセは「私なんて…」。何かしたいけど一歩が出ない" oninput="autoSave()"></textarea>
+      </div>
+      <div class="form-group">
+        <label>なぜ「今」動くのか？（きっかけ・転機）</label>
+        <input type="text" id="s1_trigger" placeholder="例：42歳の誕生日に「このままでいいの？」とふと不安になった" oninput="autoSave()">
+      </div>
+      <div class="info-box">💡 読者は「みんな」ではなく<strong>たった一人</strong>に絞るほど刺さります。実在の知人を思い浮かべてOK。<strong>日常</strong>は導入シーンの舞台に、<strong>きっかけ</strong>は物語が動き出す着火点になります。この人があなたの漫画の<strong>主人公の原型</strong>です。</div>
     </div>
     <div class="nav-buttons">
       <button class="nav-btn prev" onclick="s1Back()">◀ 全体の流れへ</button>
@@ -1030,7 +1038,7 @@ const STEPS = [
 ];
 
 const INPUT_IDS = [
-  's1_theme','s1_persona_profile','s1_persona_problem',
+  's1_theme','s1_persona_profile','s1_daily','s1_trigger','s1_persona_problem',
   's1_prob1','s1_prob2','s1_prob3','s1_prob4','s1_prob5',
   's1_honne','s1_wall','s1_key',
   's1_before','s1_after','s1_benefit',
@@ -1272,8 +1280,16 @@ function generateScenarioPrompt() {
   const wall = getVal('s1_wall');
   const key = getVal('s1_key');
   const after = getVal('s1_after');
+  const pp = getVal('s1_persona_profile');
+  const daily = getVal('s1_daily');
+  const trigger = getVal('s1_trigger');
 
   const prompt = `以下のストーリー設計（背骨）をもとに、第${ch}章のシナリオを文章で書いてください。
+
+【主人公】
+人物：${pp||'（未入力）'}
+日常・性格・口グセ：${daily||'（未入力）'}
+動くきっかけ：${trigger||'（未入力）'}
 
 【作品全体の背骨】
 テーマ：${theme||'（未入力）'}
@@ -1461,6 +1477,8 @@ function copyPrompt(textId, btn) {
 function generateWallKeyIdeas() {
   const theme = getVal('s1_theme');
   const pp = getVal('s1_persona_profile');
+  const daily = getVal('s1_daily');
+  const trigger = getVal('s1_trigger');
   const probs = [1,2,3,4,5].map(n=>getVal(`s1_prob${n}`)).filter(Boolean);
   const honne = getVal('s1_honne');
   const after = getVal('s1_after');
@@ -1471,7 +1489,9 @@ function generateWallKeyIdeas() {
 ${theme||'（未入力）'}
 
 【主人公（読者の原型）】
-${pp||'（未入力）'}
+人物：${pp||'（未入力）'}
+日常・性格：${daily||'（未入力）'}
+動くきっかけ：${trigger||'（未入力）'}
 
 【主人公の悩み】
 ${probs.length?probs.map((p,i)=>`${i+1}. ${p}`).join('\n'):'（未入力）'}
@@ -1496,6 +1516,8 @@ ${after||'（未入力）'}
 function generateStep1Prompt(type) {
   const theme = getVal('s1_theme');
   const pp = getVal('s1_persona_profile');
+  const daily = getVal('s1_daily');
+  const trigger = getVal('s1_trigger');
   const probs = [1,2,3,4,5].map(n=>getVal(`s1_prob${n}`)).filter(Boolean);
   const honne = getVal('s1_honne');
   const wall = getVal('s1_wall');
@@ -1511,8 +1533,10 @@ function generateStep1Prompt(type) {
 【テーマ（伝えたいこと）】
 ${theme||'（未入力）'}
 
-【読者＝主人公の原型】
-${pp||'（未入力）'}
+【主人公（＝読者の原型）】
+人物：${pp||'（未入力）'}
+日常・性格・口グセ：${daily||'（未入力）'}
+動くきっかけ（転機）：${trigger||'（未入力）'}
 
 【① 悩み（導入で共感させる表面の困りごと）】
 ${probs.length?probs.map((p,i)=>`${i+1}. ${p}`).join('\n'):'（未入力）'}
@@ -1545,8 +1569,10 @@ ${'━'.repeat(50)}
 ${theme||'（未入力）'}
 
 ${'━'.repeat(50)}
-■ 読者＝主人公の原型
-${pp||'（未入力）'}
+■ 主人公（＝読者の原型）
+人物：${pp||'（未入力）'}
+日常・性格・口グセ：${daily||'（未入力）'}
+動くきっかけ（転機）：${trigger||'（未入力）'}
 
 ${'━'.repeat(50)}
 ■ ① 悩み（導入・共感フック）
