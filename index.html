@@ -524,16 +524,23 @@ textarea { resize: vertical; min-height: 72px; }
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">📋</span> 投入するソース一覧（①〜⑤）</div>
+    <div class="card-title"><span class="icon">📋</span> NotebookLMに入れる素材（漫画制作バイブル）</div>
+
+    <div style="font-size:12px;font-weight:900;color:var(--primary);margin:4px 0 8px;border-left:4px solid var(--primary);padding-left:8px;">📗 この作品ごとに用意するもの</div>
     <ul class="checklist">
-      <li><input type="checkbox" id="s3_c1" onchange="autoSave()"><label for="s3_c1">① <strong>ストーリー設計シート</strong>（STEP1で生成したNotebookLMソース）</label></li>
-      <li><input type="checkbox" id="s3_c2" onchange="autoSave()"><label for="s3_c2">② <strong>構成の型</strong>（STEP1で選んだ型：起承転結・三幕構成・問題解決型・ファン化）</label></li>
-      <li><input type="checkbox" id="s3_c3" onchange="autoSave()"><label for="s3_c3">③ <strong>キャラクターの外見設定</strong>（STEP2で確定した基本プロンプト）</label></li>
-      <li><input type="checkbox" id="s3_c4" onchange="autoSave()"><label for="s3_c4">④ <strong>キャラクターシート・四面図</strong>（STEP2でGemini/GPTが生成した画像情報）</label></li>
-      <li><input type="checkbox" id="s3_c5" onchange="autoSave()"><label for="s3_c5">⑤ <strong>背景の基本プロンプト</strong>（STEP2で確定したプロンプト）</label></li>
-      <li><input type="checkbox" id="s3_c6" onchange="autoSave()"><label for="s3_c6">参考資料があれば追加する（コマ割りメソッド・演出テクニックなど）</label></li>
+      <li><input type="checkbox" id="s3_c1" onchange="autoSave()"><label for="s3_c1">① <strong>ストーリー設計シート</strong>（STEP1で生成。テーマ・主人公・背骨・構成の型・章立て）</label></li>
+      <li><input type="checkbox" id="s3_c2" onchange="autoSave()"><label for="s3_c2">② <strong>キャラクター設定・四面図</strong>（STEP2の基本プロンプト＋キャラシート画像）</label></li>
+      <li><input type="checkbox" id="s3_c3" onchange="autoSave()"><label for="s3_c3">③ <strong>背景の基本プロンプト</strong>（STEP2で確定したプロンプト）</label></li>
     </ul>
-    <div class="info-box">💡 <strong>ソースは精選するほど精度が上がります。</strong>迷ったら確定済みの情報だけを入れましょう。</div>
+
+    <div style="font-size:12px;font-weight:900;color:var(--accent);margin:14px 0 8px;border-left:4px solid var(--accent);padding-left:8px;">📚 一度作れば毎回使い回せる｜汎用素材（あなたのバイブル）</div>
+    <ul class="checklist">
+      <li><input type="checkbox" id="s3_c4" onchange="autoSave()"><label for="s3_c4">④ <strong>コマ割り設計ガイド</strong>（コマ数・シーン別パターン・視線誘導・間）</label></li>
+      <li><input type="checkbox" id="s3_c5" onchange="autoSave()"><label for="s3_c5">⑤ <strong>アングル・ショット・光ガイド</strong>（6アングル・ショット・ライティング・依頼フォーマット）</label></li>
+      <li><input type="checkbox" id="s3_c6" onchange="autoSave()"><label for="s3_c6">⑥ <strong>表情集・ポーズ集</strong>（役割ベースの表情・ポーズ。キャラの一貫性を固める）</label></li>
+    </ul>
+
+    <div class="info-box">💡 <strong>📗作品ごと素材</strong>は毎回作ります。<strong>📚汎用素材</strong>は一度NotebookLMに入れれば次の作品でも使い回せます。特に<strong>四面図は表情集・ポーズ集とセット</strong>で初めてキャラが固定されます。</div>
   </div>
 
   <div class="card highlight">
