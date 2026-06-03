@@ -585,32 +585,18 @@ textarea { resize: vertical; min-height: 72px; }
 
   <div class="info-box">📌 <strong>流れは1本道：</strong>① まずシナリオ（文章で物語）を作る → ② それをコマ割りに変換する。STEP1で作った<strong>本音・壁・カギ</strong>は、一度シナリオにすることで活きてきます。</div>
 
-  <!-- 共通設定 -->
+  <!-- 共通設定（シナリオ・変換どちらでも使う） -->
   <div class="card">
     <div class="card-title"><span class="icon">⚙️</span> この章の設定</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
-      <div>
-        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">対象章</label>
-        <select id="s4_chapter" onchange="autoSave()" style="width:100%;padding:8px 10px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;">
-          <option value="1">第1章</option>
-          <option value="2">第2章</option>
-          <option value="3">第3章</option>
-          <option value="4">第4章</option>
-          <option value="5">第5章</option>
-        </select>
-      </div>
-      <div>
-        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">ページ範囲</label>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <input type="number" id="s4_page_from" value="1" min="1" style="width:60px;padding:7px 8px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
-          <span style="font-size:12px;color:var(--text-muted);">〜</span>
-          <input type="number" id="s4_page_to" value="20" min="1" style="width:60px;padding:7px 8px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
-        </div>
-      </div>
-      <div>
-        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">1ページのコマ数</label>
-        <input type="number" id="s4_panels_per_page" value="3" min="1" max="6" style="width:80px;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
-      </div>
+    <div class="form-group">
+      <label>対象章</label>
+      <select id="s4_chapter" onchange="autoSave()" style="width:100%;padding:9px 11px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;">
+        <option value="1">第1章</option>
+        <option value="2">第2章</option>
+        <option value="3">第3章</option>
+        <option value="4">第4章</option>
+        <option value="5">第5章</option>
+      </select>
     </div>
     <div class="form-group">
       <label>この章の内容メモ（補足があれば）</label>
@@ -621,7 +607,7 @@ textarea { resize: vertical; min-height: 72px; }
   <!-- ① シナリオを作る -->
   <div class="card highlight">
     <div class="card-title"><span class="icon">📖</span> ① シナリオを作る（文章で物語を起こす）</div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">まず章の物語を<strong>文章</strong>で書き起こします。ここで感情・本音をしっかり描くのが良い漫画のコツ。</p>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">まず章の物語を<strong>文章</strong>で書き起こします。ここで感情・本音をしっかり描くのが良い漫画のコツ。<strong>ページ数やコマ数はまだ気にしなくてOK</strong>。</p>
     <button class="generate-btn" onclick="generateScenarioPrompt()">📖 シナリオ作成プロンプトを生成</button>
     <div id="scenarioPromptOutput" style="display:none;">
       <div class="prompt-box">
@@ -635,7 +621,25 @@ textarea { resize: vertical; min-height: 72px; }
   <!-- ② コマ割りに変換 -->
   <div class="card highlight">
     <div class="card-title"><span class="icon">📋</span> ② コマ割りに変換する</div>
-    <div class="divider"><span>シナリオ出力をここに貼る</span></div>
+
+    <div class="divider"><span>コマ割りの設定</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">ページ範囲</label>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <input type="number" id="s4_page_from" value="1" min="1" style="width:60px;padding:7px 8px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
+          <span style="font-size:12px;color:var(--text-muted);">〜</span>
+          <input type="number" id="s4_page_to" value="1" min="1" style="width:60px;padding:7px 8px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
+        </div>
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">1ページの目安コマ数</label>
+        <input type="number" id="s4_panels_per_page" value="3" min="1" max="6" style="width:80px;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:0;">💡 コマ数は<strong>あくまで目安</strong>。クライマックスは1コマ、会話は2〜3コマなど、<strong>シーンごとに変わってOK</strong>です（スマホ読みなら1ページ2〜4コマが目安）。1ページ漫画なら範囲を「1〜1」に。</div>
+
+    <div class="divider" style="margin-top:18px;"><span>シナリオ出力をここに貼る</span></div>
     <textarea id="s4_scenario_output" rows="8" placeholder="①でGemini / GPTが出力したシナリオをここに貼り付ける..." oninput="autoSave()"></textarea>
 
     <div class="divider" style="margin-top:18px;"><span>コマ割りに変換</span></div>
@@ -1331,13 +1335,16 @@ function generatePanelPromptB() {
 
 【変換条件】
 ・ページ範囲：P${from}〜P${to}
-・1ページのコマ数：${ppp}コマ
+・1ページのコマ数：${ppp}コマ（あくまで目安。シーンに応じて増減してOK）
+・スマホ読み前提：コマは大きく・少なく。1ページで伝えることは1つに絞る
+・クライマックスや感情のピークは「1ページ1コマ」で大きく見せる
+・会話・説明は2〜3コマ、テンポを出したい所は小コマ連続
 
 【出力フォーマット（必ずこの形式で）】
 P○-コマ○（大／中／小　演出の種類）
 キャラクター：（登場するキャラ名、なし の場合は「なし」）
 構図：（場面・動作・表情の説明）
-アングル：（ハイアングル・ローアングル・正面・俯瞰・クローズアップ など）
+アングル：（正面／斜め45度／俯瞰／煽り／後ろ姿／主観 など）
 セリフ：（1コマ30文字以内。なし の場合は「なし」）
 
 【変換するシナリオ】
