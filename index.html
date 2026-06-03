@@ -469,24 +469,11 @@ textarea { resize: vertical; min-height: 72px; }
 
   <button class="add-row-btn" onclick="addCharacter()" style="width:100%;margin-bottom:18px;">＋ 登場人物を追加</button>
 
-  <div class="card">
-    <div class="card-title"><span class="icon">🏠</span> ③ 背景の設定</div>
-    <div class="form-group">
-      <label>よく登場する場所</label>
-      <input type="text" id="s2_bg_locations" placeholder="例：自宅の部屋・会社のデスク・カフェ" oninput="autoSave()">
-    </div>
-    <button class="generate-btn" onclick="generateBgPrompt()">✨ 背景プロンプト依頼を生成</button>
-    <div id="bgPromptOutput" style="display:none;">
-      <div class="prompt-box">
-        <button class="copy-btn" onclick="copyPrompt('bgPromptText',this)">コピー</button>
-        <pre id="bgPromptText"></pre>
-      </div>
-    </div>
-    <div class="form-group" style="margin-top:14px;">
-      <label>背景の基本プロンプト（確定後にメモ）</label>
-      <textarea id="s2_bg_base_prompt" rows="3" placeholder="例：cozy home office, warm lighting, manga style background, simple desk with laptop, no character" oninput="autoSave()"></textarea>
-    </div>
-  </div>
+  <div class="info-box">🏠 <strong>背景も複数登録できます。</strong>「自宅・会社・カフェ」など、漫画によく出てくる場所を2〜3個ぶん用意しておくと、コマごとに使い分けられます。</div>
+
+  <div id="backgroundsContainer"></div>
+
+  <button class="add-row-btn" onclick="addBackground()" style="width:100%;margin-bottom:18px;">＋ 背景を追加</button>
 
   <div class="nav-buttons">
     <button class="nav-btn prev" onclick="goToStep(1)">◀ STEP 1 へ</button>
@@ -1036,7 +1023,7 @@ const INPUT_IDS = [
   's1_honne','s1_wall','s1_key',
   's1_before','s1_after','s1_benefit',
   ...[1,2,3,4,5].flatMap(n=>[`s1_ch${n}_title`,`s1_ch${n}_role`,`s1_ch${n}_change`]),
-  's2_art_style','s2_bg_locations','s2_bg_base_prompt',
+  's2_art_style',
   's4_chapter_notes','s4_scenario_output','s4_gdocs_url',
   's5_scenario_input',
 ];
@@ -1048,29 +1035,38 @@ const CHECK_IDS = [
 let currentStep = 0;
 let panelRows = [];
 let characters = [];
+let backgrounds = [];
 let s1Step = 1;
 const S1_TOTAL = 8;
 
 // =============== CHARACTERS (multi) ===============
 function blankCharacter() { return { name:'', hairStyle:'', hairColor:'', eyeColor:'', bodyType:'', height:'', fashion:'', expression:'', basePrompt:'' }; }
 
+const CHAR_SAMPLES = [
+  { name:'佐藤みなこ', hairStyle:'ショートボブ', hairColor:'黒', eyeColor:'黒', bodyType:'細身', height:'普通', fashion:'白Tシャツにジーンズ', expression:'いつも少し不安そう' },
+  { name:'田中ゆうき', hairStyle:'短髪・黒髪', hairColor:'黒', eyeColor:'濃い茶', bodyType:'がっしり', height:'高め', fashion:'スーツ・ネクタイ', expression:'落ち着いて頼れる' },
+  { name:'鈴木あや',   hairStyle:'ロングヘア', hairColor:'明るい茶', eyeColor:'茶色', bodyType:'標準', height:'低め', fashion:'ふんわりワンピース', expression:'明るく元気な笑顔' },
+  { name:'山田けん',   hairStyle:'天然パーマ', hairColor:'黒', eyeColor:'黒', bodyType:'やせ型', height:'普通', fashion:'パーカーにスニーカー', expression:'やんちゃでマイペース' },
+];
 function renderCharacters() {
   const el = document.getElementById('charactersContainer');
   if (!el) return;
-  el.innerHTML = characters.map((c,i) => `
+  el.innerHTML = characters.map((c,i) => {
+    const s = CHAR_SAMPLES[i % CHAR_SAMPLES.length];
+    return `
     <div class="card">
       <div class="card-title" style="display:flex;align-items:center;"><span class="icon">🎭</span> 登場人物 ${i+1}${i===0?'（主人公）':''}
         ${characters.length>1?`<button class="del-btn" style="margin-left:auto;" onclick="removeCharacter(${i})">✕</button>`:''}
       </div>
       <table class="char-table">
-        <tr><td>キャラクター名</td><td><input type="text" value="${esc(c.name)}" oninput="characters[${i}].name=this.value;autoSave()" placeholder="例：佐藤みなこ"></td></tr>
-        <tr><td>髪型</td><td><input type="text" value="${esc(c.hairStyle)}" oninput="characters[${i}].hairStyle=this.value;autoSave()" placeholder="例：ショートボブ"></td></tr>
-        <tr><td>髪色</td><td><input type="text" value="${esc(c.hairColor)}" oninput="characters[${i}].hairColor=this.value;autoSave()" placeholder="例：黒・茶色"></td></tr>
-        <tr><td>目の色</td><td><input type="text" value="${esc(c.eyeColor)}" oninput="characters[${i}].eyeColor=this.value;autoSave()" placeholder="例：黒・茶色・青"></td></tr>
-        <tr><td>体型</td><td><input type="text" value="${esc(c.bodyType)}" oninput="characters[${i}].bodyType=this.value;autoSave()" placeholder="例：細身・標準"></td></tr>
-        <tr><td>身長</td><td><input type="text" value="${esc(c.height)}" oninput="characters[${i}].height=this.value;autoSave()" placeholder="例：低め・普通・高め"></td></tr>
-        <tr><td>服装・ファッション</td><td><input type="text" value="${esc(c.fashion)}" oninput="characters[${i}].fashion=this.value;autoSave()" placeholder="例：白Tシャツにジーンズ"></td></tr>
-        <tr><td>表情の傾向</td><td><input type="text" value="${esc(c.expression)}" oninput="characters[${i}].expression=this.value;autoSave()" placeholder="例：いつも少し不安そう"></td></tr>
+        <tr><td>キャラクター名</td><td><input type="text" value="${esc(c.name)}" oninput="characters[${i}].name=this.value;autoSave()" placeholder="例：${s.name}"></td></tr>
+        <tr><td>髪型</td><td><input type="text" value="${esc(c.hairStyle)}" oninput="characters[${i}].hairStyle=this.value;autoSave()" placeholder="例：${s.hairStyle}"></td></tr>
+        <tr><td>髪色</td><td><input type="text" value="${esc(c.hairColor)}" oninput="characters[${i}].hairColor=this.value;autoSave()" placeholder="例：${s.hairColor}"></td></tr>
+        <tr><td>目の色</td><td><input type="text" value="${esc(c.eyeColor)}" oninput="characters[${i}].eyeColor=this.value;autoSave()" placeholder="例：${s.eyeColor}"></td></tr>
+        <tr><td>体型</td><td><input type="text" value="${esc(c.bodyType)}" oninput="characters[${i}].bodyType=this.value;autoSave()" placeholder="例：${s.bodyType}"></td></tr>
+        <tr><td>身長</td><td><input type="text" value="${esc(c.height)}" oninput="characters[${i}].height=this.value;autoSave()" placeholder="例：${s.height}"></td></tr>
+        <tr><td>服装・ファッション</td><td><input type="text" value="${esc(c.fashion)}" oninput="characters[${i}].fashion=this.value;autoSave()" placeholder="例：${s.fashion}"></td></tr>
+        <tr><td>表情の傾向</td><td><input type="text" value="${esc(c.expression)}" oninput="characters[${i}].expression=this.value;autoSave()" placeholder="例：${s.expression}"></td></tr>
       </table>
       <button class="generate-btn" onclick="generateCharPrompt(${i})">✨ キャラシート依頼プロンプトを生成</button>
       <div id="charPromptOutput_${i}" style="display:none;">
@@ -1083,8 +1079,8 @@ function renderCharacters() {
         <label>確定した基本プロンプト（メモ／英語でも日本語でもOK）</label>
         <textarea rows="3" oninput="characters[${i}].basePrompt=this.value;autoSave()" placeholder="例：1girl, short black bob hair, dark brown eyes, slim, manga style">${esc(c.basePrompt)}</textarea>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function addCharacter() { characters.push(blankCharacter()); renderCharacters(); autoSave(); }
@@ -1139,6 +1135,79 @@ function charactersBlock() {
   return list.map((c,i) => `・${c.name||('キャラ'+(i+1))}：${c.base||'（基本プロンプト未設定）'}`).join('\n');
 }
 
+// =============== BACKGROUNDS (multi) ===============
+function blankBackground() { return { location:'', basePrompt:'' }; }
+
+const BG_SAMPLES = [
+  { location:'自宅の部屋・デスク', basePrompt:'cozy home office, warm lighting, manga style background, simple desk with laptop, no character' },
+  { location:'会社のオフィス',     basePrompt:'modern office, fluorescent lighting, desks and computers, manga style background, no character' },
+  { location:'カフェ',             basePrompt:'cozy cafe interior, soft daylight, wooden table and coffee, manga style background, no character' },
+  { location:'通勤電車・駅',       basePrompt:'crowded commuter train, morning light, manga style background, no character' },
+];
+function renderBackgrounds() {
+  const el = document.getElementById('backgroundsContainer');
+  if (!el) return;
+  el.innerHTML = backgrounds.map((b,i) => {
+    const s = BG_SAMPLES[i % BG_SAMPLES.length];
+    return `
+    <div class="card">
+      <div class="card-title" style="display:flex;align-items:center;"><span class="icon">🏠</span> 背景 ${i+1}
+        ${backgrounds.length>1?`<button class="del-btn" style="margin-left:auto;" onclick="removeBackground(${i})">✕</button>`:''}
+      </div>
+      <div class="form-group">
+        <label>場所・シーン</label>
+        <input type="text" value="${esc(b.location)}" oninput="backgrounds[${i}].location=this.value;autoSave()" placeholder="例：${s.location}">
+      </div>
+      <button class="generate-btn" onclick="generateBgPrompt(${i})">✨ 背景プロンプト依頼を生成</button>
+      <div id="bgPromptOutput_${i}" style="display:none;">
+        <div class="prompt-box">
+          <button class="copy-btn" onclick="copyPrompt('bgPromptText_${i}',this)">コピー</button>
+          <pre id="bgPromptText_${i}"></pre>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:14px;">
+        <label>背景の基本プロンプト（確定後にメモ）</label>
+        <textarea rows="3" oninput="backgrounds[${i}].basePrompt=this.value;autoSave()" placeholder="例：${s.basePrompt}">${esc(b.basePrompt)}</textarea>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addBackground() { backgrounds.push(blankBackground()); renderBackgrounds(); autoSave(); }
+function removeBackground(i) { backgrounds.splice(i,1); if(backgrounds.length===0) backgrounds.push(blankBackground()); renderBackgrounds(); autoSave(); }
+
+function generateBgPrompt(i) {
+  const b = backgrounds[i]; const art = getVal('s2_art_style');
+  const prompt = `以下の場所の背景画像を生成するためのプロンプトを作成してください。
+
+【場所・シーン】
+${b.location||'（未入力）'}
+
+【画風・スタイル】
+${art||'（未入力）'}
+
+以下を出力してください：
+1. 場所の説明（日本語）
+2. 画像生成AI用の英語プロンプト
+3. 明るさ・雰囲気（時間帯・ライティング）
+
+※人物は含めず、背景のみのプロンプトにしてください
+※漫画風・アニメ風の背景として出力してください`;
+  document.getElementById('bgPromptText_'+i).textContent = prompt;
+  document.getElementById('bgPromptOutput_'+i).style.display = 'block';
+  showToast('プロンプトを生成しました！');
+}
+
+function getBackgroundList() {
+  return backgrounds.map(b => ({ location:(b.location||'').trim(), base:(b.basePrompt||'').trim() }))
+    .filter(b => b.location || b.base);
+}
+function backgroundsBlock() {
+  const list = getBackgroundList();
+  if (!list.length) return '（STEP2で背景を設定してください）';
+  return list.map((b,i) => `・${b.location||('背景'+(i+1))}：${b.base||'（基本プロンプト未設定）'}`).join('\n');
+}
+
 // =============== INIT ===============
 function init() {
   renderStepNav();
@@ -1149,6 +1218,8 @@ function init() {
   renderPanelTable();
   if (characters.length === 0) characters.push(blankCharacter());
   renderCharacters();
+  if (backgrounds.length === 0) backgrounds.push(blankBackground());
+  renderBackgrounds();
   renderS1Progress();
 }
 
@@ -1420,13 +1491,6 @@ function generateImagePromptRequest() {
   const scenario = getVal('s5_scenario_input');
   const artStyle = getVal('s2_art_style');
 
-  // 背景プロンプト：確定済みメモ優先、なければ場所から自動生成
-  let bgBase = getVal('s2_bg_base_prompt');
-  if(!bgBase) {
-    const loc = getVal('s2_bg_locations');
-    bgBase = loc ? `よく登場する場所：${loc}` : '（STEP2で背景設定を入力してください）';
-  }
-
   if(!scenario) { showToast('コマ割りシナリオを貼り付けてください'); return; }
 
   const prompt = `以下のコマ割りシナリオをもとに、各コマの画像生成プロンプト（英語）を作成してください。
@@ -1434,8 +1498,8 @@ function generateImagePromptRequest() {
 【登場人物の基本設定】
 ${charactersBlock()}
 
-【背景基本設定】
-${bgBase}
+【背景の基本設定】
+${backgroundsBlock()}
 
 【画像スタイル】
 ${artStyle||'manga style, simple line art'}
@@ -1475,7 +1539,7 @@ function goToStep(n) {
 // =============== STORAGE ===============
 function autoSave() {
   const struct = document.querySelector('input[name="s1_structure"]:checked');
-  const data = { inputs:{}, checks:{}, panels:panelRows, characters:characters, structure: struct?struct.value:'' };
+  const data = { inputs:{}, checks:{}, panels:panelRows, characters:characters, backgrounds:backgrounds, structure: struct?struct.value:'' };
   INPUT_IDS.forEach(id => { const el=document.getElementById(id); if(el) data.inputs[id]=el.value; });
   CHECK_IDS.forEach(id => { const el=document.getElementById(id); if(el) data.checks[id]=el.checked; });
   localStorage.setItem('aiMangaMaker_v2', JSON.stringify(data));
@@ -1499,6 +1563,12 @@ function loadFromStorage() {
     } else if(data.inputs && (data.inputs.s2_char_name || data.inputs.s2_char_base_prompt || data.inputs.s2_hair_style)) {
       const o = data.inputs;
       characters = [{ name:o.s2_char_name||'', hairStyle:o.s2_hair_style||'', hairColor:o.s2_hair_color||'', eyeColor:o.s2_eye_color||'', bodyType:o.s2_body_type||'', height:o.s2_height||'', fashion:o.s2_fashion||'', expression:o.s2_expression||'', basePrompt:o.s2_char_base_prompt||'' }];
+    }
+    // 背景：新形式があれば使う／旧・単一背景形式は移行する
+    if(data.backgrounds && data.backgrounds.length>0) {
+      backgrounds = data.backgrounds;
+    } else if(data.inputs && (data.inputs.s2_bg_locations || data.inputs.s2_bg_base_prompt)) {
+      backgrounds = [{ location:data.inputs.s2_bg_locations||'', basePrompt:data.inputs.s2_bg_base_prompt||'' }];
     }
     if(data.structure) {
       const radio = document.querySelector(`input[name="s1_structure"][value="${data.structure}"]`);
@@ -1671,28 +1741,6 @@ ${'━'.repeat(50)}
   showOutput('step1PromptOutput','step1PromptText', prompt);
 }
 
-function generateBgPrompt() {
-  const loc = getVal('s2_bg_locations');
-  const art = getVal('s2_art_style');
-
-  const prompt = `以下の場所の背景画像を生成するためのプロンプトを作成してください。
-
-【よく登場する場所】
-${loc||'（未入力）'}
-
-【画風・スタイル】
-${art||'（未入力）'}
-
-各場所について以下を出力してください：
-1. 場所の説明（日本語）
-2. 画像生成AI用の英語プロンプト
-3. キャラクターとの相性（明るさ・雰囲気）
-
-※人物は含めず、背景のみのプロンプトにしてください
-※漫画風・アニメ風の背景として出力してください`;
-  showOutput('bgPromptOutput','bgPromptText', prompt);
-}
-
 function generateStep3Prompt() {
   const story = getVal('s3_story_overview');
   const theme = getVal('s1_theme');
@@ -1725,7 +1773,6 @@ ${story||'（未入力）'}
 function generateNotebookLMSource() {
   const theme = getVal('s1_theme');
   const art = getVal('s2_art_style');
-  const bgPrompt = getVal('s2_bg_base_prompt');
   const scenario = getVal('s3_scenario_output');
   const benefit = getVal('s1_benefit');
   const honne = getVal('s1_honne');
@@ -1753,7 +1800,7 @@ ${charactersBlock()}
 
 ${'━'.repeat(50)}
 ■ 背景の基本プロンプト
-${bgPrompt||'（STEP2で確定したプロンプトを入力してください）'}
+${backgroundsBlock()}
 
 ${'━'.repeat(50)}
 ■ 漫画シナリオ
