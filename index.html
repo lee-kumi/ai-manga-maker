@@ -455,37 +455,19 @@ textarea { resize: vertical; min-height: 72px; }
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🎨</span> ① キャラクターの外見設定</div>
-    <table class="char-table">
-      <tr><td>キャラクター名</td><td><input type="text" id="s2_char_name" placeholder="例：佐藤みなこ" oninput="autoSave()"></td></tr>
-      <tr><td>髪型</td><td><input type="text" id="s2_hair_style" placeholder="例：ショートボブ" oninput="autoSave()"></td></tr>
-      <tr><td>髪色</td><td><input type="text" id="s2_hair_color" placeholder="例：黒・茶色" oninput="autoSave()"></td></tr>
-      <tr><td>目の色</td><td><input type="text" id="s2_eye_color" placeholder="例：黒・茶色・青" oninput="autoSave()"></td></tr>
-      <tr><td>体型</td><td><input type="text" id="s2_body_type" placeholder="例：細身・標準" oninput="autoSave()"></td></tr>
-      <tr><td>身長</td><td><input type="text" id="s2_height" placeholder="例：低め・普通・高め" oninput="autoSave()"></td></tr>
-      <tr><td>服装・ファッション</td><td><input type="text" id="s2_fashion" placeholder="例：白Tシャツにジーンズ" oninput="autoSave()"></td></tr>
-      <tr><td>表情の傾向</td><td><input type="text" id="s2_expression" placeholder="例：いつも少し不安そう" oninput="autoSave()"></td></tr>
-      <tr><td>画風・スタイル</td><td><input type="text" id="s2_art_style" placeholder="例：漫画風・アニメ風・シンプルな線画" oninput="autoSave()"></td></tr>
-    </table>
-
-    <button class="generate-btn" onclick="generateCharPrompt()">✨ キャラシート依頼プロンプトを生成</button>
-    <div id="charPromptOutput" style="display:none;">
-      <div class="prompt-box">
-        <button class="copy-btn" onclick="copyPrompt('charPromptText',this)">コピー</button>
-        <pre id="charPromptText"></pre>
-      </div>
-    </div>
-    <div class="info-box" style="margin-top:14px;">💡 <strong>四面図を作る理由：</strong> 画像生成時にキャラシート（四面図）を参考画像として添付することで、コマごとの見た目のブレを防げます。</div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">📝</span> ② 確定した基本プロンプトをメモ</div>
-    <div class="info-box">気に入ったキャラ画像が生成できたら、そのプロンプトをここにコピペしておきましょう。NotebookLMに入れる素材になります。</div>
+    <div class="card-title"><span class="icon">🖌️</span> ① 画風・スタイル（全キャラ共通）</div>
     <div class="form-group">
-      <label>キャラクターの基本プロンプト（英語でも日本語でもOK）</label>
-      <textarea id="s2_char_base_prompt" rows="4" placeholder="例：1girl, short black bob hair, dark brown eyes, slim, white T-shirt and jeans, slightly anxious expression, manga style, simple line art" oninput="autoSave()"></textarea>
+      <label>画風・スタイル</label>
+      <input type="text" id="s2_art_style" placeholder="例：漫画風・アニメ風・シンプルな線画" oninput="autoSave()">
     </div>
+    <div class="info-box">💡 全キャラ共通の画風です。ここを揃えると、登場人物全員のタッチが統一されます。</div>
   </div>
+
+  <div class="info-box">👥 <strong>登場人物は複数登録できます。</strong>主人公のほか、相手役・脇役などを追加しましょう。各コマで「誰が出るか」を指定すると、対応する人物の設定が自動で使われます。<br>💡 <strong>四面図を作る理由：</strong>画像生成時にキャラシート（四面図）を参考画像として添付すると、コマごとの見た目のブレを防げます。</div>
+
+  <div id="charactersContainer"></div>
+
+  <button class="add-row-btn" onclick="addCharacter()" style="width:100%;margin-bottom:18px;">＋ 登場人物を追加</button>
 
   <div class="card">
     <div class="card-title"><span class="icon">🏠</span> ③ 背景の設定</div>
@@ -1054,9 +1036,7 @@ const INPUT_IDS = [
   's1_honne','s1_wall','s1_key',
   's1_before','s1_after','s1_benefit',
   ...[1,2,3,4,5].flatMap(n=>[`s1_ch${n}_title`,`s1_ch${n}_role`,`s1_ch${n}_change`]),
-  's2_char_name','s2_hair_style','s2_hair_color','s2_eye_color',
-  's2_body_type','s2_height','s2_fashion','s2_expression','s2_art_style',
-  's2_char_base_prompt','s2_bg_locations','s2_bg_base_prompt',
+  's2_art_style','s2_bg_locations','s2_bg_base_prompt',
   's4_chapter_notes','s4_scenario_output','s4_gdocs_url',
   's5_scenario_input',
 ];
@@ -1067,8 +1047,97 @@ const CHECK_IDS = [
 
 let currentStep = 0;
 let panelRows = [];
+let characters = [];
 let s1Step = 1;
 const S1_TOTAL = 8;
+
+// =============== CHARACTERS (multi) ===============
+function blankCharacter() { return { name:'', hairStyle:'', hairColor:'', eyeColor:'', bodyType:'', height:'', fashion:'', expression:'', basePrompt:'' }; }
+
+function renderCharacters() {
+  const el = document.getElementById('charactersContainer');
+  if (!el) return;
+  el.innerHTML = characters.map((c,i) => `
+    <div class="card">
+      <div class="card-title" style="display:flex;align-items:center;"><span class="icon">🎭</span> 登場人物 ${i+1}${i===0?'（主人公）':''}
+        ${characters.length>1?`<button class="del-btn" style="margin-left:auto;" onclick="removeCharacter(${i})">✕</button>`:''}
+      </div>
+      <table class="char-table">
+        <tr><td>キャラクター名</td><td><input type="text" value="${esc(c.name)}" oninput="characters[${i}].name=this.value;autoSave()" placeholder="例：佐藤みなこ"></td></tr>
+        <tr><td>髪型</td><td><input type="text" value="${esc(c.hairStyle)}" oninput="characters[${i}].hairStyle=this.value;autoSave()" placeholder="例：ショートボブ"></td></tr>
+        <tr><td>髪色</td><td><input type="text" value="${esc(c.hairColor)}" oninput="characters[${i}].hairColor=this.value;autoSave()" placeholder="例：黒・茶色"></td></tr>
+        <tr><td>目の色</td><td><input type="text" value="${esc(c.eyeColor)}" oninput="characters[${i}].eyeColor=this.value;autoSave()" placeholder="例：黒・茶色・青"></td></tr>
+        <tr><td>体型</td><td><input type="text" value="${esc(c.bodyType)}" oninput="characters[${i}].bodyType=this.value;autoSave()" placeholder="例：細身・標準"></td></tr>
+        <tr><td>身長</td><td><input type="text" value="${esc(c.height)}" oninput="characters[${i}].height=this.value;autoSave()" placeholder="例：低め・普通・高め"></td></tr>
+        <tr><td>服装・ファッション</td><td><input type="text" value="${esc(c.fashion)}" oninput="characters[${i}].fashion=this.value;autoSave()" placeholder="例：白Tシャツにジーンズ"></td></tr>
+        <tr><td>表情の傾向</td><td><input type="text" value="${esc(c.expression)}" oninput="characters[${i}].expression=this.value;autoSave()" placeholder="例：いつも少し不安そう"></td></tr>
+      </table>
+      <button class="generate-btn" onclick="generateCharPrompt(${i})">✨ キャラシート依頼プロンプトを生成</button>
+      <div id="charPromptOutput_${i}" style="display:none;">
+        <div class="prompt-box">
+          <button class="copy-btn" onclick="copyPrompt('charPromptText_${i}',this)">コピー</button>
+          <pre id="charPromptText_${i}"></pre>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:14px;">
+        <label>確定した基本プロンプト（メモ／英語でも日本語でもOK）</label>
+        <textarea rows="3" oninput="characters[${i}].basePrompt=this.value;autoSave()" placeholder="例：1girl, short black bob hair, dark brown eyes, slim, manga style">${esc(c.basePrompt)}</textarea>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addCharacter() { characters.push(blankCharacter()); renderCharacters(); autoSave(); }
+function removeCharacter(i) { characters.splice(i,1); if(characters.length===0) characters.push(blankCharacter()); renderCharacters(); autoSave(); }
+
+function generateCharPrompt(i) {
+  const c = characters[i]; const art = getVal('s2_art_style');
+  const prompt = `以下の外見設定のキャラクターシートを作成してください。
+正面・横・後ろ・顔アップの四面図も含めてください。
+
+【キャラクターの外見設定】
+キャラクター名：${c.name||'（未入力）'}
+髪型：${c.hairStyle||'（未入力）'}
+髪色：${c.hairColor||'（未入力）'}
+目の色：${c.eyeColor||'（未入力）'}
+体型・身長：${c.bodyType||'（未入力）'} / ${c.height||'（未入力）'}
+服装・ファッション：${c.fashion||'（未入力）'}
+表情の傾向：${c.expression||'（未入力）'}
+画風・スタイル：${art||'（未入力）'}
+
+さらに、このキャラクターを画像生成AIで生成するための英語プロンプトも作成してください。
+・表情・ポーズなしの「基本プロンプト」として出力してください
+・背景なし（white background）で出力してください
+・漫画風アニメスタイルで統一してください`;
+  document.getElementById('charPromptText_'+i).textContent = prompt;
+  document.getElementById('charPromptOutput_'+i).style.display = 'block';
+  showToast('プロンプトを生成しました！');
+}
+
+// 各キャラの {名前, 基本プロンプト} を返す（基本プロンプト未設定なら個別フィールドから自動生成）
+function getCharacterList() {
+  return characters.map(c => {
+    let base = (c.basePrompt||'').trim();
+    if (!base) {
+      const parts = [
+        c.hairStyle && `${c.hairStyle} hair`,
+        c.hairColor && `${c.hairColor} hair color`,
+        c.eyeColor && `${c.eyeColor} eyes`,
+        c.bodyType && `${c.bodyType} build`,
+        c.fashion, c.expression
+      ].filter(Boolean);
+      base = parts.length ? parts.join(', ') : '';
+    }
+    return { name:(c.name||'').trim(), base };
+  }).filter(c => c.name || c.base);
+}
+
+// プロンプト埋め込み用の登場人物ブロック
+function charactersBlock() {
+  const list = getCharacterList();
+  if (!list.length) return '（STEP2でキャラクターを設定してください）';
+  return list.map((c,i) => `・${c.name||('キャラ'+(i+1))}：${c.base||'（基本プロンプト未設定）'}`).join('\n');
+}
 
 // =============== INIT ===============
 function init() {
@@ -1078,6 +1147,8 @@ function init() {
   loadFromStorage();
   if (panelRows.length === 0) { addPanelRow(false); addPanelRow(false); addPanelRow(false); }
   renderPanelTable();
+  if (characters.length === 0) characters.push(blankCharacter());
+  renderCharacters();
   renderS1Progress();
 }
 
@@ -1259,20 +1330,6 @@ function getChapterInfo() {
   const role = getVal(`s1_ch${ch}_role`);
   const change = getVal(`s1_ch${ch}_change`);
 
-  // キャラ情報：確定済みメモ優先、なければ個別フィールドから自動生成
-  let charBase = getVal('s2_char_base_prompt');
-  if(!charBase) {
-    const parts = [
-      getVal('s2_hair_style') && `${getVal('s2_hair_style')} hair`,
-      getVal('s2_hair_color') && `${getVal('s2_hair_color')} hair color`,
-      getVal('s2_eye_color') && `${getVal('s2_eye_color')} eyes`,
-      getVal('s2_body_type') && `${getVal('s2_body_type')} build`,
-      getVal('s2_fashion') && getVal('s2_fashion'),
-      getVal('s2_expression') && getVal('s2_expression'),
-    ].filter(Boolean);
-    charBase = parts.length ? `1girl, ${parts.join(', ')}` : '';
-  }
-
   // 背景情報：確定済みメモ優先、なければ場所から自動生成
   let bgBase = getVal('s2_bg_base_prompt');
   if(!bgBase) {
@@ -1280,7 +1337,7 @@ function getChapterInfo() {
     bgBase = loc ? loc : '';
   }
 
-  return { ch, from, to, ppp, notes, theme, title, role, change, charBase, bgBase };
+  return { ch, from, to, ppp, notes, theme, title, role, change, bgBase };
 }
 
 function generateScenarioPrompt() {
@@ -1329,16 +1386,14 @@ ${notes?`補足：${notes}`:''}
 function generatePanelPromptB() {
   const scenario = getVal('s4_scenario_output');
   const { ch, from, to, ppp } = getChapterInfo();
-  const charName = getVal('s2_char_name');
-  const charBase = getVal('s2_char_base_prompt');
 
   if(!scenario) { showToast('シナリオをStep2のテキストエリアに貼ってください'); return; }
 
   const prompt = `以下のシナリオを漫画のコマ割り形式に変換してください。
 
-【登場キャラクター】
-キャラクター名：${charName||'（未入力）'}
-外見設定：${charBase||'（未入力）'}
+【登場人物】
+${charactersBlock()}
+※各コマの「キャラクター：」には、上の登場人物のうち誰が出ているかを明記してください。
 
 【変換条件】
 ・ページ範囲：P${from}〜P${to}
@@ -1363,22 +1418,7 @@ ${scenario}`;
 // =============== STEP5 IMAGE PROMPT ===============
 function generateImagePromptRequest() {
   const scenario = getVal('s5_scenario_input');
-  const charName = getVal('s2_char_name');
   const artStyle = getVal('s2_art_style');
-
-  // キャラ基本プロンプト：確定済みメモ優先、なければ個別フィールドから自動生成
-  let charBase = getVal('s2_char_base_prompt');
-  if(!charBase) {
-    const parts = [
-      getVal('s2_hair_style') && `${getVal('s2_hair_style')} hair`,
-      getVal('s2_hair_color') && `${getVal('s2_hair_color')} hair color`,
-      getVal('s2_eye_color') && `${getVal('s2_eye_color')} eyes`,
-      getVal('s2_body_type') && `${getVal('s2_body_type')} build`,
-      getVal('s2_fashion') && getVal('s2_fashion'),
-      getVal('s2_expression') && getVal('s2_expression'),
-    ].filter(Boolean);
-    charBase = parts.length ? `1girl, ${parts.join(', ')}` : '（STEP2でキャラ設定を入力してください）';
-  }
 
   // 背景プロンプト：確定済みメモ優先、なければ場所から自動生成
   let bgBase = getVal('s2_bg_base_prompt');
@@ -1391,9 +1431,8 @@ function generateImagePromptRequest() {
 
   const prompt = `以下のコマ割りシナリオをもとに、各コマの画像生成プロンプト（英語）を作成してください。
 
-【キャラクター基本設定】
-キャラクター名：${charName||'（未入力）'}
-基本プロンプト：${charBase}
+【登場人物の基本設定】
+${charactersBlock()}
 
 【背景基本設定】
 ${bgBase}
@@ -1403,6 +1442,7 @@ ${artStyle||'manga style, simple line art'}
 
 【プロンプト生成ルール】
 ・各コマについて必ず「アングル・ショット・光・英語プロンプト」の4点セットで出力する
+・各コマの「キャラクター：」に合う人物の基本プロンプトを使う（複数キャラが混ざらないよう注意）
 ・キャラクターが登場するコマは基本プロンプトを必ず含める（見た目を固定）
 ・表情は場面の感情に合わせる（喜・怒・哀・驚・困・決意 など）
 ・光（ライティング）は感情に合わせて選ぶ（例：希望＝明るい順光／不安＝影が強い／回想＝やわらかい逆光）
@@ -1435,7 +1475,7 @@ function goToStep(n) {
 // =============== STORAGE ===============
 function autoSave() {
   const struct = document.querySelector('input[name="s1_structure"]:checked');
-  const data = { inputs:{}, checks:{}, panels:panelRows, structure: struct?struct.value:'' };
+  const data = { inputs:{}, checks:{}, panels:panelRows, characters:characters, structure: struct?struct.value:'' };
   INPUT_IDS.forEach(id => { const el=document.getElementById(id); if(el) data.inputs[id]=el.value; });
   CHECK_IDS.forEach(id => { const el=document.getElementById(id); if(el) data.checks[id]=el.checked; });
   localStorage.setItem('aiMangaMaker_v2', JSON.stringify(data));
@@ -1453,6 +1493,13 @@ function loadFromStorage() {
     if(data.inputs) Object.entries(data.inputs).forEach(([id,val])=>{ const el=document.getElementById(id); if(el) el.value=val; });
     if(data.checks) Object.entries(data.checks).forEach(([id,val])=>{ const el=document.getElementById(id); if(el) el.checked=val; });
     if(data.panels && data.panels.length>0) panelRows = data.panels;
+    // 登場人物：新形式があれば使う／旧・単一キャラ形式は移行する
+    if(data.characters && data.characters.length>0) {
+      characters = data.characters;
+    } else if(data.inputs && (data.inputs.s2_char_name || data.inputs.s2_char_base_prompt || data.inputs.s2_hair_style)) {
+      const o = data.inputs;
+      characters = [{ name:o.s2_char_name||'', hairStyle:o.s2_hair_style||'', hairColor:o.s2_hair_color||'', eyeColor:o.s2_eye_color||'', bodyType:o.s2_body_type||'', height:o.s2_height||'', fashion:o.s2_fashion||'', expression:o.s2_expression||'', basePrompt:o.s2_char_base_prompt||'' }];
+    }
     if(data.structure) {
       const radio = document.querySelector(`input[name="s1_structure"][value="${data.structure}"]`);
       if(radio) { radio.checked=true; selectStructure(radio); }
@@ -1624,37 +1671,6 @@ ${'━'.repeat(50)}
   showOutput('step1PromptOutput','step1PromptText', prompt);
 }
 
-function generateCharPrompt() {
-  const name = getVal('s2_char_name');
-  const hs = getVal('s2_hair_style');
-  const hc = getVal('s2_hair_color');
-  const ec = getVal('s2_eye_color');
-  const bt = getVal('s2_body_type');
-  const h = getVal('s2_height');
-  const f = getVal('s2_fashion');
-  const ex = getVal('s2_expression');
-  const art = getVal('s2_art_style');
-
-  const prompt = `以下の外見設定のキャラクターシートを作成してください。
-正面・横・後ろ・顔アップの四面図も含めてください。
-
-【キャラクターの外見設定】
-キャラクター名：${name||'（未入力）'}
-髪型：${hs||'（未入力）'}
-髪色：${hc||'（未入力）'}
-目の色：${ec||'（未入力）'}
-体型・身長：${bt||'（未入力）'} / ${h||'（未入力）'}
-服装・ファッション：${f||'（未入力）'}
-表情の傾向：${ex||'（未入力）'}
-画風・スタイル：${art||'（未入力）'}
-
-さらに、このキャラクターを画像生成AIで生成するための英語プロンプトも作成してください。
-・表情・ポーズなしの「基本プロンプト」として出力してください
-・背景なし（white background）で出力してください
-・漫画風アニメスタイルで統一してください`;
-  showOutput('charPromptOutput','charPromptText', prompt);
-}
-
 function generateBgPrompt() {
   const loc = getVal('s2_bg_locations');
   const art = getVal('s2_art_style');
@@ -1709,8 +1725,6 @@ ${story||'（未入力）'}
 function generateNotebookLMSource() {
   const theme = getVal('s1_theme');
   const art = getVal('s2_art_style');
-  const charName = getVal('s2_char_name');
-  const charPrompt = getVal('s2_char_base_prompt');
   const bgPrompt = getVal('s2_bg_base_prompt');
   const scenario = getVal('s3_scenario_output');
   const benefit = getVal('s1_benefit');
@@ -1734,10 +1748,8 @@ ${'━'.repeat(50)}
 画風：${art||'（未入力）'}
 
 ${'━'.repeat(50)}
-■ キャラクターの基本プロンプト
-名前：${charName||'（未入力）'}
-
-${charPrompt||'（STEP2で確定したプロンプトを入力してください）'}
+■ 登場人物の基本プロンプト
+${charactersBlock()}
 
 ${'━'.repeat(50)}
 ■ 背景の基本プロンプト
