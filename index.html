@@ -27,13 +27,13 @@ body { font-family: 'Noto Sans JP', -apple-system, sans-serif; background: var(-
 .header { background: var(--card); border-bottom: 2px solid var(--primary-light); padding: 12px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(108,99,255,0.08); }
 .header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .logo { font-size: 18px; font-weight: 900; color: var(--primary); white-space: nowrap; }
-.step-nav { display: flex; flex-wrap: wrap; gap: 3px; flex: 1; padding-bottom: 2px; }
-.step-btn { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 5px 8px; border-radius: 8px; border: none; background: transparent; cursor: pointer; white-space: nowrap; font-family: inherit; transition: all 0.2s; min-width: 52px; }
+.step-nav { flex-basis: 100%; display: flex; flex-wrap: nowrap; gap: 2px; padding-top: 8px; margin-top: 8px; border-top: 1px solid var(--primary-light); }
+.step-btn { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 5px 2px; border-radius: 8px; border: none; background: transparent; cursor: pointer; white-space: nowrap; font-family: inherit; transition: all 0.2s; }
 .step-btn:hover { background: var(--primary-light); }
 .step-btn.active { background: var(--primary); color: white; }
 .step-btn.done { background: #E8F5E9; }
 .step-num { font-size: 16px; font-weight: 900; line-height: 1; }
-.step-label { font-size: 8px; line-height: 1.2; text-align: center; color: var(--text-muted); }
+.step-label { font-size: 9px; line-height: 1.2; text-align: center; color: var(--text-muted); }
 .step-btn.active .step-label { color: rgba(255,255,255,0.8); }
 .save-indicator { font-size: 12px; color: var(--accent); white-space: nowrap; opacity: 0; transition: opacity 0.3s; }
 .save-indicator.visible { opacity: 1; }
@@ -1027,13 +1027,13 @@ textarea { resize: vertical; min-height: 72px; }
 <script>
 // =============== CONFIG ===============
 const STEPS = [
-  { num:0, label:'🗺', name:'全体の流れ' },
-  { num:1, label:'1', name:'ストーリー設計' },
-  { num:2, label:'2', name:'キャラ・背景' },
-  { num:3, label:'3', name:'LM設定' },
-  { num:4, label:'4', name:'コマ割り生成' },
-  { num:5, label:'5', name:'画像プロンプト' },
-  { num:6, label:'6', name:'内容確認' },
+  { num:0, label:'🗺', name:'全体の流れ',     short:'全体' },
+  { num:1, label:'1', name:'ストーリー設計',   short:'設計' },
+  { num:2, label:'2', name:'キャラ・背景',     short:'キャラ' },
+  { num:3, label:'3', name:'LM設定',          short:'LM' },
+  { num:4, label:'4', name:'コマ割り生成',     short:'コマ割' },
+  { num:5, label:'5', name:'画像プロンプト',   short:'画像' },
+  { num:6, label:'6', name:'内容確認',         short:'確認' },
 ];
 
 const INPUT_IDS = [
@@ -1269,9 +1269,9 @@ function renderS1Progress() {
 
 function renderStepNav() {
   document.getElementById('stepNav').innerHTML = STEPS.map(s => `
-    <button class="step-btn ${s.num===currentStep?'active':''}" onclick="goToStep(${s.num})">
+    <button class="step-btn ${s.num===currentStep?'active':''}" onclick="goToStep(${s.num})" title="${s.name}">
       <span class="step-num">${s.label}</span>
-      <span class="step-label">${s.name}</span>
+      <span class="step-label">${s.short||s.name}</span>
     </button>
   `).join('');
 }
