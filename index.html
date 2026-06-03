@@ -659,29 +659,48 @@ textarea { resize: vertical; min-height: 72px; }
   <div class="step-header">
     <div class="step-badge">STEP 5</div>
     <h1>画像プロンプトを生成する</h1>
-    <p>STEP4で作ったコマ割りシナリオをNotebookLMに渡して、各コマの画像生成プロンプトを出力します。結果をコマ管理表に整理しましょう。</p>
+    <p>コマ割りシナリオから画像プロンプトを作ります。<strong>2つのルート</strong>から選べます。</p>
     <div class="tool-links">
       <a href="https://notebooklm.google.com/" target="_blank" class="tool-link">📓 NotebookLM</a>
+      <a href="https://gemini.google.com/" target="_blank" class="tool-link">🔵 Gemini</a>
+      <a href="https://chatgpt.com/" target="_blank" class="tool-link">🟢 ChatGPT</a>
       <a href="https://docs.google.com/" target="_blank" class="tool-link">📄 Google Docs</a>
     </div>
   </div>
 
-  <div class="card highlight">
-    <div class="card-title"><span class="icon">✨</span> 画像プロンプト生成（NotebookLM用）</div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Google Docsのコマ割りシナリオをここにペーストしてください。NotebookLMへの依頼プロンプトを自動生成します。</p>
+  <div class="info-box">🔀 <strong>ルートを選ぶ：</strong><br>⚡ <strong>お手軽量産</strong>＝1ページを一発生成（速い・コマは固定的）<br>🎨 <strong>品質ルート</strong>＝1コマずつ生成してCanvaで組み立て（手間・自由なコマ割り）</div>
 
+  <div class="card">
+    <div class="card-title"><span class="icon">📋</span> コマ割りシナリオを貼る（両ルート共通）</div>
     <div class="form-group">
-      <label>コマ割りシナリオ（Google Docsからコピペ）</label>
-      <textarea id="s5_scenario_input" rows="10" placeholder="P1-コマ1&#10;絵：○○が△△している場面&#10;セリフ：「……」&#10;&#10;P1-コマ2&#10;絵：…" oninput="autoSave()"></textarea>
+      <label>コマ割りシナリオ（STEP4の出力／Google Docsからコピペ）</label>
+      <textarea id="s5_scenario_input" rows="10" placeholder="P1-コマ1（大）&#10;キャラクター：おかくみ&#10;構図：驚いた顔でスマホを見る&#10;アングル：正面・バストアップ&#10;セリフ：「えっ、AIで漫画が作れるの？」&#10;&#10;P1-コマ2（中）&#10;…" oninput="autoSave()"></textarea>
     </div>
+  </div>
 
-    <button class="generate-btn accent" onclick="generateImagePromptRequest()">🎨 画像プロンプト生成リクエストを作成</button>
+  <div class="card highlight">
+    <div class="card-title"><span class="icon">⚡</span> ルートA：お手軽量産（1ページ一括生成）</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">上のコマ割りから「1ページ漫画を一発生成するプロンプト」を作ります。画像AIに貼って、四面図を添付するだけ。</p>
+    <button class="generate-btn accent" onclick="generateBulkPagePrompt()">⚡ 1ページ一括生成プロンプトを作る</button>
+    <div id="bulkPageOutput" style="display:none;">
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyPrompt('bulkPageText',this)">コピー</button>
+        <pre id="bulkPageText"></pre>
+      </div>
+      <div class="info-box" style="margin-top:10px;">👆 このプロンプトを<strong>画像AI（Gemini / Nano Banana / ChatGPT画像）</strong>に貼り、<strong>キャラの四面図を参考画像として添付</strong>して生成→1ページ漫画が出ます。<br>⚠️ 日本語セリフが崩れたら、プロンプト末尾の「セリフを描く」を「吹き出しは空欄で」に変えて、文字はCanvaで乗せましょう。</div>
+    </div>
+  </div>
+
+  <div class="card highlight">
+    <div class="card-title"><span class="icon">🎨</span> ルートB：品質ルート（1コマずつ・NotebookLM用）</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">上のコマ割りから、各コマの画像プロンプト（アングル・ショット・光・英語）の依頼文を作ります。NotebookLMに渡してください。</p>
+    <button class="generate-btn" onclick="generateImagePromptRequest()">🎨 各コマの画像プロンプト依頼を作る</button>
     <div id="imagePromptRequestOutput" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyPrompt('imagePromptRequestText',this)">コピー</button>
         <pre id="imagePromptRequestText"></pre>
       </div>
-      <div class="info-box" style="margin-top:10px;">👆 このプロンプトをNotebookLMに貼り付けて実行→出力をコマ管理表に整理してください。</div>
+      <div class="info-box" style="margin-top:10px;">👆 このプロンプトをNotebookLMに貼り付けて実行→出た各コマの英語プロンプトで1コマずつ生成→Canvaで組み立て。</div>
     </div>
   </div>
 
@@ -1489,6 +1508,36 @@ ${scenario}`;
 }
 
 // =============== STEP5 IMAGE PROMPT ===============
+function generateBulkPagePrompt() {
+  const scenario = getVal('s5_scenario_input');
+  const artStyle = getVal('s2_art_style') || 'Japanese manga style, black and white';
+  if(!scenario) { showToast('コマ割りシナリオを貼り付けてください'); return; }
+
+  const prompt = `以下のコマ割りをもとに、1ページの漫画を「1枚の画像」として生成してください。
+
+【スタイル】${artStyle}
+【サイズ】縦長・アスペクト比 1000:1414（A4縦・portrait）
+【レイアウト】コマ枠をはっきり描く／右上から左下への読み順（日本式・右綴じ）
+【セリフ】各コマに日本語の吹き出しを描き、下のセリフを入れる（長い場合は短くしてOK）
+【擬音】感情が動く場面にはオノマトペ（擬音）を漫画的な手描き文字で添える
+【一貫性】同じキャラクターは全コマで顔・髪・服を統一する（参考：四面図を添付）
+
+【登場人物（見た目を統一）】
+${charactersBlock()}
+
+【コマ割り（この通りに配置・セリフを入れる）】
+${scenario}
+
+【注意】
+・キャラの顔がコマ間でブレないようにする
+・日本語のセリフはできるだけ正確に描く
+・吹き出しに収まらないセリフは短く言い換えてよい
+
+※このプロンプトを画像生成AIに貼り、キャラの四面図を参考画像として添付してください。
+※日本語の文字が崩れる場合は、上の【セリフ】の行を「吹き出しは空欄にする（文字は描かない）」に変更し、文字はCanvaで後から入れてください。`;
+  showOutput('bulkPageOutput','bulkPageText', prompt);
+}
+
 function generateImagePromptRequest() {
   const scenario = getVal('s5_scenario_input');
   const artStyle = getVal('s2_art_style');
