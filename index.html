@@ -425,13 +425,15 @@ textarea { resize: vertical; min-height: 72px; }
   <div class="s1-substep" id="s1sub-8">
     <div class="card highlight">
       <div class="card-title"><span class="icon">🎉</span> ストーリー設計シート完成！</div>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">入力内容をもとに、NotebookLM に投入するソースシートを生成します。コピーしてGoogle Docsとして保存しておきましょう。</p>
-      <button class="generate-btn accent" onclick="generateStep1Prompt('notebooklm')">📖 NotebookLM ソースシートを生成</button>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">入力内容をもとに、NotebookLM に保存する「ソースシート（資料）」を生成します。</p>
+      <div class="warn-box">⚠️ <strong>これはAIに投げる"指示プロンプト"ではありません。</strong><br>NotebookLMやGoogle Docsに<strong>貼って保存する"資料"</strong>です。AIに質問する必要はなく、<strong>コピーして置いておくだけ</strong>でOK（本棚に1冊置くイメージ）。</div>
+      <button class="generate-btn accent" onclick="generateStep1Prompt('notebooklm')">📚 NotebookLMに保存する資料を作る</button>
       <div id="step1PromptOutput" style="display:none;">
         <div class="prompt-box">
           <button class="copy-btn" onclick="copyPrompt('step1PromptText',this)">コピー</button>
           <pre id="step1PromptText"></pre>
         </div>
+        <div class="info-box" style="margin-top:10px;">📚 <strong>使い方：</strong>「コピー」→ NotebookLMの「ソースを追加」に貼る（またはGoogle Docsに保存）。質問は不要、保存するだけ。</div>
       </div>
       <div class="info-box" style="margin-top:14px;">✅ 生成できたら、次のSTEP2でキャラクターと背景を決めましょう。</div>
     </div>
