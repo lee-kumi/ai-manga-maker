@@ -239,6 +239,12 @@ textarea { resize: vertical; min-height: 72px; }
 
   <div class="warn-box">⚠️ <strong>よくある失敗：</strong> STEP1を雑にしていきなり画像生成から始めてしまう。ストーリーとキャラが固まっていないと、NotebookLMに具体的な指示が出せません。必ずSTEP1から順番に進めましょう。</div>
 
+  <div class="card">
+    <div class="card-title"><span class="icon">🗑️</span> 最初からやり直す</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">入力した内容（ストーリー・キャラ・背景など）を<strong>すべて一括で消去</strong>して、まっさらな状態に戻します。新しい漫画を作り始めるときに使ってください。</p>
+    <button class="generate-btn" style="background:#EF4444;" onclick="clearAllData()">🗑️ 全データをクリア（最初から）</button>
+  </div>
+
   <div class="nav-buttons">
     <button class="nav-btn prev" disabled>◀ 前へ</button>
     <button class="nav-btn next" onclick="goToStep(1)">STEP 1 を始める ▶</button>
@@ -1596,6 +1602,12 @@ function autoSave() {
   ind.classList.add('visible');
   clearTimeout(autoSave._t);
   autoSave._t = setTimeout(()=>ind.classList.remove('visible'), 2000);
+}
+
+function clearAllData() {
+  if (!confirm('入力した内容（ストーリー・キャラ・背景・コマ管理表など）をすべて消して、最初の状態に戻します。\n\nよろしいですか？（この操作は取り消せません）')) return;
+  localStorage.removeItem('aiMangaMaker_v2');
+  location.reload();
 }
 
 function loadFromStorage() {
