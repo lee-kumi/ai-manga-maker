@@ -461,12 +461,16 @@ textarea { resize: vertical; min-height: 72px; }
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🖌️</span> ① 画風・スタイル（全キャラ共通）</div>
+    <div class="card-title"><span class="icon">🖌️</span> ① 画風・スタイル＆ネガティブ（全キャラ共通）</div>
     <div class="form-group">
       <label>画風・スタイル</label>
       <input type="text" id="s2_art_style" placeholder="例：漫画風・アニメ風・シンプルな線画" oninput="autoSave()">
     </div>
-    <div class="info-box">💡 全キャラ共通の画風です。ここを揃えると、登場人物全員のタッチが統一されます。</div>
+    <div class="form-group">
+      <label>ネガティブプロンプト（避けたい要素・英語推奨）</label>
+      <textarea id="s2_negative_prompt" rows="2" placeholder="例：lowres, bad anatomy, bad hands, extra fingers, missing fingers, blurry, deformed, watermark, text" oninput="autoSave()"></textarea>
+    </div>
+    <div class="info-box">💡 <strong>画風</strong>は全キャラ共通。タッチが揃います。<br>🚫 <strong>ネガティブプロンプト</strong>は「出したくないもの」を指定（指の崩れ・低画質など）。Anifusionなどで特に効きます。迷ったら上の例をそのまま使ってOK。</div>
   </div>
 
   <div class="info-box">👥 <strong>登場人物は複数登録できます。</strong>主人公のほか、相手役・脇役などを追加しましょう。各コマで「誰が出るか」を指定すると、対応する人物の設定が自動で使われます。<br>💡 <strong>四面図を作る理由：</strong>画像生成時にキャラシート（四面図）を参考画像として添付すると、コマごとの見た目のブレを防げます。</div>
@@ -1048,7 +1052,7 @@ const INPUT_IDS = [
   's1_honne','s1_wall','s1_key',
   's1_before','s1_after','s1_benefit',
   ...[1,2,3,4,5].flatMap(n=>[`s1_ch${n}_title`,`s1_ch${n}_role`,`s1_ch${n}_change`]),
-  's2_art_style',
+  's2_art_style','s2_negative_prompt',
   's4_chapter_notes','s4_scenario_output','s4_gdocs_url',
   's5_scenario_input',
 ];
@@ -1101,8 +1105,9 @@ function renderCharacters() {
         </div>
       </div>
       <div class="form-group" style="margin-top:14px;">
-        <label>確定した基本プロンプト（メモ／英語でも日本語でもOK）</label>
-        <textarea rows="3" oninput="characters[${i}].basePrompt=this.value;autoSave()" placeholder="例：1girl, short black bob hair, dark brown eyes, slim, manga style">${esc(c.basePrompt)}</textarea>
+        <label>確定した基本プロンプト（<strong>英語推奨</strong>）</label>
+        <textarea rows="3" oninput="characters[${i}].basePrompt=this.value;autoSave()" placeholder="例：1girl, short black bob hair, dark brown eyes, slim, white T-shirt and jeans, manga style">${esc(c.basePrompt)}</textarea>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:5px;">💡 画像生成は<strong>英語の方が精度が高い</strong>です。上の「キャラシート依頼」でGPT / Geminiに英語プロンプトを作ってもらい、それをここに貼りましょう。</p>
       </div>
     </div>`;
   }).join('');
@@ -1127,9 +1132,10 @@ function generateCharPrompt(i) {
 画風・スタイル：${art||'（未入力）'}
 
 さらに、このキャラクターを画像生成AIで生成するための英語プロンプトも作成してください。
-・表情・ポーズなしの「基本プロンプト」として出力してください
+・表情・ポーズなしの「基本プロンプト（英語）」として出力してください
 ・背景なし（white background）で出力してください
-・漫画風アニメスタイルで統一してください`;
+・漫画風アニメスタイルで統一してください
+・あわせて、崩れを防ぐための「ネガティブプロンプト（英語）」の推奨も出力してください（例：lowres, bad anatomy, bad hands, extra fingers, blurry など）`;
   document.getElementById('charPromptText_'+i).textContent = prompt;
   document.getElementById('charPromptOutput_'+i).style.display = 'block';
   showToast('プロンプトを生成しました！');
@@ -1515,6 +1521,7 @@ ${scenario}`;
 function generateBulkPagePrompt() {
   const scenario = getVal('s5_scenario_input');
   const artStyle = getVal('s2_art_style') || 'Japanese manga style, black and white';
+  const neg = getVal('s2_negative_prompt');
   if(!scenario) { showToast('コマ割りシナリオを貼り付けてください'); return; }
 
   const prompt = `以下のコマ割りをもとに、1ページの漫画を「1枚の画像」として生成してください。
@@ -1525,6 +1532,7 @@ function generateBulkPagePrompt() {
 【セリフ】各コマに日本語の吹き出しを描き、下のセリフを入れる（長い場合は短くしてOK）
 【擬音】感情が動く場面にはオノマトペ（擬音）を漫画的な手描き文字で添える
 【一貫性】同じキャラクターは全コマで顔・髪・服を統一する（参考：四面図を添付）
+【避ける要素（ネガティブ）】${neg||'指の崩れ・低画質・余計な文字など'}
 
 【登場人物（見た目を統一）】
 ${charactersBlock()}
@@ -1545,6 +1553,7 @@ ${scenario}
 function generateImagePromptRequest() {
   const scenario = getVal('s5_scenario_input');
   const artStyle = getVal('s2_art_style');
+  const neg = getVal('s2_negative_prompt');
 
   if(!scenario) { showToast('コマ割りシナリオを貼り付けてください'); return; }
 
@@ -1559,14 +1568,18 @@ ${backgroundsBlock()}
 【画像スタイル】
 ${artStyle||'manga style, simple line art'}
 
+【ネガティブプロンプト（全コマ共通・避ける要素）】
+${neg||'lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, text'}
+
 【プロンプト生成ルール】
-・各コマについて必ず「アングル・ショット・光・英語プロンプト」の4点セットで出力する
+・各コマについて必ず「アングル・ショット・光・英語プロンプト・ネガティブ」の5点セットで出力する
 ・各コマの「キャラクター：」に合う人物の基本プロンプトを使う（複数キャラが混ざらないよう注意）
 ・キャラクターが登場するコマは基本プロンプトを必ず含める（見た目を固定）
 ・表情は場面の感情に合わせる（喜・怒・哀・驚・困・決意 など）
 ・光（ライティング）は感情に合わせて選ぶ（例：希望＝明るい順光／不安＝影が強い／回想＝やわらかい逆光）
 ・背景の雰囲気を簡潔に英語で加える
 ・末尾に必ず「${artStyle||'manga style, simple line art'}」を付ける
+・ネガティブプロンプトは上の【ネガティブプロンプト】を各コマに共通で付ける
 ・セリフは含めない（セリフは別途吹き出しで対応）
 
 【各コマの出力フォーマット（必ずこの形式で）】
@@ -1575,6 +1588,7 @@ P○-コマ○
 ショット：（超クローズアップ／クローズアップ／バストアップ／ウエスト／全身 など）
 光：（順光／逆光／夕日／室内灯／影が強い など。感情に合わせる）
 英語プロンプト：[キャラ基本＋表情＋ポーズ＋アングル＋ショット＋ライティング＋背景＋スタイル]
+ネガティブ：[上の共通ネガティブプロンプト]
 
 【コマ割りシナリオ】
 ${scenario}`;
