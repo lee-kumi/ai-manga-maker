@@ -603,24 +603,20 @@ textarea { resize: vertical; min-height: 72px; }
   <!-- ② コマ割りに変換 -->
   <div class="card highlight">
     <div class="card-title"><span class="icon">📋</span> ② ページ構成（コマ割り）に変換する</div>
-    <p style="font-size:13px;color:var(--text-muted);margin:0 0 6px;">シナリオを貼って変換すると、<strong>1ページずつ・コマ数・構図・アングル・セリフ・モノローグ</strong>が整理された形に変換する依頼文ができます。</p>
+    <p style="font-size:13px;color:var(--text-muted);margin:0 0 6px;">章のシナリオを貼って変換すると、<strong>章まるごと</strong>を「1ページずつ・コマ数・構図／演出・アングル・セリフ・モノローグ・効果音・ナレーション」が整理された形に変換する依頼文ができます。</p>
 
-    <div class="divider"><span>コマ割りの設定</span></div>
+    <div class="divider"><span>コマ割りの設定（任意・空欄でおまかせ）</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">
       <div>
-        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">ページ範囲</label>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <input type="number" id="s4_page_from" value="1" min="1" style="width:60px;padding:7px 8px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
-          <span style="font-size:12px;color:var(--text-muted);">〜</span>
-          <input type="number" id="s4_page_to" value="1" min="1" style="width:60px;padding:7px 8px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
-        </div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">目安の総ページ数（任意）</label>
+        <input type="number" id="s4_target_pages" placeholder="例：20" min="1" style="width:100%;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
       </div>
       <div>
         <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">1ページの目安コマ数</label>
         <input type="number" id="s4_panels_per_page" value="3" min="1" max="6" style="width:80px;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
       </div>
     </div>
-    <div class="info-box" style="margin-top:0;">💡 コマ数は<strong>あくまで目安</strong>。クライマックスは1コマ、会話は2〜3コマなど、<strong>シーンごとに変わってOK</strong>です（スマホ読みなら1ページ2〜4コマが目安）。1ページ漫画なら範囲を「1〜1」に。</div>
+    <div class="info-box" style="margin-top:0;">💡 どちらも<strong>目安</strong>。<strong>空欄ならAIが内容に合わせてページ数を決めます</strong>。1ページ漫画なら「1」、20ページの章なら「20」など。コマ数はクライマックス＝1コマ、会話＝2〜3コマとシーンで増減してOK。</div>
 
     <div class="divider" style="margin-top:18px;"><span>シナリオ出力をここに貼る</span></div>
     <textarea id="s4_scenario_output" rows="8" placeholder="①でGemini / GPTが出力したシナリオをここに貼り付ける..." oninput="autoSave()"></textarea>
@@ -1436,27 +1432,19 @@ function selectStructure(radio) {
 // =============== STEP4 PROMPT GENERATORS ===============
 function getChapterInfo() {
   const ch = document.getElementById('s4_chapter').value;
-  const from = document.getElementById('s4_page_from').value;
-  const to = document.getElementById('s4_page_to').value;
-  const ppp = document.getElementById('s4_panels_per_page').value;
+  const targetPages = (document.getElementById('s4_target_pages')||{}).value || '';
+  const ppp = (document.getElementById('s4_panels_per_page')||{}).value || '3';
   const notes = getVal('s4_chapter_notes');
   const theme = getVal('s1_theme');
   const title = getVal(`s1_ch${ch}_title`);
   const role = getVal(`s1_ch${ch}_role`);
   const change = getVal(`s1_ch${ch}_change`);
 
-  // 背景情報：確定済みメモ優先、なければ場所から自動生成
-  let bgBase = getVal('s2_bg_base_prompt');
-  if(!bgBase) {
-    const loc = getVal('s2_bg_locations');
-    bgBase = loc ? loc : '';
-  }
-
-  return { ch, from, to, ppp, notes, theme, title, role, change, bgBase };
+  return { ch, targetPages, ppp, notes, theme, title, role, change };
 }
 
 function generateScenarioPrompt() {
-  const { ch, from, to, notes, theme, title, role, change } = getChapterInfo();
+  const { ch, notes, theme, title, role, change } = getChapterInfo();
   const struct = document.querySelector('input[name="s1_structure"]:checked');
   const structVal = struct ? struct.value : '（未選択）';
   const honne = getVal('s1_honne');
@@ -1500,11 +1488,16 @@ ${notes?`補足：${notes}`:''}
 
 function generatePanelPromptB() {
   const scenario = getVal('s4_scenario_output');
-  const { ch, from, to, ppp } = getChapterInfo();
+  const { ch, targetPages, ppp, title } = getChapterInfo();
 
   if(!scenario) { showToast('シナリオをStep2のテキストエリアに貼ってください'); return; }
 
-  const prompt = `あなたは漫画の編集者です。以下のシナリオを、漫画の「ページ構成（コマ割り）」に変換してください。
+  const pageLine = targetPages
+    ? `・目安の総ページ数：約${targetPages}ページ（多少前後してOK）`
+    : `・総ページ数：内容に合わせてあなたが決めてください（短い章は数ページ、長い章は20ページ前後など）`;
+
+  const prompt = `あなたは漫画の編集者です。以下の「第${ch}章のシナリオ全体」を、漫画の「ページ構成（コマ割り）」に変換してください。
+章をまるごと、最初から最後まで、ページ単位で漏れなく構成してください。
 必ず「1ページずつ」に整理し、ページごとにコマ数を決めてから各コマを書いてください。
 
 【登場人物】
@@ -1512,31 +1505,33 @@ ${charactersBlock()}
 ※各コマの「キャラクター：」には、上の登場人物のうち誰が出ているかを明記してください。
 
 【変換条件】
-・ページ範囲：P${from}〜P${to}（この範囲に収める）
+${pageLine}
 ・1ページのコマ数：${ppp}コマを目安に。ただしシーンに応じて増減してOK
 ・スマホ読み前提：コマは大きく・少なく。1ページで伝えることは1つに絞る
 ・クライマックスや感情のピークは「1ページ1コマ」で大きく見せる
 ・会話・説明は2〜3コマ、テンポを出したい所は小コマ連続
+・感情の流れ（表情変化）を各コマに明確に反映する
 ・各ページの最後は「次が気になる」引きで終えると良い
 
 【出力フォーマット（必ずこの形式で。ページごとに区切る）】
 ━━━━━━━━━━━━━━━━━━
 【ページ1】　コマ数：3
-　P1-コマ1（大／中／小・演出）
+　P1-コマ1（大／中／小・演出の種類）
 　　キャラクター：（登場するキャラ名。いなければ「なし」）
-　　構図：（場面・動作・表情）
-　　アングル：（正面／斜め45度／俯瞰／煽り／後ろ姿／主観 など）
+　　構図／演出：（場面・動作・表情。アングルもここに：正面／斜め45度／俯瞰／煽り／後ろ姿／主観 など）
 　　セリフ：（口に出す言葉。1コマ30文字以内。なければ「なし」）
-　　モノローグ：（心の声・ナレーション。なければ「なし」）
+　　モノローグ：（心の声。なければ「なし」）
+　　ナレーション：（地の文・説明。なければ「なし」）
+　　効果音：（オノマトペ。なければ「なし」）
 　P1-コマ2（…）
 　　…
 ━━━━━━━━━━━━━━━━━━
 【ページ2】　コマ数：4
 　P2-コマ1（…）
 　　…
-（以降、同じ形式でページごとに続ける）
+（以降、章の最後まで同じ形式でページごとに続ける。最後に「第${ch}章 完」）
 
-【変換するシナリオ】
+【変換する第${ch}章のシナリオ】
 ${scenario}`;
 
   showOutput('panelPromptBOutput','panelPromptBText', prompt);
