@@ -602,7 +602,8 @@ textarea { resize: vertical; min-height: 72px; }
 
   <!-- ② コマ割りに変換 -->
   <div class="card highlight">
-    <div class="card-title"><span class="icon">📋</span> ② コマ割りに変換する</div>
+    <div class="card-title"><span class="icon">📋</span> ② ページ構成（コマ割り）に変換する</div>
+    <p style="font-size:13px;color:var(--text-muted);margin:0 0 6px;">シナリオを貼って変換すると、<strong>1ページずつ・コマ数・構図・アングル・セリフ・モノローグ</strong>が整理された形に変換する依頼文ができます。</p>
 
     <div class="divider"><span>コマ割りの設定</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">
@@ -624,8 +625,8 @@ textarea { resize: vertical; min-height: 72px; }
     <div class="divider" style="margin-top:18px;"><span>シナリオ出力をここに貼る</span></div>
     <textarea id="s4_scenario_output" rows="8" placeholder="①でGemini / GPTが出力したシナリオをここに貼り付ける..." oninput="autoSave()"></textarea>
 
-    <div class="divider" style="margin-top:18px;"><span>コマ割りに変換</span></div>
-    <button class="generate-btn accent" onclick="generatePanelPromptB()">📋 コマ割り変換プロンプトを生成</button>
+    <div class="divider" style="margin-top:18px;"><span>ページ構成に変換</span></div>
+    <button class="generate-btn accent" onclick="generatePanelPromptB()">📋 ページ構成に変換する依頼文を作る</button>
     <div id="panelPromptBOutput" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyPrompt('panelPromptBText',this)">コピー</button>
@@ -1503,25 +1504,37 @@ function generatePanelPromptB() {
 
   if(!scenario) { showToast('シナリオをStep2のテキストエリアに貼ってください'); return; }
 
-  const prompt = `以下のシナリオを漫画のコマ割り形式に変換してください。
+  const prompt = `あなたは漫画の編集者です。以下のシナリオを、漫画の「ページ構成（コマ割り）」に変換してください。
+必ず「1ページずつ」に整理し、ページごとにコマ数を決めてから各コマを書いてください。
 
 【登場人物】
 ${charactersBlock()}
 ※各コマの「キャラクター：」には、上の登場人物のうち誰が出ているかを明記してください。
 
 【変換条件】
-・ページ範囲：P${from}〜P${to}
-・1ページのコマ数：${ppp}コマ（あくまで目安。シーンに応じて増減してOK）
+・ページ範囲：P${from}〜P${to}（この範囲に収める）
+・1ページのコマ数：${ppp}コマを目安に。ただしシーンに応じて増減してOK
 ・スマホ読み前提：コマは大きく・少なく。1ページで伝えることは1つに絞る
 ・クライマックスや感情のピークは「1ページ1コマ」で大きく見せる
 ・会話・説明は2〜3コマ、テンポを出したい所は小コマ連続
+・各ページの最後は「次が気になる」引きで終えると良い
 
-【出力フォーマット（必ずこの形式で）】
-P○-コマ○（大／中／小　演出の種類）
-キャラクター：（登場するキャラ名、なし の場合は「なし」）
-構図：（場面・動作・表情の説明）
-アングル：（正面／斜め45度／俯瞰／煽り／後ろ姿／主観 など）
-セリフ：（1コマ30文字以内。なし の場合は「なし」）
+【出力フォーマット（必ずこの形式で。ページごとに区切る）】
+━━━━━━━━━━━━━━━━━━
+【ページ1】　コマ数：3
+　P1-コマ1（大／中／小・演出）
+　　キャラクター：（登場するキャラ名。いなければ「なし」）
+　　構図：（場面・動作・表情）
+　　アングル：（正面／斜め45度／俯瞰／煽り／後ろ姿／主観 など）
+　　セリフ：（口に出す言葉。1コマ30文字以内。なければ「なし」）
+　　モノローグ：（心の声・ナレーション。なければ「なし」）
+　P1-コマ2（…）
+　　…
+━━━━━━━━━━━━━━━━━━
+【ページ2】　コマ数：4
+　P2-コマ1（…）
+　　…
+（以降、同じ形式でページごとに続ける）
 
 【変換するシナリオ】
 ${scenario}`;
