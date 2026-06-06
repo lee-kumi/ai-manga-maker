@@ -461,16 +461,12 @@ textarea { resize: vertical; min-height: 72px; }
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🖌️</span> ① 画風・スタイル＆ネガティブ（全キャラ共通）</div>
+    <div class="card-title"><span class="icon">🖌️</span> ① 画風・スタイル（全キャラ共通）</div>
     <div class="form-group">
       <label>画風・スタイル</label>
       <input type="text" id="s2_art_style" placeholder="例：漫画風・アニメ風・シンプルな線画" oninput="autoSave()">
     </div>
-    <div class="form-group">
-      <label>ネガティブプロンプト（避けたい要素・英語推奨）</label>
-      <textarea id="s2_negative_prompt" rows="2" placeholder="例：lowres, bad anatomy, bad hands, extra fingers, missing fingers, blurry, deformed, watermark, text" oninput="autoSave()"></textarea>
-    </div>
-    <div class="info-box">💡 <strong>画風</strong>は全キャラ共通。タッチが揃います。<br>🚫 <strong>ネガティブプロンプト</strong>は「出したくないもの」を指定（指の崩れ・低画質など）。Anifusionなどで特に効きます。迷ったら上の例をそのまま使ってOK。</div>
+    <div class="info-box">💡 全キャラ共通の画風です。ここを揃えると、登場人物全員のタッチが統一されます。</div>
   </div>
 
   <div class="info-box">👥 <strong>登場人物は複数登録できます。</strong>主人公のほか、相手役・脇役などを追加しましょう。各コマで「誰が出るか」を指定すると、対応する人物の設定が自動で使われます。<br>💡 <strong>四面図を作る理由：</strong>画像生成時にキャラシート（四面図）を参考画像として添付すると、コマごとの見た目のブレを防げます。</div>
@@ -1052,7 +1048,7 @@ const INPUT_IDS = [
   's1_honne','s1_wall','s1_key',
   's1_before','s1_after','s1_benefit',
   ...[1,2,3,4,5].flatMap(n=>[`s1_ch${n}_title`,`s1_ch${n}_role`,`s1_ch${n}_change`]),
-  's2_art_style','s2_negative_prompt',
+  's2_art_style',
   's4_chapter_notes','s4_scenario_output','s4_gdocs_url',
   's5_scenario_input',
 ];
@@ -1069,7 +1065,7 @@ let s1Step = 1;
 const S1_TOTAL = 8;
 
 // =============== CHARACTERS (multi) ===============
-function blankCharacter() { return { name:'', hairStyle:'', hairColor:'', eyeColor:'', bodyType:'', height:'', fashion:'', expression:'', basePrompt:'' }; }
+function blankCharacter() { return { name:'', hairStyle:'', hairColor:'', eyeColor:'', bodyType:'', height:'', fashion:'', expression:'', basePrompt:'', negativePrompt:'' }; }
 
 const CHAR_SAMPLES = [
   { name:'佐藤みなこ', hairStyle:'ショートボブ', hairColor:'黒', eyeColor:'黒', bodyType:'細身', height:'普通', fashion:'白Tシャツにジーンズ', expression:'いつも少し不安そう' },
@@ -1108,6 +1104,11 @@ function renderCharacters() {
         <label>確定した基本プロンプト（<strong>英語推奨</strong>）</label>
         <textarea rows="3" oninput="characters[${i}].basePrompt=this.value;autoSave()" placeholder="例：1girl, short black bob hair, dark brown eyes, slim, white T-shirt and jeans, manga style">${esc(c.basePrompt)}</textarea>
         <p style="font-size:12px;color:var(--text-muted);margin-top:5px;">💡 画像生成は<strong>英語の方が精度が高い</strong>です。上の「キャラシート依頼」でGPT / Geminiに英語プロンプトを作ってもらい、それをここに貼りましょう。</p>
+      </div>
+      <div class="form-group">
+        <label>🚫 ネガティブプロンプト（避けたい要素・<strong>英語推奨</strong>）</label>
+        <textarea rows="2" oninput="characters[${i}].negativePrompt=this.value;autoSave()" placeholder="例：lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, text">${esc(c.negativePrompt||'')}</textarea>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:5px;">🚫 このキャラで「出したくないもの」を指定（指の崩れ・低画質など）。迷ったら例をそのまま使ってOK。</p>
       </div>
     </div>`;
   }).join('');
@@ -1155,7 +1156,7 @@ function getCharacterList() {
       ].filter(Boolean);
       base = parts.length ? parts.join(', ') : '';
     }
-    return { name:(c.name||'').trim(), base };
+    return { name:(c.name||'').trim(), base, neg:(c.negativePrompt||'').trim() };
   }).filter(c => c.name || c.base);
 }
 
@@ -1163,7 +1164,18 @@ function getCharacterList() {
 function charactersBlock() {
   const list = getCharacterList();
   if (!list.length) return '（STEP2でキャラクターを設定してください）';
-  return list.map((c,i) => `・${c.name||('キャラ'+(i+1))}：${c.base||'（基本プロンプト未設定）'}`).join('\n');
+  return list.map((c,i) => {
+    let line = `・${c.name||('キャラ'+(i+1))}：${c.base||'（基本プロンプト未設定）'}`;
+    if (c.neg) line += `\n　（ネガティブ：${c.neg}）`;
+    return line;
+  }).join('\n');
+}
+
+// 全キャラのネガティブをまとめる（重複除去）
+function negativeBlock() {
+  const negs = getCharacterList().map(c => c.neg).filter(Boolean);
+  if (!negs.length) return 'lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, text';
+  return [...new Set(negs.join(', ').split(',').map(s => s.trim()).filter(Boolean))].join(', ');
 }
 
 // =============== BACKGROUNDS (multi) ===============
@@ -1521,7 +1533,7 @@ ${scenario}`;
 function generateBulkPagePrompt() {
   const scenario = getVal('s5_scenario_input');
   const artStyle = getVal('s2_art_style') || 'Japanese manga style, black and white';
-  const neg = getVal('s2_negative_prompt');
+  const neg = negativeBlock();
   if(!scenario) { showToast('コマ割りシナリオを貼り付けてください'); return; }
 
   const prompt = `以下のコマ割りをもとに、1ページの漫画を「1枚の画像」として生成してください。
@@ -1553,13 +1565,12 @@ ${scenario}
 function generateImagePromptRequest() {
   const scenario = getVal('s5_scenario_input');
   const artStyle = getVal('s2_art_style');
-  const neg = getVal('s2_negative_prompt');
 
   if(!scenario) { showToast('コマ割りシナリオを貼り付けてください'); return; }
 
   const prompt = `以下のコマ割りシナリオをもとに、各コマの画像生成プロンプト（英語）を作成してください。
 
-【登場人物の基本設定】
+【登場人物の基本設定（各キャラのネガティブも記載）】
 ${charactersBlock()}
 
 【背景の基本設定】
@@ -1568,18 +1579,15 @@ ${backgroundsBlock()}
 【画像スタイル】
 ${artStyle||'manga style, simple line art'}
 
-【ネガティブプロンプト（全コマ共通・避ける要素）】
-${neg||'lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, text'}
-
 【プロンプト生成ルール】
 ・各コマについて必ず「アングル・ショット・光・英語プロンプト・ネガティブ」の5点セットで出力する
-・各コマの「キャラクター：」に合う人物の基本プロンプトを使う（複数キャラが混ざらないよう注意）
+・各コマの「キャラクター：」に合う人物の基本プロンプト＆ネガティブを使う（複数キャラが混ざらないよう注意）
 ・キャラクターが登場するコマは基本プロンプトを必ず含める（見た目を固定）
 ・表情は場面の感情に合わせる（喜・怒・哀・驚・困・決意 など）
 ・光（ライティング）は感情に合わせて選ぶ（例：希望＝明るい順光／不安＝影が強い／回想＝やわらかい逆光）
 ・背景の雰囲気を簡潔に英語で加える
 ・末尾に必ず「${artStyle||'manga style, simple line art'}」を付ける
-・ネガティブプロンプトは上の【ネガティブプロンプト】を各コマに共通で付ける
+・ネガティブは、そのコマに登場するキャラの「ネガティブ」を使う（未設定なら一般的な品質ネガティブ：lowres, bad anatomy, bad hands, extra fingers, blurry）
 ・セリフは含めない（セリフは別途吹き出しで対応）
 
 【各コマの出力フォーマット（必ずこの形式で）】
@@ -1588,7 +1596,7 @@ P○-コマ○
 ショット：（超クローズアップ／クローズアップ／バストアップ／ウエスト／全身 など）
 光：（順光／逆光／夕日／室内灯／影が強い など。感情に合わせる）
 英語プロンプト：[キャラ基本＋表情＋ポーズ＋アングル＋ショット＋ライティング＋背景＋スタイル]
-ネガティブ：[上の共通ネガティブプロンプト]
+ネガティブ：[そのコマに出るキャラのネガティブプロンプト]
 
 【コマ割りシナリオ】
 ${scenario}`;
