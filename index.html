@@ -461,12 +461,12 @@ textarea { resize: vertical; min-height: 72px; }
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🖌️</span> ① 画風・スタイル（全キャラ共通）</div>
+    <div class="card-title"><span class="icon">🖌️</span> ① 画風・スタイル（全キャラ・全背景 共通）</div>
     <div class="form-group">
       <label>画風・スタイル</label>
       <input type="text" id="s2_art_style" placeholder="例：漫画風・アニメ風・シンプルな線画" oninput="autoSave()">
     </div>
-    <div class="info-box">💡 全キャラ共通の画風です。ここを揃えると、登場人物全員のタッチが統一されます。</div>
+    <div class="info-box">💡 ここで決めた画風が、<strong>すべての出力に統一して反映</strong>されます（全キャラクター・全背景・コマ割り画像・一括生成すべて）。タッチがバラつかないよう、最初にここを決めましょう。</div>
   </div>
 
   <div class="info-box">👥 <strong>登場人物は複数登録できます。</strong>主人公のほか、相手役・脇役などを追加しましょう。各コマで「誰が出るか」を指定すると、対応する人物の設定が自動で使われます。<br>💡 <strong>四面図を作る理由：</strong>画像生成時にキャラシート（四面図）を参考画像として添付すると、コマごとの見た目のブレを防げます。</div>
@@ -1132,7 +1132,7 @@ function generateCharPrompt(i) {
 さらに、このキャラクターを画像生成AIで生成するための英語プロンプトも作成してください。
 ・表情・ポーズなしの「基本プロンプト（英語）」として出力してください
 ・背景なし（white background）で出力してください
-・漫画風アニメスタイルで統一してください
+・画風は「${art||'漫画風・アニメ風'}」で統一してください（全キャラ・全背景で同じ画風に揃えるため、英語プロンプトにも画風を表す語を必ず含めること）
 ・あわせて、崩れを防ぐための「ネガティブプロンプト（英語）」の推奨も出力してください（例：lowres, bad anatomy, bad hands, extra fingers, blurry など）`;
   document.getElementById('charPromptText_'+i).textContent = prompt;
   document.getElementById('charPromptOutput_'+i).style.display = 'block';
@@ -1223,8 +1223,8 @@ function generateBgPrompt(i) {
 【場所・シーン】
 ${b.location||'（未入力）'}
 
-【画風・スタイル】
-${art||'（未入力）'}
+【画風・スタイル（キャラと統一・必ず反映）】
+${art||'漫画風・アニメ風'}
 
 以下を出力してください：
 1. 場所の説明（日本語）
@@ -1232,7 +1232,7 @@ ${art||'（未入力）'}
 3. 明るさ・雰囲気（時間帯・ライティング）
 
 ※人物は含めず、背景のみのプロンプトにしてください
-※漫画風・アニメ風の背景として出力してください`;
+※画風は上記「${art||'漫画風・アニメ風'}」で統一し、英語プロンプトにも画風を表す語を必ず含めてください（キャラと背景でタッチを揃えるため）`;
   document.getElementById('bgPromptText_'+i).textContent = prompt;
   document.getElementById('bgPromptOutput_'+i).style.display = 'block';
   showToast('プロンプトを生成しました！');
@@ -1546,7 +1546,7 @@ function generateBulkPagePrompt() {
 
   const prompt = `以下のコマ割りをもとに、1ページの漫画を「1枚の画像」として生成してください。
 
-【スタイル】${artStyle}
+【スタイル】${artStyle}（全コマ・全キャラ・全背景をこの画風で統一すること）
 【サイズ】縦長・アスペクト比 1000:1414（A4縦・portrait）
 【レイアウト】コマ枠をはっきり描く／各コマは右上から左下へ、右→左の順に読む配置（日本の漫画）
 【セリフ】各コマに日本語の吹き出しを描き、下のセリフを入れる（長い場合は短くしてOK）
@@ -1584,8 +1584,9 @@ ${charactersBlock()}
 【背景の基本設定】
 ${backgroundsBlock()}
 
-【画像スタイル】
+【画像スタイル（全コマ・全キャラ・全背景で必ず統一）】
 ${artStyle||'manga style, simple line art'}
+※すべてのコマ・すべてのキャラ・すべての背景を、この画風で統一してください。各英語プロンプトの末尾に必ずこの画風を付けること。
 
 【プロンプト生成ルール】
 ・各コマについて必ず「アングル・ショット・光・英語プロンプト・ネガティブ」の5点セットで出力する
