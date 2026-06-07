@@ -618,13 +618,8 @@ textarea { resize: vertical; min-height: 72px; }
     </div>
     <div class="info-box" style="margin-top:0;">💡 どちらも<strong>目安</strong>。<strong>空欄ならAIが内容に合わせてページ数を決めます</strong>。1ページ漫画なら「1」、20ページの章なら「20」など。コマ数はクライマックス＝1コマ、会話＝2〜3コマとシーンで増減してOK。</div>
 
-    <label style="display:flex;align-items:flex-start;gap:8px;font-size:13px;margin:14px 0 4px;cursor:pointer;background:#F4F6FC;padding:12px;border-radius:10px;">
-      <input type="checkbox" id="s4_scenario_in_source" onchange="autoSave()" style="margin-top:2px;">
-      <span><strong>シナリオが長くてチャットに入らない場合 →</strong> NotebookLMの<strong>ソースに登録</strong>して、ここにチェック。<br>依頼文から<strong>シナリオ本文を省いた「短い版」</strong>を生成します（ソース参照型）。</span>
-    </label>
-
-    <div class="divider" style="margin-top:14px;"><span>シナリオ出力をここに貼る（チェック時は不要）</span></div>
-    <textarea id="s4_scenario_output" rows="8" placeholder="①でGemini / GPTが出力したシナリオをここに貼り付ける...（ソース登録した場合は空欄でOK）" oninput="autoSave()"></textarea>
+    <div class="divider" style="margin-top:14px;"><span>シナリオをここに貼る</span></div>
+    <textarea id="s4_scenario_output" rows="8" placeholder="①で作ったシナリオ、または自分で書いたシナリオをここに貼り付ける..." oninput="autoSave()"></textarea>
 
     <div class="divider" style="margin-top:18px;"><span>ページ構成に変換</span></div>
     <button class="generate-btn accent" onclick="generatePanelPromptB()">📋 ページ構成に変換する依頼文を作る</button>
@@ -633,7 +628,7 @@ textarea { resize: vertical; min-height: 72px; }
         <button class="copy-btn" onclick="copyPrompt('panelPromptBText',this)">コピー</button>
         <pre id="panelPromptBText"></pre>
       </div>
-      <div class="info-box" style="margin-top:10px;">👆 この依頼文を <strong>NotebookLM</strong>（バイブル登録済みなら最適）または GPT / Gemini のチャットに貼り付けて実行 → 出力されたコマ割りを保存してください。</div>
+      <div class="info-box" style="margin-top:10px;">👆 この依頼文を <strong>GPT / Gemini</strong> のチャットに貼り付けて実行 → 出力されたコマ割りを保存（次のSTEP5の材料になります）。</div>
     </div>
     <div class="info-box" style="margin-top:14px;">⚡ <strong>4コマ・1ページなど超短い漫画なら</strong>、シナリオを飛ばして、このコマ割り変換にいきなり章メモを貼ってもOKです。</div>
   </div>
@@ -1056,7 +1051,6 @@ const INPUT_IDS = [
 ];
 const CHECK_IDS = [
   's3_c1','s3_c2','s3_c3','s3_c4','s3_c5','s3_c6',
-  's4_scenario_in_source',
   's6_c1','s6_c2','s6_c3','s6_c4','s6_c5',
 ];
 
@@ -1498,10 +1492,9 @@ ${notes?`補足：${notes}`:''}
 
 function generatePanelPromptB() {
   const scenario = getVal('s4_scenario_output');
-  const inSource = !!(document.getElementById('s4_scenario_in_source') && document.getElementById('s4_scenario_in_source').checked);
   const { ch, targetPages, ppp, title } = getChapterInfo();
 
-  if(!inSource && !scenario) { showToast('シナリオを貼るか、「ソースに登録済み」にチェックしてください'); return; }
+  if(!scenario) { showToast('シナリオを貼り付けてください'); return; }
 
   const pageLine = targetPages
     ? `・目安の総ページ数：約${targetPages}ページ（多少前後してOK）`
@@ -1542,9 +1535,8 @@ ${pageLine}
 　　…
 （以降、章の最後まで同じ形式でページごとに続ける。最後に「第${ch}章 完」）
 
-${inSource
-  ? `【変換する第${ch}章のシナリオ】\nNotebookLMの【ソース】に登録した「第${ch}章のシナリオ」を参照して変換してください。\n（コマ割りガイド・アングルガイド・表情集も参照すること）`
-  : `【変換する第${ch}章のシナリオ】\n${scenario}`}`;
+【変換する第${ch}章のシナリオ】
+${scenario}`;
 
   showOutput('panelPromptBOutput','panelPromptBText', prompt);
 }
