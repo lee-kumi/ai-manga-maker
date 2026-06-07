@@ -589,7 +589,7 @@ textarea { resize: vertical; min-height: 72px; }
   <!-- ① シナリオを作る -->
   <div class="card highlight">
     <div class="card-title"><span class="icon">📖</span> ① シナリオを作る（章・ページ・コマで整理）</div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">章の物語を<strong>章・ページ・コマ・構図／演出・セリフ／モノローグ</strong>の形に構造化して書き出します。感情・本音をしっかり描くのが良い漫画のコツ。</p>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">章の物語を<strong>章・ページ・コマ・構図／演出・セリフ・モノローグ・ナレーション</strong>の形に構造化して書き出します（セリフと心の声は分けて整理）。感情・本音をしっかり描くのが良い漫画のコツ。</p>
     <button class="generate-btn" onclick="generateScenarioPrompt()">📖 シナリオ作成プロンプトを生成</button>
     <div id="scenarioPromptOutput" style="display:none;">
       <div class="prompt-box">
@@ -1476,13 +1476,16 @@ function generateScenarioPrompt() {
 第${ch}章の読後変化：${change||'（未入力）'}
 ${notes?`補足：${notes}`:''}
 
-【出力フォーマット】
+【出力フォーマット】（ページ・コマ順に、表または箇条書きで整理）
 ・章
 ・ページ番号
 ・コマ番号
 ・構図／演出（誰が・どこで・何をしているか＋表情）
-・セリフ／モノローグ（心の声は「本音」を活かす。1行30文字以内を目安に）
+・セリフ（声に出す言葉。なければ「なし」）
+・モノローグ（心の声・本音。なければ「なし」）
+・ナレーション（地の文・状況説明。なければ「なし」）
 
+※「セリフ」「モノローグ」「ナレーション」は必ず分けて書く（声に出す言葉＝セリフ、心の中＝モノローグ、語り＝ナレーション）
 ※感情の流れ（表情変化）も明確に反映してください
 ※冗長な説明は削り、視覚的に分かる形で整理してください
 ※読者が「これ私だ」と共感し、最後に前を向ける展開にしてください`;
