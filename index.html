@@ -569,7 +569,7 @@ textarea { resize: vertical; min-height: 72px; }
 
   <!-- 共通設定（シナリオ・変換どちらでも使う） -->
   <div class="card">
-    <div class="card-title"><span class="icon">⚙️</span> この章の設定</div>
+    <div class="card-title"><span class="icon">⚙️</span> この章の設定（①②どちらにも反映）</div>
     <div class="form-group">
       <label>対象章</label>
       <select id="s4_chapter" onchange="autoSave()" style="width:100%;padding:9px 11px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;">
@@ -580,6 +580,17 @@ textarea { resize: vertical; min-height: 72px; }
         <option value="5">第5章</option>
       </select>
     </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">この章の目安ページ数（任意）</label>
+        <input type="number" id="s4_target_pages" placeholder="例：4" min="1" style="width:100%;padding:9px 11px;border:2px solid var(--border);border-radius:8px;font-size:14px;">
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">1ページの目安コマ数</label>
+        <input type="number" id="s4_panels_per_page" value="3" min="1" max="6" style="width:80px;padding:9px 11px;border:2px solid var(--border);border-radius:8px;font-size:14px;">
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:0;">💡 <strong>目安ページ数</strong>を入れると、①シナリオも②コマ割りも<strong>そのページ数に収めて</strong>くれます。<br>例：全16ページのダイジェストを4章に分けるなら、各章「<strong>4</strong>」。空欄ならAIにおまかせ（内容に合わせて決める）。</div>
     <div class="form-group">
       <label>この章の内容メモ（補足があれば）</label>
       <textarea id="s4_chapter_notes" rows="3" placeholder="例：主人公が○○に出会い、△△という気持ちの変化が起きる章" oninput="autoSave()"></textarea>
@@ -603,22 +614,9 @@ textarea { resize: vertical; min-height: 72px; }
   <!-- ② コマ割りに変換 -->
   <div class="card highlight">
     <div class="card-title"><span class="icon">📋</span> ② ページ構成（コマ割り）に変換する</div>
-    <p style="font-size:13px;color:var(--text-muted);margin:0 0 6px;">章のシナリオを貼って変換すると、<strong>章まるごと</strong>を「1ページずつ・コマ数・構図／演出・アングル・セリフ・モノローグ・効果音・ナレーション」が整理された形に変換する依頼文ができます。</p>
+    <p style="font-size:13px;color:var(--text-muted);margin:0 0 6px;">章のシナリオを貼って変換すると、<strong>章まるごと</strong>を「1ページずつ・コマ数・構図／演出・アングル・セリフ・モノローグ・効果音・ナレーション」が整理された形に変換する依頼文ができます。（ページ数・コマ数は上の「この章の設定」を使います）</p>
 
-    <div class="divider"><span>コマ割りの設定（任意・空欄でおまかせ）</span></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">
-      <div>
-        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">目安の総ページ数（任意）</label>
-        <input type="number" id="s4_target_pages" placeholder="例：20" min="1" style="width:100%;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
-      </div>
-      <div>
-        <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">1ページの目安コマ数</label>
-        <input type="number" id="s4_panels_per_page" value="3" min="1" max="6" style="width:80px;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-size:13px;">
-      </div>
-    </div>
-    <div class="info-box" style="margin-top:0;">💡 どちらも<strong>目安</strong>。<strong>空欄ならAIが内容に合わせてページ数を決めます</strong>。1ページ漫画なら「1」、20ページの章なら「20」など。コマ数はクライマックス＝1コマ、会話＝2〜3コマとシーンで増減してOK。</div>
-
-    <div class="divider" style="margin-top:14px;"><span>シナリオをここに貼る</span></div>
+    <div class="divider" style="margin-top:6px;"><span>シナリオをここに貼る</span></div>
     <textarea id="s4_scenario_output" rows="8" placeholder="①で作ったシナリオ、または自分で書いたシナリオをここに貼り付ける..." oninput="autoSave()"></textarea>
 
     <div class="divider" style="margin-top:18px;"><span>ページ構成に変換</span></div>
@@ -1444,7 +1442,7 @@ function getChapterInfo() {
 }
 
 function generateScenarioPrompt() {
-  const { ch, notes, theme, title, role, change } = getChapterInfo();
+  const { ch, targetPages, ppp, notes, theme, title, role, change } = getChapterInfo();
   const struct = document.querySelector('input[name="s1_structure"]:checked');
   const structVal = struct ? struct.value : '（未選択）';
   const honne = getVal('s1_honne');
@@ -1454,8 +1452,14 @@ function generateScenarioPrompt() {
   const pp = getVal('s1_persona_profile');
   const daily = getVal('s1_daily');
   const trigger = getVal('s1_trigger');
+  const pageLine = targetPages
+    ? `この章は「約${targetPages}ページ」に収めてください（1ページ約${ppp}コマが目安。多少前後OK）。ページ数を超えないよう、エピソードを取捨選択して整理すること。`
+    : `ページ数は内容に合わせて決めてください（1ページ約${ppp}コマが目安）。`;
 
   const prompt = `以下のストーリー設計（背骨）をもとに、第${ch}章のシナリオを、下記の【出力フォーマット】に沿って構造化して書き出してください。
+
+【ページ数の指定】
+${pageLine}
 
 【主人公】
 人物：${pp||'（未入力）'}
