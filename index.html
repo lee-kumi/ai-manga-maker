@@ -109,6 +109,8 @@ textarea { resize: vertical; min-height: 72px; }
 .data-table th { background: var(--primary-light); color: var(--primary); font-weight: 700; padding: 9px 12px; text-align: left; border: 1px solid var(--border); }
 .data-table td { padding: 8px 12px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
 .data-table td input, .data-table td textarea { width: 100%; border: none; background: transparent; font-size: 13px; padding: 3px; resize: none; min-height: 38px; font-family: inherit; }
+.panel-serif-cell { width: 120px; }
+.panel-serif-cell textarea { writing-mode: vertical-rl; text-orientation: mixed; min-height: 80px; height: 80px; width: 100%; }
 .data-table td input:focus, .data-table td textarea:focus { outline: 1px solid var(--primary); border-radius: 4px; background: white; }
 .data-table tr.hl td { background: var(--primary-light); }
 
@@ -711,7 +713,7 @@ textarea { resize: vertical; min-height: 72px; }
             <th style="width:70px;">ページ</th>
             <th style="width:70px;">コマ</th>
             <th style="width:100px;">キャラ</th>
-            <th>セリフ／モノローグ</th>
+            <th class="panel-serif-cell">セリフ／モノローグ</th>
             <th style="width:36px;"></th>
           </tr>
         </thead>
@@ -1339,7 +1341,7 @@ function renderPanelTable() {
       <td><input type="text" value="${esc(row.page)}" onchange="panelRows[${i}].page=this.value;autoSave()" placeholder="P1"></td>
       <td><input type="text" value="${esc(row.num)}" onchange="panelRows[${i}].num=this.value;autoSave()" placeholder="コマ1"></td>
       <td><input type="text" value="${esc(row.chara||'')}" onchange="panelRows[${i}].chara=this.value;autoSave()" placeholder="キャラ名"></td>
-      <td><textarea onchange="panelRows[${i}].dialog=this.value;autoSave()" placeholder="${DIALOG_PH[i % DIALOG_PH.length]}">${esc(row.dialog)}</textarea></td>
+      <td class="panel-serif-cell"><textarea onchange="panelRows[${i}].dialog=this.value;autoSave()" placeholder="${DIALOG_PH[i % DIALOG_PH.length]}">${esc(row.dialog)}</textarea></td>
       <td><button class="del-btn" onclick="removePanelRow(${i})">✕</button></td>
     </tr>
   `).join('');
@@ -1515,8 +1517,8 @@ function generateBulkPagePrompt() {
 【スタイル】${artStyle}（全コマ・全キャラ・全背景をこの画風で統一すること）
 【サイズ】縦長・アスペクト比 1000:1414（A4縦・portrait）
 【レイアウト】コマ枠をはっきり描く／各コマは右上から左下へ、右→左の順に読む配置（日本の漫画）
-【セリフ】各コマに日本語の吹き出しを描き、下のセリフを入れる（長い場合は短くしてOK）
-【擬音】感情が動く場面にはオノマトペ（擬音）を漫画的な手描き文字で添える
+【セリフ】各コマに日本語の吹き出しを描き、下のセリフを入れる。文字は必ず「縦書き」（上から下へ、行は右から左へ）にすること＝日本の漫画の標準スタイル（長い場合は短くしてOK）
+【擬音】感情が動く場面にはオノマトペ（擬音）を漫画的な手描き文字で添える（擬音も縦書きや斜めなど漫画らしく）
 【一貫性】同じキャラクターは全コマで顔・髪・服を統一する（参考：四面図を添付）
 【避ける要素（ネガティブ）】${neg||'指の崩れ・低画質・余計な文字など'}
 
