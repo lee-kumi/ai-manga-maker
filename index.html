@@ -1029,7 +1029,7 @@ const INPUT_IDS = [
   's1_prob1','s1_prob2','s1_prob3','s1_prob4','s1_prob5',
   's1_honne','s1_wall','s1_key',
   's1_before','s1_after','s1_benefit',
-  ...[1,2,3,4,5].flatMap(n=>[`s1_ch${n}_title`,`s1_ch${n}_role`,`s1_ch${n}_change`]),
+  ...Array.from({length:12},(_,i)=>i+1).flatMap(n=>[`s1_ch${n}_title`,`s1_ch${n}_role`,`s1_ch${n}_change`]),
   's2_art_style',
   's4_chapter_notes','s4_scenario_output','s4_gdocs_url',
   's5_scenario_input',
@@ -1043,6 +1043,8 @@ let currentStep = 0;
 let panelRows = [];
 let characters = [];
 let backgrounds = [];
+let chapterCount = 5;
+const MAX_CHAPTERS = 12;
 let s1Step = 1;
 const S1_TOTAL = 8;
 
@@ -1235,9 +1237,12 @@ function backgroundsBlock() {
 
 // =============== INIT ===============
 function init() {
+  // 章数を先に復元（renderChaptersの前）
+  try { const s = JSON.parse(localStorage.getItem('aiMangaMaker_v2')||'{}'); if (s.chapterCount && s.chapterCount>=1 && s.chapterCount<=MAX_CHAPTERS) chapterCount = s.chapterCount; } catch(e){}
   renderStepNav();
   renderOverviewGrid();
   renderChapters();
+  renderChapterSelect();
   loadFromStorage();
   if (panelRows.length === 0) { addPanelRow(false); addPanelRow(false); addPanelRow(false); }
   renderPanelTable();
@@ -1292,28 +1297,73 @@ function renderOverviewGrid() {
 }
 
 function renderChapters() {
+  const el = document.getElementById('chaptersContainer');
+  if (!el) return;
+  // 既存の入力値を保持
+  const cur = {};
+  el.querySelectorAll('input').forEach(inp => { if (inp.id) cur[inp.id] = inp.value; });
+
   const TPH = ['例：何者にもなれない毎日', '例：AIとの出会い', '例：つまずき、そして気づき', '例：はじめての完成', '例：新しい日常'];
   const RPH = ['①悩み：読者が共感する導入', '①→②：本音が見え始める', '②葛藤：壁にぶつかり、カギをつかむ', '②→③：理想へ動き出す', '③理想：希望のラスト'];
   const CPH = ['「これ私だ」と引き込まれる', '「わかる…」と心を重ねる', '「自分も頑張ろう」と思える', '「私にもできるかも」と感じる', '「読んでよかった」と満たされる'];
-  document.getElementById('chaptersContainer').innerHTML = [1,2,3,4,5].map(n => `
+  el.innerHTML = Array.from({length: chapterCount}, (_, i) => {
+    const n = i + 1;
+    const tph = TPH[(n-1) % TPH.length], rph = RPH[(n-1) % RPH.length], cph = CPH[(n-1) % CPH.length];
+    return `
     <div class="chapter-item">
-      <div class="chapter-num">第${n}章${n>3?' （任意）':''}</div>
+      <div class="chapter-num" style="display:flex;align-items:center;">第${n}章${n>3?' （任意）':''}
+        ${chapterCount>3?`<button class="del-btn" style="margin-left:auto;" onclick="removeChapter(${n})">✕</button>`:''}
+      </div>
       <div class="chapter-fields">
         <div class="form-group">
           <label>タイトル</label>
-          <input type="text" id="s1_ch${n}_title" placeholder="${TPH[n-1]}" oninput="autoSave()">
+          <input type="text" id="s1_ch${n}_title" value="${esc(cur['s1_ch'+n+'_title']||'')}" placeholder="${tph}" oninput="autoSave()">
         </div>
         <div class="form-group">
           <label>章の役割（背骨のどこ？）</label>
-          <input type="text" id="s1_ch${n}_role" placeholder="${RPH[n-1]}" oninput="autoSave()">
+          <input type="text" id="s1_ch${n}_role" value="${esc(cur['s1_ch'+n+'_role']||'')}" placeholder="${rph}" oninput="autoSave()">
         </div>
         <div class="form-group">
           <label>読後変化</label>
-          <input type="text" id="s1_ch${n}_change" placeholder="${CPH[n-1]}" oninput="autoSave()">
+          <input type="text" id="s1_ch${n}_change" value="${esc(cur['s1_ch'+n+'_change']||'')}" placeholder="${cph}" oninput="autoSave()">
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('') + `<button class="add-row-btn" onclick="addChapter()" style="width:100%;margin-top:8px;">＋ 章を追加</button>`;
+}
+
+function addChapter() {
+  if (chapterCount >= MAX_CHAPTERS) { showToast(`章は最大${MAX_CHAPTERS}章までです`); return; }
+  chapterCount++;
+  renderChapters();
+  renderChapterSelect();
+  autoSave();
+}
+function removeChapter(n) {
+  if (chapterCount <= 1) return;
+  // n章以降を1つ前にずらす（DOM値を詰める）
+  for (let i = n; i < chapterCount; i++) {
+    ['title','role','change'].forEach(f => {
+      const from = document.getElementById(`s1_ch${i+1}_${f}`);
+      const to = document.getElementById(`s1_ch${i}_${f}`);
+      if (from && to) to.value = from.value;
+    });
+  }
+  // 末尾をクリア
+  ['title','role','change'].forEach(f => { const el2 = document.getElementById(`s1_ch${chapterCount}_${f}`); if (el2) el2.value = ''; });
+  chapterCount--;
+  renderChapters();
+  renderChapterSelect();
+  autoSave();
+}
+
+// STEP4の「対象章」セレクトを章数に合わせて再生成
+function renderChapterSelect() {
+  const sel = document.getElementById('s4_chapter');
+  if (!sel) return;
+  const prev = sel.value;
+  sel.innerHTML = Array.from({length: chapterCount}, (_, i) => `<option value="${i+1}">第${i+1}章</option>`).join('');
+  if (prev && parseInt(prev) <= chapterCount) sel.value = prev;
 }
 
 const PROMPT_PH = [
@@ -1608,7 +1658,7 @@ function goToStep(n) {
 // =============== STORAGE ===============
 function autoSave() {
   const struct = document.querySelector('input[name="s1_structure"]:checked');
-  const data = { inputs:{}, checks:{}, panels:panelRows, characters:characters, backgrounds:backgrounds, structure: struct?struct.value:'' };
+  const data = { inputs:{}, checks:{}, panels:panelRows, characters:characters, backgrounds:backgrounds, chapterCount:chapterCount, structure: struct?struct.value:'' };
   INPUT_IDS.forEach(id => { const el=document.getElementById(id); if(el) data.inputs[id]=el.value; });
   CHECK_IDS.forEach(id => { const el=document.getElementById(id); if(el) data.checks[id]=el.checked; });
   localStorage.setItem('aiMangaMaker_v2', JSON.stringify(data));
@@ -1734,7 +1784,7 @@ function generateStep1Prompt(type) {
   const key = getVal('s1_key');
   const after = getVal('s1_after');
   const benefit = getVal('s1_benefit');
-  const chapters = [1,2,3,4,5].map(n=>({t:getVal(`s1_ch${n}_title`),r:getVal(`s1_ch${n}_role`),c:getVal(`s1_ch${n}_change`)})).filter(c=>c.t);
+  const chapters = Array.from({length:MAX_CHAPTERS},(_,i)=>i+1).map(n=>({t:getVal(`s1_ch${n}_title`),r:getVal(`s1_ch${n}_role`),c:getVal(`s1_ch${n}_change`)})).filter(c=>c.t);
 
   let prompt;
   if(type === 'gemini') {
