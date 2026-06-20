@@ -225,6 +225,11 @@ textarea { resize: vertical; min-height: 72px; }
     <p>各ステップをクリックして作業を始めましょう。入力内容はブラウザに自動保存されます。</p>
   </div>
 
+  <div class="card highlight">
+    <div id="projectBar"></div>
+    <div class="info-box" style="margin-bottom:0;">💡 作品ごとに独立して保存されます。複数の漫画を同時進行できます。<br>⚠️ ブラウザのデータを消すと消えるので、大事な作品は<strong>エクスポート（バックアップ）</strong>しておきましょう。</div>
+  </div>
+
   <div class="flow-steps" id="overviewGrid"></div>
 
   <div class="card">
@@ -1237,10 +1242,14 @@ function backgroundsBlock() {
 
 // =============== INIT ===============
 function init() {
+  // プロジェクト（作品）を先に確定
+  const reg = loadRegistry();
+  currentProjectId = reg.currentId;
   // 章数を先に復元（renderChaptersの前）
-  try { const s = JSON.parse(localStorage.getItem('aiMangaMaker_v2')||'{}'); if (s.chapterCount && s.chapterCount>=1 && s.chapterCount<=MAX_CHAPTERS) chapterCount = s.chapterCount; } catch(e){}
+  try { const s = JSON.parse(localStorage.getItem(storageKey())||'{}'); if (s.chapterCount && s.chapterCount>=1 && s.chapterCount<=MAX_CHAPTERS) chapterCount = s.chapterCount; } catch(e){}
   renderStepNav();
   renderOverviewGrid();
+  renderProjectBar();
   renderChapters();
   renderChapterSelect();
   loadFromStorage();
@@ -1655,13 +1664,118 @@ function goToStep(n) {
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
+// =============== PROJECTS（複数作品の管理）===============
+const REGISTRY_KEY = 'aiMangaMaker_registry';
+const PROJ_PREFIX = 'aiMangaMaker_proj_';
+let currentProjectId = null;
+
+function loadRegistry() {
+  let reg;
+  try { reg = JSON.parse(localStorage.getItem(REGISTRY_KEY)); } catch(e) {}
+  if (!reg || !reg.projects || !reg.projects.length) {
+    const old = localStorage.getItem('aiMangaMaker_v2');
+    const id = String(Date.now());
+    if (old) localStorage.setItem(PROJ_PREFIX + id, old);  // 旧データを作品1として移行
+    reg = { projects: [{ id, name: '作品1' }], currentId: id };
+    localStorage.setItem(REGISTRY_KEY, JSON.stringify(reg));
+  }
+  return reg;
+}
+function saveRegistry(reg) { localStorage.setItem(REGISTRY_KEY, JSON.stringify(reg)); }
+function storageKey() { return PROJ_PREFIX + currentProjectId; }
+
+function renderProjectBar() {
+  const reg = loadRegistry();
+  const el = document.getElementById('projectBar');
+  if (!el) return;
+  el.innerHTML = `
+    <label style="font-size:11px;font-weight:700;color:var(--text-muted);">📁 プロジェクト（作品）の切り替え</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:6px 0 8px;">
+      <select id="projectSelect" onchange="switchProject(this.value)" style="flex:1;min-width:150px;padding:8px 10px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;">
+        ${reg.projects.map(p=>`<option value="${p.id}" ${p.id===currentProjectId?'selected':''}>${esc(p.name)}</option>`).join('')}
+      </select>
+      <button class="add-row-btn" onclick="newProject()">＋ 新規作成</button>
+      <button class="add-row-btn" onclick="renameProject()">✎ 名前変更</button>
+      ${reg.projects.length>1?`<button class="del-btn" onclick="deleteProject()">🗑 削除</button>`:''}
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="add-row-btn" onclick="exportProject()">💾 エクスポート（バックアップ）</button>
+      <label class="add-row-btn" style="cursor:pointer;display:inline-flex;align-items:center;">📂 インポート<input type="file" accept="application/json,.json" style="display:none;" onchange="importProject(this.files[0]); this.value='';"></label>
+    </div>`;
+}
+
+function switchProject(id) {
+  if (id === currentProjectId) return;
+  autoSave();
+  const reg = loadRegistry();
+  reg.currentId = id; saveRegistry(reg);
+  location.reload();
+}
+function newProject() {
+  const name = prompt('新しい作品の名前を入力してください', '無題の作品');
+  if (name === null) return;
+  autoSave();
+  const reg = loadRegistry();
+  const id = String(Date.now());
+  reg.projects.push({ id, name: name.trim() || '無題の作品' });
+  reg.currentId = id; saveRegistry(reg);
+  location.reload();
+}
+function renameProject() {
+  const reg = loadRegistry();
+  const p = reg.projects.find(p=>p.id===currentProjectId);
+  if (!p) return;
+  const name = prompt('作品名を変更', p.name);
+  if (name === null || !name.trim()) return;
+  p.name = name.trim(); saveRegistry(reg); renderProjectBar();
+}
+function deleteProject() {
+  const reg = loadRegistry();
+  if (reg.projects.length <= 1) { showToast('最後の1作品は削除できません'); return; }
+  const p = reg.projects.find(p=>p.id===currentProjectId);
+  if (!confirm(`作品「${p?p.name:''}」を削除します。よろしいですか？（取り消せません）`)) return;
+  localStorage.removeItem(storageKey());
+  reg.projects = reg.projects.filter(x=>x.id!==currentProjectId);
+  reg.currentId = reg.projects[0].id; saveRegistry(reg);
+  location.reload();
+}
+function exportProject() {
+  autoSave();
+  const reg = loadRegistry();
+  const p = reg.projects.find(p=>p.id===currentProjectId);
+  const out = { name: p?p.name:'作品', data: JSON.parse(localStorage.getItem(storageKey())||'{}') };
+  const blob = new Blob([JSON.stringify(out,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `manga_${(p?p.name:'project').replace(/[^\w぀-ヿ一-龯]/g,'_')}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  showToast('エクスポートしました。ファイルを保存してください');
+}
+function importProject(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const obj = JSON.parse(e.target.result);
+      const data = obj.data || obj;
+      const name = obj.name || 'インポート作品';
+      const reg = loadRegistry();
+      const id = String(Date.now());
+      localStorage.setItem(PROJ_PREFIX + id, JSON.stringify(data));
+      reg.projects.push({ id, name }); reg.currentId = id; saveRegistry(reg);
+      location.reload();
+    } catch(err) { showToast('ファイルを読み込めませんでした'); }
+  };
+  reader.readAsText(file);
+}
+
 // =============== STORAGE ===============
 function autoSave() {
   const struct = document.querySelector('input[name="s1_structure"]:checked');
   const data = { inputs:{}, checks:{}, panels:panelRows, characters:characters, backgrounds:backgrounds, chapterCount:chapterCount, structure: struct?struct.value:'' };
   INPUT_IDS.forEach(id => { const el=document.getElementById(id); if(el) data.inputs[id]=el.value; });
   CHECK_IDS.forEach(id => { const el=document.getElementById(id); if(el) data.checks[id]=el.checked; });
-  localStorage.setItem('aiMangaMaker_v2', JSON.stringify(data));
+  localStorage.setItem(storageKey(), JSON.stringify(data));
   const ind = document.getElementById('saveIndicator');
   ind.classList.add('visible');
   clearTimeout(autoSave._t);
@@ -1669,14 +1783,14 @@ function autoSave() {
 }
 
 function clearAllData() {
-  if (!confirm('入力した内容（ストーリー・キャラ・背景・コマ管理表など）をすべて消して、最初の状態に戻します。\n\nよろしいですか？（この操作は取り消せません）')) return;
-  localStorage.removeItem('aiMangaMaker_v2');
+  if (!confirm('この作品の入力内容（ストーリー・キャラ・背景など）をすべて消して、最初の状態に戻します。\n（他の作品には影響しません）\n\nよろしいですか？（この操作は取り消せません）')) return;
+  localStorage.removeItem(storageKey());
   location.reload();
 }
 
 function loadFromStorage() {
   try {
-    const saved = localStorage.getItem('aiMangaMaker_v2');
+    const saved = localStorage.getItem(storageKey());
     if(!saved) return;
     const data = JSON.parse(saved);
     if(data.inputs) Object.entries(data.inputs).forEach(([id,val])=>{ const el=document.getElementById(id); if(el) el.value=val; });
