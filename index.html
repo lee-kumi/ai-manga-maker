@@ -491,20 +491,25 @@ textarea { resize: vertical; min-height: 72px; }
 
   <div class="nav-buttons">
     <button class="nav-btn prev" onclick="goToStep(1)">◀ STEP 1 へ</button>
-    <button class="nav-btn next" onclick="goToStep(3)">STEP 3 へ ▶</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+      <button class="nav-btn" onclick="goToStep(3)" style="background:#fff;color:var(--text-muted);border:2px solid var(--border);">STEP 3（任意）NotebookLM</button>
+      <button class="nav-btn next green" onclick="goToStep(4)">STEP 4 へ（コマ割り）▶</button>
+    </div>
   </div>
 </div>
 
 <!-- ===== PAGE 3: NotebookLM Setup ===== -->
 <div class="step-page" id="page-3">
   <div class="step-header">
-    <div class="step-badge">STEP 3</div>
-    <h1>NotebookLMにソースを入れる</h1>
-    <p>STEP1・2で作った素材をNotebookLMに登録します。ここが整うとSTEP4以降のAI生成の精度が大きく上がります。</p>
+    <div class="step-badge" style="background:var(--warning);">STEP 3 ｜ 任意・上級者向け</div>
+    <h1>（任意）NotebookLMで一貫性を強化</h1>
+    <p><strong>このステップは飛ばしてもOK。</strong>初心者は STEP4（コマ割り）へ進んでください。<br>長編で「キャラ・設定を絶対にブレさせたくない」本格派だけ、NotebookLMに素材を登録すると一貫性が上がります。</p>
     <div class="tool-links">
       <a href="https://notebooklm.google.com/" target="_blank" class="tool-link">📓 NotebookLM</a>
     </div>
   </div>
+
+  <div class="info-box">💡 <strong>なぜ任意？</strong> 今のアプリは、キャラ設定・背景・画風・コマ割り技法を<strong>各プロンプトに自動で埋め込みます</strong>。だからGPT / Geminiだけでも作れます。NotebookLMは「<strong>詳細バイブルを丸ごと効かせたい長編・本格派</strong>」のための上級オプションです。</div>
 
   <div class="card">
     <div class="card-title"><span class="icon">📋</span> NotebookLMに入れる素材（漫画制作バイブル）</div>
@@ -1024,7 +1029,7 @@ const STEPS = [
   { num:0, label:'🗺', name:'全体の流れ',     short:'全体' },
   { num:1, label:'1', name:'ストーリー設計',   short:'設計' },
   { num:2, label:'2', name:'キャラ・背景',     short:'キャラ' },
-  { num:3, label:'3', name:'LM設定',          short:'LM' },
+  { num:3, label:'3', name:'LM設定（任意）',   short:'LM任意' },
   { num:4, label:'4', name:'コマ割り生成',     short:'コマ割' },
   { num:5, label:'5', name:'画像プロンプト',   short:'画像' },
   { num:6, label:'6', name:'内容確認',         short:'確認' },
