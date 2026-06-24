@@ -1049,6 +1049,8 @@ function genScenario() {
   L.push('');
   L.push('ページ構成表の内容で全ページのコマ割りシナリオを一括出力してください。');
   L.push('');
+  L.push('⚠️ 重要ルール：セリフ・モノローグ・ナレーションのすべてに句点（。）を使わないこと。漫画のセリフに句点は不要です。出力後に句点がないか必ず確認してください。');
+  L.push('');
   var structure = getSelected('g-structure')[0] || gv('g-structure') && JSON.parse(gv('g-structure') || '[]')[0] || '';
   if(structure) { L.push('【構成の型】'); L.push(structure + 'の流れを意識してシナリオを組み立ててください。'); L.push(''); }
   if(art) { L.push('【画風・スタイル】'); L.push(art); L.push(''); }
