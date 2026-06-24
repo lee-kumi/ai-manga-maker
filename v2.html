@@ -553,6 +553,13 @@ textarea{resize:vertical;min-height:72px;}
       <label>コマ割りシナリオ（STEP3で生成した内容を貼り付けてください）</label>
       <textarea id="p4_scenario" placeholder="AIが生成したコマ割りシナリオをここに貼り付けてください" style="min-height:120px;" oninput="autoSave()"></textarea>
     </div>
+    <div class="fg">
+      <label>セリフの扱い</label>
+      <div class="tog-group" id="g-text-mode">
+        <button class="tog active" onclick="pick(this,'g-text-mode')" id="tog-text-ai">AIに描かせる</button>
+        <button class="tog" onclick="pick(this,'g-text-mode')" id="tog-text-blank">吹き出し空欄（Canvaで入れる）</button>
+      </div>
+    </div>
     <button class="gen-btn" onclick="genImagePrompt()">🖼️ 画像生成プロンプトを生成</button>
     <div id="s4out2" style="display:none;">
       <div class="prompt-box">
@@ -1161,16 +1168,25 @@ function genImagePrompt() {
   L.push('・読み方向：右から左（日本式）');
   L.push('・コマ枠：はっきり描く・黒枠');
   L.push('');
+  var textMode = getSelected('g-text-mode');
+  var isBlank = textMode.indexOf('吹き出し空欄') >= 0;
   L.push('【セリフ・文字の仕様】');
-  L.push('・文字は必ず縦書き（上から下・行は右から左）');
-  L.push('・セリフに句点（。）は使わない（漫画のルール）');
-  L.push('・吹き出し内のテキストは上端をそろえる（上揃え）');
-  L.push('・吹き出し内にセリフを入れる');
-  L.push('・フォントイメージ：Noto Sans / アンチックセザンヌ / 源英アンチック（明朝系・漫画フォント）');
-  L.push('・文字サイズ（Canva 1000×1414px基準）：');
-  L.push('　通常コマ（3〜4コマ）：26pt相当');
-  L.push('　大ゴマ（1〜2コマ）：32〜42pt相当');
-  L.push('・モノローグは角丸・薄い吹き出し、ナレーションは四角い枠で区別する');
+  if(isBlank) {
+    L.push('⚠️ 吹き出しはすべて空欄のまま描いてください。セリフのテキストは一切書かないこと。');
+    L.push('・吹き出しの形（丸・角丸・四角など）だけ描く。中身は空白にする');
+    L.push('・モノローグ用の角丸吹き出し・ナレーション用の四角い枠も空欄で描く');
+    L.push('・文字・ひらがな・カタカナ・漢字をコマ内に一切描かないこと');
+  } else {
+    L.push('・文字は必ず縦書き（上から下・行は右から左）');
+    L.push('・セリフに句点（。）は使わない（漫画のルール）');
+    L.push('・吹き出し内のテキストは上端をそろえる（上揃え）');
+    L.push('・吹き出し内にセリフを入れる');
+    L.push('・フォントイメージ：Noto Sans / アンチックセザンヌ / 源英アンチック（明朝系・漫画フォント）');
+    L.push('・文字サイズ（Canva 1000×1414px基準）：');
+    L.push('　通常コマ（3〜4コマ）：26pt相当');
+    L.push('　大ゴマ（1〜2コマ）：32〜42pt相当');
+    L.push('・モノローグは角丸・薄い吹き出し、ナレーションは四角い枠で区別する');
+  }
   L.push('');
   L.push('【コマ割りのルール】');
   L.push('・コマの大小を必ず混ぜる（均一な並びは禁止）');
@@ -1199,9 +1215,15 @@ function genImagePrompt() {
   else { L.push('※ STEP3で生成したコマ割りシナリオを上の欄に貼り付けてください。'); L.push(''); }
   L.push('【注意】');
   L.push('・同じキャラクターは全コマで顔・髪・服を統一する');
-  L.push('・日本語のセリフはできるだけ正確に描く');
-  L.push('・吹き出しに収まらないセリフは短く言い換えてよい');
-  L.push('・日本語文字が崩れる場合は吹き出しを空欄にして、後からCanvaで文字を入れる');
+  if(isBlank) {
+    L.push('・吹き出しは空欄のまま。セリフは後からCanvaで追加する');
+    L.push('・Canvaで文字を入れる際のフォント推奨：アンチックセザンヌ / 源英アンチック / Noto Sans JP');
+    L.push('・文字サイズ目安（Canva 1000×1414px）：通常16〜18pt・感情強調22〜26pt・クライマックス28〜32pt');
+  } else {
+    L.push('・日本語のセリフはできるだけ正確に描く');
+    L.push('・吹き出しに収まらないセリフは短く言い換えてよい');
+    L.push('・日本語文字が崩れる場合は吹き出しを空欄にして、後からCanvaで文字を入れる');
+  }
   L.push('※キャラの四面図を参考画像として添付してください（顔ブレ防止）');
   showOut('s4out2', L.join('\n'));
 }
