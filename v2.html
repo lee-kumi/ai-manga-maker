@@ -264,7 +264,7 @@ textarea{resize:vertical;min-height:72px;}
     <div class="card-title"><span class="icon">🗂️</span> ストーリーの構成を選ぶ<span class="opt-badge" style="margin-left:8px;">任意</span></div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">選ぶとAIがその型に沿ってストーリーを組み立てます。迷ったら<strong>起承転転結</strong>がおすすめ。</p>
     <div class="tog-group" id="g-structure">
-      <button class="tog" onclick="pick(this,'g-structure')" id="tog-kisho">起承転転結</button>
+      <button class="tog" onclick="pick(this,'g-structure')" id="tog-kisho">起承転結</button>
       <button class="tog" onclick="pick(this,'g-structure')" id="tog-3maku">三幕構成</button>
       <button class="tog" onclick="pick(this,'g-structure')" id="tog-heroes">ヒーローズジャーニー</button>
       <button class="tog" onclick="pick(this,'g-structure')" id="tog-mondai">問題解決型</button>
@@ -727,7 +727,7 @@ function getSize() {
 }
 
 var structureDescs = {
-  '起承転転結': '①日常を見せる → ②状況が動く → ③どん底（1回目） → ④さらなる試練（2回目） → ⑤乗り越えて成長。転が2回あるので読者が「え、またここから！？」と引き込まれやすい。',
+  '起承転結': '①日常を見せる（起） → ②状況が動く（承） → ③転換・どん底（転） → ④乗り越えて成長・解決（結）。シンプルで初心者にも使いやすい基本の型。',
   '三幕構成': '①出会い・設定（全体の25%） → ②葛藤・試練（50%） → ③クライマックス・解決（25%）。映画や小説でよく使われる基本構成。',
   'ヒーローズジャーニー': '①日常の世界 → ②冒険への召喚 → ③試練・変容 → ④帰還・成長。主人公の内面変化を丁寧に描きたい時に向く。',
   '問題解決型': '①問題提示（読者の共感） → ②原因を探る → ③解決策の発見 → ④実践・結果。ビジネス・自己紹介漫画に使いやすい実用的な構成。'
