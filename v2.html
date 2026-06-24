@@ -288,6 +288,11 @@ textarea{resize:vertical;min-height:72px;}
       <textarea id="p1_s5" placeholder="例：○○を達成し、△△な人物になった" oninput="autoSave()"></textarea>
     </div>
 
+    <!-- テキスト書き出しボタン -->
+    <div style="margin-top:14px;">
+      <button class="gen-btn" style="margin-top:0;background:#6B7BF7;" onclick="exportStory()">📋 ストーリーをテキストでコピーする</button>
+    </div>
+
     <!-- AIと一緒に考える（折りたたみ） -->
     <div style="margin-top:18px;">
       <button onclick="toggleKabeuchi()" style="width:100%;background:#f8f8f5;border:1.5px dashed var(--border);border-radius:10px;padding:12px 16px;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:between;gap:8px;text-align:left;" id="kabeuchiToggleBtn">
@@ -333,7 +338,7 @@ textarea{resize:vertical;min-height:72px;}
   <div class="card">
     <div class="card-title"><span class="icon">📄</span> ページ数</div>
     <div style="display:flex;align-items:center;gap:12px;">
-      <label style="margin:0;white-space:nowrap;font-size:13px;font-weight:700;text-transform:none;letter-spacing:0;">1章あたりのページ数<span class="req-badge">必須</span></label>
+      <label style="margin:0;white-space:nowrap;font-size:13px;font-weight:700;text-transform:none;letter-spacing:0;">全体のページ数<span class="req-badge">必須</span></label>
       <input type="number" id="p1_pages" value="20" min="4" max="100" style="width:80px;text-align:center;font-size:16px;font-weight:700;" oninput="autoSave()">
       <span style="font-size:13px;color:var(--muted);">ページ</span>
     </div>
@@ -891,6 +896,29 @@ function toggleKabeuchi() {
 }
 
 // コピー＋AIで開く
+function exportStory() {
+  var d = loadData();
+  var lines = [];
+  lines.push('【ストーリー設計】');
+  lines.push('');
+  if (d.p1_title) lines.push('■ タイトル：' + d.p1_title);
+  if (d.p1_theme) lines.push('■ テーマ：' + d.p1_theme);
+  if (d.p1_target) lines.push('■ ターゲット：' + d.p1_target);
+  if (d.p1_cta) lines.push('■ 読者への期待行動：' + d.p1_cta);
+  lines.push('');
+  lines.push('■ 日常（出発点）：' + (d.p1_s1 || '未入力'));
+  lines.push('■ 事件（転換点）：' + (d.p1_s2 || '未入力'));
+  lines.push('■ 転機：' + (d.p1_s3 || '未入力'));
+  lines.push('■ 成長：' + (d.p1_s4 || '未入力'));
+  lines.push('■ 結末：' + (d.p1_s5 || '未入力'));
+  lines.push('');
+  lines.push('■ 全体のページ数：' + (d.p1_pages || '20') + 'ページ');
+  var text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(function() {
+    alert('コピーしました！ClaudeやChatGPTに貼り付けてください。');
+  });
+}
+
 function copyAndOpenAI() {
   var L = [];
   L.push('漫画のストーリーのヒントを一緒に考えてください。');
