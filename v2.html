@@ -404,6 +404,12 @@ textarea{resize:vertical;min-height:72px;}
       <button class="tog" onclick="pick(this,'g-style')">女性誌挿絵風 × 北欧ナチュラル</button>
     </div>
 
+    <div style="margin-top:12px;">
+      <span class="tog-label">自由入力（画像から取得したプロンプトなど）</span>
+      <textarea id="p2_style_custom" placeholder="例：soft watercolor illustration, gentle lineart, pastel nordic tones, cozy atmosphere&#10;好きな画像からAIで抽出したプロンプトをそのまま貼り付けてOK" style="min-height:72px;margin-top:6px;" oninput="autoSave()"></textarea>
+      <p style="font-size:11px;color:var(--muted);margin-top:4px;">※ 上のボタンと組み合わせて使えます。両方入力した場合は自由入力が優先されます。</p>
+    </div>
+
     <span class="tog-label">線・質感（複数選択可）</span>
     <div class="tog-group" id="g-line">
       <button class="tog" onclick="multi(this)">細線・スッキリ</button>
@@ -851,12 +857,17 @@ function showOut(id, text) {
 
 // ===== PROMPT BUILDERS =====
 function getArtStyle() {
+  var custom = v('p2_style_custom') || gv('p2_style_custom') || '';
   var st = getSelected('g-style');
   var ln = getSelected('g-line');
   var tn = getSelected('g-tone');
   var bg = getSelected('g-bg');
   var parts = [];
-  if(st.length) parts.push('画風：' + st.join('・'));
+  if(custom) {
+    parts.push('画風（カスタム）：' + custom);
+  } else if(st.length) {
+    parts.push('画風：' + st.join('・'));
+  }
   if(ln.length) parts.push('線・質感：' + ln.join('・'));
   if(tn.length) parts.push('トーン：' + tn.join('・'));
   if(bg.length) parts.push('背景の描き込み度：' + bg.join('・'));
