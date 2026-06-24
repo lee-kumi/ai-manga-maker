@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI漫画メーカー v2 | 企画から画像生成まで</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#6C63FF;--primary-light:#EEF0FF;--accent:#43B89C;--warning:#FFB74D;--bg:#F4F6FC;--card:#FFFFFF;--text:#1A1A2E;--muted:#6B7280;--border:#E5E7EB;--r:12px;--shadow:0 4px 20px rgba(108,99,255,0.1);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+input,textarea,select,button,option{font-family:'Noto Sans JP',-apple-system,sans-serif;}
+
+/* Header */
+.header{background:var(--card);border-bottom:2px solid var(--primary-light);padding:12px 20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(108,99,255,0.08);}
+.header-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.logo{font-size:17px;font-weight:900;color:var(--primary);white-space:nowrap;}
+.step-nav{flex-basis:100%;display:flex;flex-wrap:nowrap;gap:2px;padding-top:8px;margin-top:8px;border-top:1px solid var(--primary-light);}
+.step-btn{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 2px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.step-btn:hover{background:var(--primary-light);}
+.step-btn.active{background:var(--primary);color:white;}
+.step-btn.done{background:#E8F5E9;}
+.step-num{font-size:15px;font-weight:900;line-height:1;}
+.step-label{font-size:9px;line-height:1.2;text-align:center;color:var(--muted);}
+.step-btn.active .step-label{color:rgba(255,255,255,0.8);}
+.save-ind{font-size:12px;color:var(--accent);white-space:nowrap;opacity:0;transition:opacity 0.3s;margin-left:auto;}
+.save-ind.show{opacity:1;}
+
+/* Layout */
+.main{max-width:860px;margin:28px auto;padding:0 20px;}
+.step-page{display:none;}
+.step-page.active{display:block;}
+
+/* Step header */
+.step-header{margin-bottom:22px;}
+.step-badge{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:white;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:10px;}
+.step-header h1{font-size:24px;font-weight:900;margin-bottom:6px;line-height:1.3;}
+.step-header p{color:var(--muted);font-size:14px;line-height:1.7;}
+
+/* Cards */
+.card{background:var(--card);border-radius:var(--r);padding:22px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.card.hl{border:2px solid var(--primary);}
+.card-title{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title .icon{width:26px;height:26px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+
+/* Forms */
+.fg{margin-bottom:14px;}
+.fg:last-child{margin-bottom:0;}
+label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+input[type=text],input[type=number],textarea,select{width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;color:var(--text);background:#FAFAFA;transition:border-color 0.2s;outline:none;}
+input[type=text]:focus,textarea:focus{border-color:var(--primary);background:white;}
+textarea{resize:vertical;min-height:72px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* Badges */
+.req-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;background:#FAECE7;color:#993C1D;margin-left:5px;text-transform:none;letter-spacing:0;}
+.opt-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;background:#f0f0ec;color:#666;margin-left:5px;text-transform:none;letter-spacing:0;}
+
+/* Toggle buttons */
+.tog-group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.tog{font-family:inherit;font-size:12px;padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.tog:hover{background:var(--primary-light);}
+.tog.on{background:var(--primary-light);border-color:#AFA9EC;color:#3C3489;font-weight:700;}
+.tog-label{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;display:block;}
+
+/* Boxes */
+.info-box{border-left:4px solid var(--primary);background:var(--primary-light);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13px;line-height:1.7;}
+.warn-box{border-left:4px solid var(--warning);background:#FFF8E1;padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13px;line-height:1.7;}
+.kabeuchi-box{background:#f8f8f5;border:1px solid var(--border);border-radius:10px;padding:16px;}
+.q-row{margin-bottom:14px;}
+.q-label{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.q-num{width:20px;height:20px;border-radius:50%;background:#BA7517;color:#FAEEDA;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* Prompt output */
+.prompt-box{background:#1A1A2E;border-radius:10px;padding:18px;margin-top:14px;position:relative;}
+.prompt-box pre{color:#E8E8F0;font-family:'Consolas','Courier New',monospace;font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-word;margin-top:28px;}
+.copy-btn{position:absolute;top:10px;right:10px;background:var(--primary);color:white;border:none;padding:5px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;z-index:1;}
+.copy-btn:hover{background:#5954D6;}
+.copy-btn.ok{background:var(--accent);}
+
+/* Buttons */
+.gen-btn{display:inline-flex;align-items:center;gap:7px;background:var(--primary);color:white;border:none;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-top:14px;}
+.gen-btn:hover{background:#5954D6;transform:translateY(-1px);}
+.gen-btn.green{background:var(--accent);}
+.gen-btn.green:hover{background:#359e85;}
+.gen-btn.full{width:100%;justify-content:center;font-size:14px;padding:12px;}
+.add-btn{background:none;border:2px dashed var(--primary);color:var(--primary);padding:7px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;width:100%;transition:all 0.2s;}
+.add-btn:hover{background:var(--primary-light);}
+.del-btn{background:none;border:none;color:#ccc;cursor:pointer;font-size:18px;line-height:1;padding:4px;}
+.del-btn:hover{color:#f44;}
+
+/* Dynamic blocks */
+.dyn-block{border:2px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;}
+.dyn-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.dyn-num{font-size:12px;font-weight:700;color:var(--muted);}
+
+/* Project bar */
+.proj-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.proj-btn{font-family:inherit;font-size:12px;padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.proj-btn:hover{background:var(--primary-light);}
+.proj-btn.active{background:var(--primary);color:white;border-color:var(--primary);font-weight:700;}
+.proj-add{font-family:inherit;font-size:12px;padding:5px 10px;border-radius:20px;border:1.5px dashed var(--border);background:#fff;color:var(--muted);cursor:pointer;}
+.proj-add:hover{border-color:var(--primary);color:var(--primary);}
+
+/* Flow cards */
+.flow-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0;}
+.flow-card{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:all 0.2s;text-align:center;}
+.flow-card:hover{border-color:var(--primary);box-shadow:var(--shadow);transform:translateY(-2px);}
+.flow-num{font-size:28px;font-weight:900;color:var(--primary);line-height:1;}
+.flow-name{font-size:12px;font-weight:700;margin-top:6px;color:var(--text);}
+.flow-desc{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* Navigation */
+.nav-buttons{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:22px;border-top:2px solid var(--border);}
+.nav-btn{display:flex;align-items:center;gap:8px;padding:11px 24px;border-radius:10px;border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.nav-btn.prev{background:white;color:var(--muted);border:2px solid var(--border);}
+.nav-btn.prev:hover:not(:disabled){border-color:var(--primary);color:var(--primary);}
+.nav-btn.next{background:var(--primary);color:white;}
+.nav-btn.next:hover{background:#5954D6;}
+.nav-btn.next.green{background:var(--accent);}
+.nav-btn.next.green:hover{background:#359e85;}
+.nav-btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+/* Divider */
+.divider{height:1px;background:var(--border);margin:18px 0;}
+
+/* Tool links */
+.tool-links{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;}
+.tool-link{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;transition:all 0.2s;}
+.tool-link:hover{background:var(--primary);color:white;}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:#1A1A2E;color:white;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;z-index:9999;transform:translateY(70px);opacity:0;transition:all 0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.25);}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* Table */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table th{background:var(--primary-light);color:var(--primary);font-weight:700;padding:9px 12px;text-align:left;border:1px solid var(--border);}
+.data-table td{padding:8px 12px;border:1px solid var(--border);vertical-align:top;line-height:1.5;}
+
+@media(max-width:600px){.grid2{grid-template-columns:1fr;}.flow-cards{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">🎨 AI漫画メーカー v2</div>
+    <span class="save-ind" id="saveInd">✓ 保存済み</span>
+    <nav class="step-nav" id="stepNav"></nav>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- ===== PAGE 0: スタート ===== -->
+<div class="step-page active" id="page-0">
+  <div class="step-header">
+    <div class="step-badge">🗺️ スタート</div>
+    <h1>絵が描けなくても大丈夫。<br>4ステップで漫画が完成します。</h1>
+    <p>企画・キャラ・コマ割り・画像生成まで、ぜんぶここでできます。<br>入力内容はブラウザに自動保存されます。</p>
+  </div>
+
+  <div class="card hl">
+    <div class="card-title"><span class="icon">📁</span> 作品を選ぶ</div>
+    <div class="proj-bar" id="projBar"></div>
+    <div class="info-box" style="margin-bottom:0;">💡 作品ごとに独立して保存されます。複数の漫画を同時進行できます。</div>
+  </div>
+
+  <div class="flow-cards">
+    <div class="flow-card" onclick="goTo(1)">
+      <div class="flow-num">1</div>
+      <div class="flow-name">📓 企画書</div>
+      <div class="flow-desc">テーマ・ストーリー・コンセプトを決める</div>
+    </div>
+    <div class="flow-card" onclick="goTo(2)">
+      <div class="flow-num">2</div>
+      <div class="flow-name">👤 キャラ・画風</div>
+      <div class="flow-desc">見た目・背景・画風を固定する</div>
+    </div>
+    <div class="flow-card" onclick="goTo(3)">
+      <div class="flow-num">3</div>
+      <div class="flow-name">📄 コマ割り</div>
+      <div class="flow-desc">ページ構成・コマ割りシナリオを作る</div>
+    </div>
+    <div class="flow-card" onclick="goTo(4)">
+      <div class="flow-num">4</div>
+      <div class="flow-name">🖼️ 画像生成</div>
+      <div class="flow-desc">画像生成プロンプトを作る</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🛠️</span> どのAIを使う？</div>
+    <table class="data-table">
+      <thead><tr><th>ツール</th><th>使う場面</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Gemini / Claude / ChatGPT</strong></td><td>ストーリー・コマ割り・プロンプト生成</td></tr>
+        <tr><td><strong>Nano Banana / ChatGPT</strong></td><td>漫画画像の生成</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warn-box">⚠️ <strong>よくある失敗：</strong> STEP1を雑にして、いきなり画像生成から始めてしまう。テーマとキャラが固まっていないと画像がバラバラになります。必ずSTEP1から順番に進めましょう。</div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🗑️</span> この作品をリセット</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;"><strong>今開いている作品だけ</strong>を最初の状態に戻します。他の作品には影響しません。</p>
+    <button class="gen-btn" style="background:#EF4444;margin-top:0;" onclick="resetProject()">🗑️ この作品をリセット</button>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" disabled>◀ 前へ</button>
+    <button class="nav-btn next" onclick="goTo(1)">STEP 1 を始める ▶</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 1: 企画書 ===== -->
+<div class="step-page" id="page-1">
+  <div class="step-header">
+    <div class="step-badge">STEP 1</div>
+    <h1>企画書を作る</h1>
+    <p><span style="background:#FAECE7;color:#993C1D;font-size:11px;padding:2px 7px;border-radius:10px;font-weight:700;">必須</span> の項目だけ入力すればOKです。あとはAIが補完します。</p>
+    <div class="tool-links">
+      <a href="https://gemini.google.com/" target="_blank" class="tool-link">🔵 Gemini</a>
+      <a href="https://claude.ai/" target="_blank" class="tool-link">🟣 Claude</a>
+      <a href="https://chatgpt.com/" target="_blank" class="tool-link">🟢 ChatGPT</a>
+    </div>
+  </div>
+
+  <!-- 企画概要 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span> 企画概要</div>
+    <div class="grid2">
+      <div class="fg">
+        <label>題材・テーマ<span class="req-badge">必須</span></label>
+        <input type="text" id="p1_theme" placeholder="例：地元の偉人・観光PR・家族の物語" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>対象読者<span class="opt-badge">任意</span></label>
+        <input type="text" id="p1_target" placeholder="例：子どもから大人まで" oninput="autoSave()">
+      </div>
+    </div>
+    <div class="fg">
+      <label>制作背景・目的<span class="opt-badge">任意</span></label>
+      <textarea id="p1_bg" placeholder="例：観光誘致・周年記念など、なぜ作るかを書くとAIの精度が上がります" oninput="autoSave()"></textarea>
+    </div>
+    <div class="grid2">
+      <div class="fg">
+        <label>メディア・用途<span class="opt-badge">任意</span></label>
+        <input type="text" id="p1_media" placeholder="例：Web掲載・パンフレット・SNS" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>読者への期待行動<span class="opt-badge">任意</span></label>
+        <input type="text" id="p1_cta" placeholder="例：○○に行きたい・続きが読みたい" oninput="autoSave()">
+      </div>
+    </div>
+  </div>
+
+  <!-- ストーリー概要 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📖</span> ストーリーを考える</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;"><strong>「日常」と「結末」だけでも入力するとAIの精度が大きく上がります。</strong>自分で考えて直接書いてください。</p>
+    <div class="grid2">
+      <div class="fg">
+        <label>日常（主人公の出発点）<span class="req-badge">必須</span></label>
+        <textarea id="p1_s1" placeholder="例：○歳の△△、□□で暮らす◇◇。日々○○している。" oninput="autoSave()"></textarea>
+      </div>
+      <div class="fg">
+        <label>事件（転換点）<span class="opt-badge">任意</span></label>
+        <textarea id="p1_s2" placeholder="例：突然○○が起きて、△△してしまう" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="fg">
+        <label>転機<span class="opt-badge">任意</span></label>
+        <textarea id="p1_s3" placeholder="例：○○との出会いで状況が変わる" oninput="autoSave()"></textarea>
+      </div>
+      <div class="fg">
+        <label>成長<span class="opt-badge">任意</span></label>
+        <textarea id="p1_s4" placeholder="例：○○を学び、△△するようになる" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+    <div class="fg">
+      <label>結末<span class="req-badge">必須</span></label>
+      <textarea id="p1_s5" placeholder="例：○○を達成し、△△な人物になった" oninput="autoSave()"></textarea>
+    </div>
+
+    <!-- AIと一緒に考える（折りたたみ） -->
+    <div style="margin-top:18px;">
+      <button onclick="toggleKabeuchi()" style="width:100%;background:#f8f8f5;border:1.5px dashed var(--border);border-radius:10px;padding:12px 16px;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:between;gap:8px;text-align:left;" id="kabeuchiToggleBtn">
+        <span>💭 ストーリーが思い浮かばない方へ — AIと一緒に考える</span>
+        <span id="kabeuchiArrow" style="margin-left:auto;">▼</span>
+      </button>
+      <div id="kabeuchiSection" style="display:none;margin-top:10px;">
+        <div class="info-box">💡 4つの質問に答えてコピー → AIに貼り付けるだけで、ストーリーのヒントが返ってきます。返ってきた内容を上のフォームに書き写してください。</div>
+        <div class="kabeuchi-box">
+          <div class="q-row">
+            <p class="q-label"><span class="q-num">Q1</span>主人公はどんな人ですか？</p>
+            <textarea id="p1_q1" placeholder="例：14歳の男の子、地方の漁師の息子、母と2人暮らし" style="min-height:56px;" oninput="autoSave()"></textarea>
+          </div>
+          <div class="q-row">
+            <p class="q-label"><span class="q-num">Q2</span>その人の「一番つらかったこと」は何ですか？</p>
+            <textarea id="p1_q2" placeholder="例：突然の事故で仕事を失い、家族と離れ離れになってしまった。" style="min-height:56px;" oninput="autoSave()"></textarea>
+          </div>
+          <div class="q-row">
+            <p class="q-label"><span class="q-num">Q3</span>最後にどうなりましたか？</p>
+            <textarea id="p1_q3" placeholder="例：長い苦労の末に夢を実現し、家族と再会できた。" style="min-height:56px;" oninput="autoSave()"></textarea>
+          </div>
+          <div class="q-row" style="margin-bottom:0;">
+            <p class="q-label"><span class="q-num">Q4</span>読んだ人に何をしてほしいですか？</p>
+            <textarea id="p1_q4" placeholder="例：○○に行ってみたいと思ってほしい。" style="min-height:56px;" oninput="autoSave()"></textarea>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:14px;flex-wrap:wrap;">
+            <button class="gen-btn" style="margin-top:0;" onclick="copyAndOpenAI()">📋 コピーしてAIで開く →</button>
+            <a href="https://gemini.google.com/" target="_blank" class="tool-link">🔵 Gemini</a>
+            <a href="https://claude.ai/" target="_blank" class="tool-link">🟣 Claude</a>
+            <a href="https://chatgpt.com/" target="_blank" class="tool-link">🟢 ChatGPT</a>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7;">
+            ① コピーしてAIのチャット欄に貼り付ける<br>
+            ② 返ってきたストーリーのヒントを見る<br>
+            ③ 上の「日常」「結末」などの欄に自分の言葉で書く
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ページ数 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📄</span> ページ数</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <label style="margin:0;white-space:nowrap;font-size:13px;font-weight:700;text-transform:none;letter-spacing:0;">1章あたりのページ数<span class="req-badge">必須</span></label>
+      <input type="number" id="p1_pages" value="20" min="4" max="100" style="width:80px;text-align:center;font-size:16px;font-weight:700;" oninput="autoSave()">
+      <span style="font-size:13px;color:var(--muted);">ページ</span>
+    </div>
+  </div>
+
+  <!-- プロンプト生成 -->
+  <button class="gen-btn full" onclick="genStep1()">✨ 企画プロンプトを生成する</button>
+  <div id="s1out" style="display:none;">
+    <div class="prompt-box">
+      <button class="copy-btn" onclick="copyEl('s1text',this)">コピー</button>
+      <pre id="s1text"></pre>
+    </div>
+    <div class="info-box">💡 このプロンプトをGemini / Claude / ChatGPTに貼り付けてください。返ってきた内容をもとにSTEP2へ進みましょう。</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" onclick="goTo(0)">◀ スタートへ</button>
+    <button class="nav-btn next" onclick="goTo(2)">STEP 2 へ ▶</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 2: キャラ・背景・画風 ===== -->
+<div class="step-page" id="page-2">
+  <div class="step-header">
+    <div class="step-badge">STEP 2</div>
+    <h1>キャラ・背景・画風を固定する</h1>
+    <p>ここで決めた内容がSTEP3・4のプロンプトに自動で反映されます。</p>
+  </div>
+
+  <!-- 画風 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🎨</span> 画風・スタイル</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">選ぶだけでOKです。全コマに統一して反映されます。</p>
+
+    <span class="tog-label">画風（1つ選択）</span>
+    <div class="tog-group" id="g-style">
+      <button class="tog" onclick="pick(this,'g-style')">少年漫画風</button>
+      <button class="tog" onclick="pick(this,'g-style')">少女漫画風</button>
+      <button class="tog" onclick="pick(this,'g-style')">青年漫画風</button>
+      <button class="tog" onclick="pick(this,'g-style')">劇画風</button>
+      <button class="tog" onclick="pick(this,'g-style')">ゆるいイラスト風</button>
+      <button class="tog" onclick="pick(this,'g-style')">絵本風</button>
+      <button class="tog" onclick="pick(this,'g-style')">アメコミ風</button>
+    </div>
+
+    <span class="tog-label">線・質感（複数選択可）</span>
+    <div class="tog-group" id="g-line">
+      <button class="tog" onclick="multi(this)">細線・スッキリ</button>
+      <button class="tog" onclick="multi(this)">太線・はっきり</button>
+      <button class="tog" onclick="multi(this)">手描き感</button>
+      <button class="tog" onclick="multi(this)">デジタルクリーン</button>
+      <button class="tog" onclick="multi(this)">強弱のある線</button>
+    </div>
+
+    <span class="tog-label">トーン（1つ選択）</span>
+    <div class="tog-group" id="g-tone">
+      <button class="tog" onclick="pick(this,'g-tone')">白黒（スクリーントーン）</button>
+      <button class="tog" onclick="pick(this,'g-tone')">グレースケール</button>
+      <button class="tog" onclick="pick(this,'g-tone')">淡いカラー</button>
+      <button class="tog" onclick="pick(this,'g-tone')">フルカラー</button>
+    </div>
+
+    <span class="tog-label">背景の描き込み度（1つ選択）</span>
+    <div class="tog-group" id="g-bg">
+      <button class="tog" onclick="pick(this,'g-bg')">シンプル（キャラ重視）</button>
+      <button class="tog" onclick="pick(this,'g-bg')">標準</button>
+      <button class="tog" onclick="pick(this,'g-bg')">緻密なリアル背景</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <span class="tog-label">キャンバスサイズ<span class="opt-badge">任意</span></span>
+    <div class="tog-group" id="g-size">
+      <button class="tog" onclick="pickSize(this,'1000×1414px（A4縦）')">1000×1414px<br><span style="font-size:10px;">A4縦・標準</span></button>
+      <button class="tog" onclick="pickSize(this,'1080×1080px（SNS正方形）')">1080×1080px<br><span style="font-size:10px;">SNS正方形</span></button>
+      <button class="tog" onclick="pickSize(this,'1080×1920px（縦型SNS）')">1080×1920px<br><span style="font-size:10px;">縦型SNS・リール</span></button>
+      <button class="tog" onclick="pickSize(this,'')">カスタム</button>
+    </div>
+    <div id="size-custom" style="display:none;margin-top:8px;">
+      <input type="text" id="p2_size_custom" placeholder="例：2480×3508px（印刷用A4）" oninput="autoSave()">
+    </div>
+    <input type="hidden" id="p2_size" oninput="autoSave()">
+
+    <div class="divider"></div>
+    <div class="fg" style="margin-bottom:0;">
+      <label>口調・雰囲気（任意）</label>
+      <input type="text" id="p2_voice" placeholder="例：主人公：タメ口・方言 / 母：優しい話し方" oninput="autoSave()">
+    </div>
+  </div>
+
+  <!-- キャラクター -->
+  <div class="card">
+    <div class="card-title"><span class="icon">👤</span> 登場人物のビジュアル設定</div>
+    <div class="info-box" style="margin-top:0;">💡 入力した内容が画像生成プロンプトに自動で使われます。主人公だけでもOKです。</div>
+    <div id="charaList"></div>
+    <button class="add-btn" onclick="addChara()">＋ 登場人物を追加</button>
+  </div>
+
+  <!-- 背景 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🏠</span> 背景・世界観設定</div>
+    <div class="info-box" style="margin-top:0;">💡 よく出てくる場所を2〜3個登録しておくと、コマごとに使い分けられます。</div>
+    <div id="bgList"></div>
+    <button class="add-btn" onclick="addBg()">＋ 背景を追加</button>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" onclick="goTo(1)">◀ STEP 1 へ</button>
+    <button class="nav-btn next" onclick="goTo(3)">STEP 3 へ ▶</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 3: コマ割りシナリオ ===== -->
+<div class="step-page" id="page-3">
+  <div class="step-header">
+    <div class="step-badge">STEP 3</div>
+    <h1>コマ割りシナリオを作る</h1>
+    <p>まずページ構成表を作り、「OK」を返したらシナリオを一括生成します。</p>
+    <div class="tool-links">
+      <a href="https://gemini.google.com/" target="_blank" class="tool-link">🔵 Gemini</a>
+      <a href="https://claude.ai/" target="_blank" class="tool-link">🟣 Claude</a>
+      <a href="https://chatgpt.com/" target="_blank" class="tool-link">🟢 ChatGPT</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span> ① ページ構成表を作る</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">STEP1・2の内容をもとに、ページごとの内容・役割の一覧表をAIに作らせます。</p>
+    <div class="fg">
+      <label>1ページあたりのコマ数<span class="opt-badge">任意</span></label>
+      <input type="text" id="p3_koma" placeholder="例：3〜4コマ（迷ったらこれでOK）" oninput="autoSave()">
+    </div>
+    <button class="gen-btn" onclick="genPagePlan()">📊 ページ構成表プロンプトを生成</button>
+    <div id="s3out1" style="display:none;">
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyEl('s3text1',this)">コピー</button>
+        <pre id="s3text1"></pre>
+      </div>
+      <div class="info-box">💡 AIにこのプロンプトを貼り付けると、ページ構成表が出てきます。内容を確認して「OK」と返信すると次のステップへ進めます。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオを一括生成する</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">ページ構成表に「OK」と返した後、このプロンプトで全ページのシナリオを一括出力します。</p>
+    <button class="gen-btn" onclick="genScenario()">🎬 コマ割りシナリオプロンプトを生成</button>
+    <div id="s3out2" style="display:none;">
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyEl('s3text2',this)">コピー</button>
+        <pre id="s3text2"></pre>
+      </div>
+      <div class="info-box">💡 <strong>Gemini または Claude</strong> を推奨します（20ページ一括出力に対応しています）。</div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" onclick="goTo(2)">◀ STEP 2 へ</button>
+    <button class="nav-btn next" onclick="goTo(4)">STEP 4 へ ▶</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 4: 画像生成プロンプト ===== -->
+<div class="step-page" id="page-4">
+  <div class="step-header">
+    <div class="step-badge">STEP 4</div>
+    <h1>画像生成プロンプトを作る</h1>
+    <p>キャラシートを先に作ってから、コマ別プロンプトへ進みましょう。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🧑‍🎨</span> ① キャラシート生成プロンプト</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">キャラシート（四面図）を画像AIに作らせるためのプロンプトです。<br>生成した画像を画像AIに参照画像として添付すると、コマごとの顔ブレを防げます。</p>
+    <button class="gen-btn" onclick="genCharaSheet()">🧑‍🎨 キャラシートプロンプトを生成</button>
+    <div id="s4out1" style="display:none;">
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyEl('s4text1',this)">コピー</button>
+        <pre id="s4text1"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🖼️</span> ② コマ別画像生成プロンプト</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">コマ割りシナリオをもとに、1ページずつ画像生成プロンプトを作るためのプロンプトです。</p>
+    <div class="fg">
+      <label>コマ割りシナリオ（STEP3で生成した内容を貼り付けてください）</label>
+      <textarea id="p4_scenario" placeholder="AIが生成したコマ割りシナリオをここに貼り付けてください" style="min-height:120px;" oninput="autoSave()"></textarea>
+    </div>
+    <button class="gen-btn" onclick="genImagePrompt()">🖼️ 画像生成プロンプトを生成</button>
+    <div id="s4out2" style="display:none;">
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyEl('s4text2',this)">コピー</button>
+        <pre id="s4text2"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔧</span> ③ 修正プロンプト</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">画像が思い通りにならないときの修正指示テンプレートです。</p>
+    <div class="fg">
+      <label>どこを直したいですか？（複数選択可）</label>
+      <div class="tog-group" id="g-fix">
+        <button class="tog" onclick="multi(this)">キャラの顔が違う</button>
+        <button class="tog" onclick="multi(this)">服装が違う</button>
+        <button class="tog" onclick="multi(this)">背景が現代風になった</button>
+        <button class="tog" onclick="multi(this)">コマ割りが違う</button>
+        <button class="tog" onclick="multi(this)">セリフが読みにくい</button>
+        <button class="tog" onclick="multi(this)">主人公をもっと大きく</button>
+        <button class="tog" onclick="multi(this)">フォントが違う</button>
+        <button class="tog" onclick="multi(this)">画像サイズが変わった</button>
+      </div>
+    </div>
+    <div class="fg">
+      <label>その他・詳細<span class="opt-badge">任意</span></label>
+      <textarea id="p4_fix_detail" placeholder="例：吹き出しの位置を右上に移動したい" oninput="autoSave()"></textarea>
+    </div>
+    <button class="gen-btn" onclick="genFixPrompt()">🔧 修正プロンプトを生成</button>
+    <div id="s4out3" style="display:none;">
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyEl('s4text3',this)">コピー</button>
+        <pre id="s4text3"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="background:linear-gradient(135deg,#43B89C,#2E9E83);color:white;border:none;">
+    <div style="font-size:28px;margin-bottom:8px;">🎉</div>
+    <div style="font-size:18px;font-weight:900;margin-bottom:6px;">全ステップ完了！</div>
+    <div style="font-size:14px;opacity:0.9;">お疲れさまでした。画像生成AIに貼り付けて漫画を完成させましょう。</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" onclick="goTo(3)">◀ STEP 3 へ</button>
+    <button class="nav-btn next green" onclick="goTo(0)">🏠 スタートへ戻る</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ===== PROJECTS =====
+var projects = JSON.parse(localStorage.getItem('v2_projects') || '["作品1"]');
+var curProj = localStorage.getItem('v2_curProj') || projects[0];
+
+function saveProjects() { localStorage.setItem('v2_projects', JSON.stringify(projects)); }
+function setProject(name) {
+  curProj = name;
+  localStorage.setItem('v2_curProj', name);
+  renderProjBar();
+  loadData();
+  renderChara();
+  renderBg();
+  restoreToggles();
+}
+function addProject() {
+  var n = '作品' + (projects.length + 1);
+  projects.push(n);
+  saveProjects();
+  setProject(n);
+}
+function renderProjBar() {
+  var bar = document.getElementById('projBar');
+  bar.innerHTML = '';
+  projects.forEach(function(p) {
+    var btn = document.createElement('button');
+    btn.className = 'proj-btn' + (p === curProj ? ' active' : '');
+    btn.textContent = p;
+    btn.onclick = function() { setProject(p); };
+    bar.appendChild(btn);
+  });
+  var add = document.createElement('button');
+  add.className = 'proj-add';
+  add.textContent = '＋ 追加';
+  add.onclick = addProject;
+  bar.appendChild(add);
+}
+
+// ===== STORAGE =====
+function key(id) { return 'v2_' + curProj + '_' + id; }
+function sv(id, val) { localStorage.setItem(key(id), val); }
+function gv(id) { return localStorage.getItem(key(id)) || ''; }
+function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+function autoSave() {
+  var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
+             'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
+             'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages',
+             'p2_voice','p3_koma','p4_scenario','p4_fix_detail'];
+  ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
+  showSave();
+}
+
+function loadData() {
+  var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
+             'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
+             'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages',
+             'p2_voice','p3_koma','p4_scenario','p4_fix_detail'];
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if(el) { var val = gv(id); if(val) el.value = val; }
+  });
+}
+
+function showSave() {
+  var ind = document.getElementById('saveInd');
+  ind.classList.add('show');
+  clearTimeout(ind._t);
+  ind._t = setTimeout(function() { ind.classList.remove('show'); }, 1500);
+}
+
+function resetProject() {
+  if(!confirm('「' + curProj + '」のデータをすべて消しますか？')) return;
+  var keys = Object.keys(localStorage).filter(function(k) { return k.startsWith('v2_' + curProj + '_'); });
+  keys.forEach(function(k) { localStorage.removeItem(k); });
+  loadData();
+  renderChara();
+  renderBg();
+  restoreToggles();
+  showToast('リセットしました');
+}
+
+// ===== STEPS =====
+var STEPS = [
+  {num:'🗺️', label:'全体'},
+  {num:'1', label:'企画書'},
+  {num:'2', label:'キャラ・画風'},
+  {num:'3', label:'コマ割り'},
+  {num:'4', label:'画像生成'}
+];
+var curStep = 0;
+
+function renderNav() {
+  var nav = document.getElementById('stepNav');
+  nav.innerHTML = '';
+  STEPS.forEach(function(s, i) {
+    var btn = document.createElement('button');
+    btn.className = 'step-btn' + (i === curStep ? ' active' : '');
+    btn.innerHTML = '<span class="step-num">' + s.num + '</span><span class="step-label">' + s.label + '</span>';
+    btn.onclick = (function(idx) { return function() { goTo(idx); }; })(i);
+    nav.appendChild(btn);
+  });
+}
+
+function goTo(n) {
+  document.querySelectorAll('.step-page').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('page-' + n).classList.add('active');
+  curStep = n;
+  renderNav();
+  window.scrollTo(0, 0);
+}
+
+// ===== TOGGLES =====
+function pickSize(btn, val) {
+  document.querySelectorAll('#g-size .tog').forEach(function(b) { b.classList.remove('on'); });
+  btn.classList.add('on');
+  var custom = document.getElementById('size-custom');
+  if(val === '') {
+    custom.style.display = 'block';
+    document.getElementById('p2_size').value = '';
+  } else {
+    custom.style.display = 'none';
+    document.getElementById('p2_size').value = val;
+  }
+  sv('p2_size', document.getElementById('p2_size').value);
+  sv('p2_size_sel', btn.textContent.trim().split('\n')[0]);
+  saveToggles();
+}
+function getSize() {
+  var custom = (v('p2_size_custom') || gv('p2_size_custom') || '').trim();
+  var sel = (v('p2_size') || gv('p2_size') || '').trim();
+  return custom || sel || '1000×1414px（A4縦）';
+}
+
+function pick(btn, g) {
+  document.querySelectorAll('#' + g + ' .tog').forEach(function(b) { b.classList.remove('on'); });
+  btn.classList.toggle('on');
+  saveToggles();
+}
+function multi(btn) { btn.classList.toggle('on'); saveToggles(); }
+function getSelected(g) {
+  var s = [];
+  document.querySelectorAll('#' + g + ' .tog.on').forEach(function(b) { s.push(b.textContent.trim()); });
+  return s;
+}
+function saveToggles() {
+  ['g-style','g-line','g-tone','g-bg','g-fix'].forEach(function(g) {
+    sv(g, JSON.stringify(getSelected(g)));
+  });
+  showSave();
+}
+function restoreToggles() {
+  ['g-style','g-line','g-tone','g-bg','g-fix'].forEach(function(g) {
+    var saved = JSON.parse(gv(g) || '[]');
+    document.querySelectorAll('#' + g + ' .tog').forEach(function(b) {
+      b.classList.toggle('on', saved.indexOf(b.textContent.trim()) > -1);
+    });
+  });
+}
+
+// ===== CHARACTERS =====
+var charas = [];
+function loadCharas() { charas = JSON.parse(gv('charas') || '[]'); }
+function saveCharas() { sv('charas', JSON.stringify(charas)); showSave(); }
+function addChara() {
+  charas.push({name:'', age:'', hair:'', clothes:'', other:''});
+  saveCharas();
+  renderChara();
+}
+function delChara(i) { charas.splice(i, 1); saveCharas(); renderChara(); }
+function updateChara(i, field, val) { charas[i][field] = val; saveCharas(); }
+function renderChara() {
+  var list = document.getElementById('charaList');
+  list.innerHTML = '';
+  charas.forEach(function(c, i) {
+    var div = document.createElement('div');
+    div.className = 'dyn-block';
+    div.innerHTML =
+      '<div class="dyn-head"><span class="dyn-num">キャラ' + (i+1) + '</span>' +
+      '<button class="del-btn" onclick="delChara(' + i + ')">×</button></div>' +
+      '<div class="grid2">' +
+      '<div class="fg"><label>名前・役割</label><input type="text" value="' + esc(c.name) + '" placeholder="例：万次郎 / 主人公" onchange="updateChara(' + i + ',\'name\',this.value)"></div>' +
+      '<div class="fg"><label>年齢・性別</label><input type="text" value="' + esc(c.age) + '" placeholder="例：14歳・男" onchange="updateChara(' + i + ',\'age\',this.value)"></div>' +
+      '</div><div class="grid2">' +
+      '<div class="fg"><label>髪型・髪色</label><input type="text" value="' + esc(c.hair) + '" placeholder="例：短い黒髪" onchange="updateChara(' + i + ',\'hair\',this.value)"></div>' +
+      '<div class="fg"><label>服装・特徴</label><input type="text" value="' + esc(c.clothes) + '" placeholder="例：麻の着物・細身" onchange="updateChara(' + i + ',\'clothes\',this.value)"></div>' +
+      '</div>' +
+      '<div class="fg"><label>その他の外見・性格メモ</label><input type="text" value="' + esc(c.other) + '" placeholder="例：目が大きく笑顔が印象的、お調子者" onchange="updateChara(' + i + ',\'other\',this.value)"></div>';
+    list.appendChild(div);
+  });
+}
+
+// ===== BACKGROUNDS =====
+var bgs = [];
+function loadBgs() { bgs = JSON.parse(gv('bgs') || '[]'); }
+function saveBgs() { sv('bgs', JSON.stringify(bgs)); showSave(); }
+function addBg() { bgs.push({place:'', desc:''}); saveBgs(); renderBg(); }
+function delBg(i) { bgs.splice(i, 1); saveBgs(); renderBg(); }
+function updateBg(i, field, val) { bgs[i][field] = val; saveBgs(); }
+function renderBg() {
+  var list = document.getElementById('bgList');
+  list.innerHTML = '';
+  bgs.forEach(function(b, i) {
+    var div = document.createElement('div');
+    div.className = 'dyn-block';
+    div.innerHTML =
+      '<div class="dyn-head"><span class="dyn-num">背景' + (i+1) + '</span>' +
+      '<button class="del-btn" onclick="delBg(' + i + ')">×</button></div>' +
+      '<div class="grid2">' +
+      '<div class="fg"><label>場所の名前</label><input type="text" value="' + esc(b.place) + '" placeholder="例：土佐の漁村・船の上" onchange="updateBg(' + i + ',\'place\',this.value)"></div>' +
+      '<div class="fg"><label>特徴・禁止事項</label><input type="text" value="' + esc(b.desc) + '" placeholder="例：江戸末期・木造・電柱禁止" onchange="updateBg(' + i + ',\'desc\',this.value)"></div>' +
+      '</div>';
+    list.appendChild(div);
+  });
+}
+
+// ===== HELPERS =====
+function esc(s) { return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2000);
+}
+function copyEl(id, btn) {
+  var text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.classList.add('ok'); btn.textContent = '✅ コピー完了';
+    setTimeout(function() { btn.classList.remove('ok'); btn.textContent = 'コピー'; }, 2000);
+  });
+}
+function showOut(id, text) {
+  var box = document.getElementById(id);
+  box.style.display = 'block';
+  box.querySelector('pre').textContent = text;
+}
+
+// ===== PROMPT BUILDERS =====
+function getArtStyle() {
+  var st = getSelected('g-style');
+  var ln = getSelected('g-line');
+  var tn = getSelected('g-tone');
+  var bg = getSelected('g-bg');
+  var parts = [];
+  if(st.length) parts.push('画風：' + st.join('・'));
+  if(ln.length) parts.push('線・質感：' + ln.join('・'));
+  if(tn.length) parts.push('トーン：' + tn.join('・'));
+  if(bg.length) parts.push('背景の描き込み度：' + bg.join('・'));
+  return parts.join(' / ');
+}
+function getCharaText() {
+  if(!charas.length) return '';
+  var L = ['【登場人物】'];
+  charas.forEach(function(c, i) {
+    var parts = [];
+    if(c.name) parts.push('名前・役割：' + c.name);
+    if(c.age) parts.push('年齢・性別：' + c.age);
+    if(c.hair) parts.push('髪型・髪色：' + c.hair);
+    if(c.clothes) parts.push('服装・特徴：' + c.clothes);
+    if(c.other) parts.push('その他：' + c.other);
+    if(parts.length) L.push('キャラ' + (i+1) + '：' + parts.join(' / '));
+  });
+  return L.join('\n');
+}
+function getBgText() {
+  if(!bgs.length) return '';
+  var L = ['【背景・世界観】'];
+  bgs.forEach(function(b) {
+    if(b.place) L.push('場所：' + b.place + (b.desc ? '（' + b.desc + '）' : ''));
+  });
+  return L.join('\n');
+}
+
+// STEP1: 企画プロンプト
+function genStep1() {
+  var pages = v('p1_pages') || '20';
+  var L = [];
+  L.push('# 漫画企画書プロンプト');
+  L.push('');
+  L.push('以下の企画内容をもとに、漫画のページ構成とセリフ・アングル指示を作成してください。');
+  L.push('1章分（' + pages + 'ページ）を一括で出力してください。');
+  L.push('');
+  L.push('## 企画概要');
+  if(v('p1_theme')) L.push('題材・テーマ：' + v('p1_theme'));
+  if(v('p1_target')) L.push('対象読者：' + v('p1_target'));
+  if(v('p1_bg')) L.push('制作背景・目的：' + v('p1_bg'));
+  if(v('p1_media')) L.push('メディア・用途：' + v('p1_media'));
+  if(v('p1_cta')) L.push('読者への期待行動：' + v('p1_cta'));
+  if(v('p1_concept')) { L.push(''); L.push('## コンセプト'); L.push(v('p1_concept')); }
+  L.push('');
+  L.push('## ストーリー概要');
+  if(v('p1_s1')) L.push('日常：' + v('p1_s1'));
+  if(v('p1_s2')) L.push('事件：' + v('p1_s2'));
+  if(v('p1_s3')) L.push('転機：' + v('p1_s3'));
+  if(v('p1_s4')) L.push('成長：' + v('p1_s4'));
+  if(v('p1_s5')) L.push('結末：' + v('p1_s5'));
+  L.push('');
+  L.push('## 依頼内容');
+  L.push('上記の企画をもとに以下を提案してください：');
+  L.push('1. タイトル案（3つ）');
+  L.push('2. キャッチコピー（1行）');
+  L.push('3. 章立て（' + pages + 'ページ1章として何章構成が適切か）');
+  L.push('4. 第1章のページ構成表');
+  L.push('   形式：| P | 内容 | 役割 | 感情 |');
+  showOut('s1out', L.join('\n'));
+}
+
+// 折りたたみ
+function toggleKabeuchi() {
+  var sec = document.getElementById('kabeuchiSection');
+  var arrow = document.getElementById('kabeuchiArrow');
+  var open = sec.style.display === 'none';
+  sec.style.display = open ? 'block' : 'none';
+  arrow.textContent = open ? '▲' : '▼';
+}
+
+// コピー＋AIで開く
+function copyAndOpenAI() {
+  var L = [];
+  L.push('漫画のストーリーのヒントを一緒に考えてください。');
+  L.push('以下の4つの質問への回答をもとに、ストーリーのアイデアを提案してください。');
+  L.push('');
+  L.push('Q1. 主人公はどんな人ですか？'); L.push(v('p1_q1') || '（未入力）'); L.push('');
+  L.push('Q2. その人の「一番つらかったこと」は何ですか？'); L.push(v('p1_q2') || '（未入力）'); L.push('');
+  L.push('Q3. 最後にどうなりましたか？'); L.push(v('p1_q3') || '（未入力）'); L.push('');
+  L.push('Q4. 読んだ人に何をしてほしいですか？'); L.push(v('p1_q4') || '（未入力）'); L.push('');
+  L.push('以下の形式でストーリーのヒントを提案してください：');
+  L.push('① 日常（主人公の出発点）');
+  L.push('② 事件（転換点）');
+  L.push('③ 転機（状況が変わるきっかけ）');
+  L.push('④ 成長（主人公が変わる）');
+  L.push('⑤ 結末（最後にどうなるか）');
+  navigator.clipboard.writeText(L.join('\n')).then(function() {
+    showToast('コピーしました！AIのチャットに貼り付けてください');
+  });
+}
+
+// 壁打ちコピー（旧・互換用）
+function copyKabeuchi() {
+  var L = [];
+  L.push('漫画のコンセプトを一緒に考えてください。');
+  L.push('以下の4つの質問への回答をもとに、コンセプトをまとめてください。');
+  L.push('');
+  L.push('Q1. 主人公はどんな人ですか？'); L.push(v('p1_q1') || '（未入力）'); L.push('');
+  L.push('Q2. その人の「一番つらかったこと」は何ですか？'); L.push(v('p1_q2') || '（未入力）'); L.push('');
+  L.push('Q3. 最後にどうなりましたか？'); L.push(v('p1_q3') || '（未入力）'); L.push('');
+  L.push('Q4. 読んだ人に何をしてほしいですか？'); L.push(v('p1_q4') || '（未入力）'); L.push('');
+  L.push('上記をもとに以下の4つをまとめてください：');
+  L.push('① キャッチコピー（1行）');
+  L.push('② 感情の入口（読者が最初に共感するポイント）');
+  L.push('③ 物語の到達点（主人公が最終的に何を成し遂げるか）');
+  L.push('④ 読者にどう行動してほしいか');
+  navigator.clipboard.writeText(L.join('\n')).then(function() {
+    showToast('壁打ちプロンプトをコピーしました');
+  });
+}
+
+// STEP3: ページ構成表
+function genPagePlan() {
+  var pages = v('p1_pages') || gv('p1_pages') || '20';
+  var koma = v('p3_koma') || gv('p3_koma') || '3〜4コマ';
+  var L = [];
+  L.push('# ページ構成表の作成をお願いします');
+  L.push('');
+  if(v('p1_theme') || gv('p1_theme')) L.push('題材・テーマ：' + (v('p1_theme') || gv('p1_theme')));
+  if(v('p1_s1') || gv('p1_s1')) L.push('日常：' + (v('p1_s1') || gv('p1_s1')));
+  if(v('p1_s5') || gv('p1_s5')) L.push('結末：' + (v('p1_s5') || gv('p1_s5')));
+  if(v('p1_concept') || gv('p1_concept')) { L.push(''); L.push('コンセプト：' + (v('p1_concept') || gv('p1_concept'))); }
+  L.push('');
+  var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
+  L.push('## 出力してほしいもの');
+  L.push('1章分（' + pages + 'ページ）のページ構成表を以下の形式で作ってください。');
+  L.push('1ページあたりのコマ数：' + koma);
+  L.push('');
+  L.push('| P | 内容 | 役割 | 感情 | ポイント |');
+  L.push('|---|---|---|---|---|');
+  L.push('（' + pages + 'ページ分）');
+  L.push('');
+  L.push('確認したら「OK」と返信してください。');
+  showOut('s3out1', L.join('\n'));
+}
+
+// STEP3: コマ割りシナリオ
+function genScenario() {
+  var art = getArtStyle();
+  var voice = v('p2_voice') || gv('p2_voice') || '';
+  var L = [];
+  L.push('# コマ割りシナリオの一括生成をお願いします');
+  L.push('');
+  L.push('ページ構成表の内容で全ページのコマ割りシナリオを一括出力してください。');
+  L.push('');
+  if(art) { L.push('【画風・スタイル】'); L.push(art); L.push(''); }
+  var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
+  var bt = getBgText(); if(bt) { L.push(bt); L.push(''); }
+  if(voice) { L.push('【口調】'); L.push(voice); L.push(''); }
+  L.push('【コマ割りのルール】');
+  L.push('・スマホ読み前提：コマは大きく・少なく。1ページで伝えることは1つに絞る');
+  L.push('・クライマックスや感情のピークは「1ページ1〜2コマ」で大きく見せる');
+  L.push('・会話・説明は3〜4コマ、テンポを出す所は小コマ連続');
+  L.push('・感情の流れ（表情変化）を各コマに反映');
+  L.push('・「セリフ」「モノローグ」「ナレーション」は必ず分ける');
+  L.push('　セリフ＝声に出す言葉 / モノローグ＝心の声 / ナレーション＝地の文・語り');
+  L.push('');
+  L.push('【アングル（構図／演出の参考）】');
+  L.push('・正面：基本・安定感');
+  L.push('・斜め45度：自然な会話・動き');
+  L.push('・俯瞰（斜め上）：見下ろす・不安感・弱さの演出');
+  L.push('・煽り（斜め下）：迫力・威圧感・決意の演出');
+  L.push('・クローズアップ：感情・表情の強調');
+  L.push('・引き（全身）：全体・場の雰囲気を伝える');
+  L.push('・後ろ姿：孤独・旅立ち・余韻');
+  L.push('');
+  L.push('【出力形式（全ページ分）】');
+  L.push('━━━━━━━━━━━━━━━━━━');
+  L.push('【ページX】　コマ数：○');
+  L.push('　P X-コマ1（大／中／小）');
+  L.push('　　キャラクター：（登場するキャラ名）');
+  L.push('　　構図／演出：（場面・動作・表情・アングル）');
+  L.push('　　セリフ：（キャラ名）「台詞テキスト」　※1コマ30文字以内');
+  L.push('　　モノローグ：「心の声」　※なければ「なし」');
+  L.push('　　ナレーション：「地の文」　※なければ「なし」');
+  L.push('　　オノマトペ：（ドキッ・ザバーン等　なければ「なし」）');
+  L.push('━━━━━━━━━━━━━━━━━━');
+  if(voice) { L.push(''); L.push('※ 口調の指定は忠実に反映してください。'); }
+  showOut('s3out2', L.join('\n'));
+}
+
+// STEP4: キャラシート
+function genCharaSheet() {
+  var art = getArtStyle();
+  var L = [];
+  L.push('# キャラシート（四面図）の生成をお願いします');
+  L.push('');
+  L.push('以下のキャラクターの四面図（正面・左側面・右側面・背面）を1枚の画像に並べて生成してください。');
+  L.push('');
+  if(art) { L.push('【画風】'); L.push(art); L.push(''); }
+  var ct = getCharaText();
+  if(ct) { L.push(ct); L.push(''); }
+  else { L.push('※ STEP2でキャラクターを登録すると、ここに自動で反映されます。'); L.push(''); }
+  L.push('【出力形式】');
+  L.push('・1キャラにつき1枚');
+  L.push('・正面・左側面・右側面・背面の4ポーズを横に並べる');
+  L.push('・表情は自然な無表情（参照画像として使うため）');
+  L.push('・背景は白または透過');
+  L.push('');
+  L.push('生成した画像は、次の画像生成時に参照画像として添付してください。');
+  showOut('s4out1', L.join('\n'));
+}
+
+// STEP4: 画像生成プロンプト
+function genImagePrompt() {
+  var scenario = v('p4_scenario') || gv('p4_scenario') || '';
+  var art = getArtStyle();
+  var L = [];
+  L.push('# 漫画ページの画像生成をお願いします');
+  L.push('');
+  L.push('以下のコマ割りシナリオをもとに、1ページの漫画を「1枚の画像」として生成してください。');
+  L.push('');
+  if(art) { L.push('【画風・スタイル（全コマ共通）】'); L.push(art); L.push(''); }
+  L.push('【キャンバスサイズ・基本仕様】');
+  L.push('・サイズ：' + getSize());
+  L.push('・読み方向：右から左（日本式）');
+  L.push('・コマ枠：はっきり描く・黒枠');
+  L.push('');
+  L.push('【セリフ・文字の仕様】');
+  L.push('・文字は必ず縦書き（上から下・行は右から左）');
+  L.push('・吹き出し内にセリフを入れる');
+  L.push('・フォントイメージ：Noto Sans / アンチックセザンヌ / 源英アンチック（明朝系・漫画フォント）');
+  L.push('・文字サイズ（Canva 1000×1414px基準）：');
+  L.push('　通常コマ（3〜4コマ）：26pt相当');
+  L.push('　大ゴマ（1〜2コマ）：32〜42pt相当');
+  L.push('・モノローグは角丸・薄い吹き出し、ナレーションは四角い枠で区別する');
+  L.push('');
+  L.push('【コマ割りのルール】');
+  L.push('・コマの大小を必ず混ぜる（均一な並びは禁止）');
+  L.push('・1ページで伝えることは1つに絞る');
+  L.push('・感情のピーク／クライマックスは大ゴマ（1〜2コマ）で大きく止める');
+  L.push('・感情を見せるコマはクローズアップ（顔アップ）にする');
+  L.push('・世界観・風景は「断ち切り」でコマ枠を端まで広げて開放感を出す');
+  L.push('・迫力・感情を強めたい所は「ぶち抜き」でキャラが枠を越える（控えめに）');
+  L.push('・アクション・緊迫シーンは「斜めコマ」でスピード感を出す');
+  L.push('・「跳ね上げ」＝ページの切り替えタイミングで動きを上方向に向ける小技。ぶち抜き・めくりと組み合わせると次ページへの期待感が高まる');
+  L.push('・キャラの視線・吹き出しの向きで次のコマへ視線を誘導する');
+  L.push('・静寂・余韻は「間（ま）コマ」（背景だけ）を入れる');
+  L.push('・最後のコマは「めくり」＝全部見せず次が読みたくなる所で止める');
+  L.push('');
+  L.push('【オノマトペ・演出】');
+  L.push('・オノマトペは手描き文字として絵に溶け込ませる（縦書き・斜め・大小をつけて）');
+  L.push('・効果線・集中線・スピード線を必要に応じて入れる');
+  L.push('・感情マーク（汗・怒りマーク・赤面など）も場面に合わせて添える');
+  L.push('');
+  var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
+  var bt = getBgText(); if(bt) { L.push(bt); L.push(''); }
+  L.push('【ネガティブプロンプト】');
+  L.push('lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, modern objects（時代・設定に合わない現代物）');
+  L.push('');
+  if(scenario) { L.push('【コマ割りシナリオ（この通りに配置・セリフを入れる）】'); L.push(scenario); L.push(''); }
+  else { L.push('※ STEP3で生成したコマ割りシナリオを上の欄に貼り付けてください。'); L.push(''); }
+  L.push('【注意】');
+  L.push('・同じキャラクターは全コマで顔・髪・服を統一する');
+  L.push('・日本語のセリフはできるだけ正確に描く');
+  L.push('・吹き出しに収まらないセリフは短く言い換えてよい');
+  L.push('・日本語文字が崩れる場合は吹き出しを空欄にして、後からCanvaで文字を入れる');
+  L.push('※キャラの四面図を参考画像として添付してください（顔ブレ防止）');
+  showOut('s4out2', L.join('\n'));
+}
+
+// STEP4: 修正プロンプト
+function genFixPrompt() {
+  var fixes = getSelected('g-fix');
+  var detail = v('p4_fix_detail') || gv('p4_fix_detail') || '';
+  var art = getArtStyle();
+  var L = [];
+  L.push('# 画像の修正をお願いします');
+  L.push('');
+  L.push('直前に生成した画像を以下の点で修正してください。');
+  L.push('');
+  if(fixes.length) { L.push('【修正内容】'); fixes.forEach(function(f) { L.push('・' + f); }); }
+  if(detail) L.push('・' + detail);
+  L.push('');
+  if(art) { L.push('【画風・スタイルは変えないでください】'); L.push(art); L.push(''); }
+  var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
+  L.push('それ以外の部分（コマ割り・構図・他のキャラ）は変えないでください。');
+  showOut('s4out3', L.join('\n'));
+}
+
+// ===== INIT =====
+renderProjBar();
+renderNav();
+loadData();
+loadCharas();
+renderChara();
+loadBgs();
+renderBg();
+restoreToggles();
+</script>
+</body>
+</html>
