@@ -492,7 +492,12 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">📊</span> ① ページ構成表を作る</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">全ページの役割・内容・感情の流れを一覧にします。出力をGoogleドキュメントに貼って全体像を把握しましょう。</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">全ページの役割・内容・感情の流れを一覧にします。</p>
+    <div class="info-box" style="margin-bottom:14px;">
+      <strong>なぜ作るか？</strong><br>
+      全体像を把握して制作の地図にするためです。出力をGoogleドキュメントに保存しておくと、どのページで何を伝えるかが一目でわかり、②のシナリオ生成・画像生成の指針になります。<br><br>
+      <strong>使い方：</strong>このプロンプトを <strong>Gemini / ChatGPT / Claude</strong> に貼り付けて出力をもらう → Googleドキュメントに保存 → ②へ進む
+    </div>
     <div class="fg">
       <label>1ページあたりのコマ数<span class="opt-badge">任意</span></label>
       <input type="text" id="p3_koma" placeholder="例：3〜4コマ（迷ったらこれでOK）" oninput="autoSave()">
