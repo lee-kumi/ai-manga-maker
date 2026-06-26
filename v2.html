@@ -482,7 +482,7 @@ textarea{resize:vertical;min-height:72px;}
   <div class="step-header">
     <div class="step-badge">STEP 3</div>
     <h1>コマ割りシナリオを作る</h1>
-    <p>まずページ構成表を作り、「OK」を返したらシナリオを一括生成します。</p>
+    <p>STEP1・2の情報をもとに、全ページのコマ割りシナリオを一括生成します。</p>
     <div class="tool-links">
       <a href="https://gemini.google.com/" target="_blank" class="tool-link">🔵 Gemini</a>
       <a href="https://claude.ai/" target="_blank" class="tool-link">🟣 Claude</a>
@@ -491,32 +491,19 @@ textarea{resize:vertical;min-height:72px;}
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">📊</span> ① ページ構成表を作る</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">STEP1・2の内容をもとに、ページごとの内容・役割の一覧表をAIに作らせます。</p>
+    <div class="card-title"><span class="icon">🎬</span> コマ割りシナリオを一括生成する</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">ページ・コマ数・構図・セリフ・モノローグ・ナレーション・オノマトペをまとめて出力します。</p>
     <div class="fg">
       <label>1ページあたりのコマ数<span class="opt-badge">任意</span></label>
       <input type="text" id="p3_koma" placeholder="例：3〜4コマ（迷ったらこれでOK）" oninput="autoSave()">
     </div>
-    <button class="gen-btn" onclick="genPagePlan()">📊 ページ構成表プロンプトを生成</button>
-    <div id="s3out1" style="display:none;">
-      <div class="prompt-box">
-        <button class="copy-btn" onclick="copyEl('s3text1',this)">コピー</button>
-        <pre id="s3text1"></pre>
-      </div>
-      <div class="info-box">💡 AIにこのプロンプトを貼り付けると、ページ構成表が出てきます。内容を確認して「OK」と返信すると次のステップへ進めます。</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオを一括生成する</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">ページ構成表に「OK」と返した後、このプロンプトで全ページのシナリオを一括出力します。</p>
     <button class="gen-btn" onclick="genScenario()">🎬 コマ割りシナリオプロンプトを生成</button>
     <div id="s3out2" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s3text2',this)">コピー</button>
         <pre id="s3text2"></pre>
       </div>
-      <div class="info-box">💡 <strong>Gemini または Claude</strong> を推奨します（20ページ一括出力に対応しています）。</div>
+      <div class="info-box">💡 <strong>Gemini または Claude</strong> を推奨します（20ページ一括出力に対応しています）。出力されたシナリオはそのままSTEP4に貼り付けて使えます。</div>
     </div>
   </div>
 
