@@ -1231,6 +1231,8 @@ function genImagePrompt() {
   L.push('・サイズ：' + getSize());
   L.push('・読み方向：右から左（日本式）');
   L.push('・コマ枠：はっきり描く・黒枠');
+  L.push('・コマとコマの間には必ず白い余白（ガター）を入れる（目安10〜15px）');
+  L.push('・コマ枠は黒線・余白は白・背景色は白にする');
   L.push('');
   var textMode = getSelected('g-text-mode');
   var isBlank = textMode.indexOf('吹き出し空欄') >= 0;
