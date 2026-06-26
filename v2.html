@@ -463,6 +463,23 @@ textarea{resize:vertical;min-height:72px;}
     <button class="add-btn" onclick="addChara()">＋ 登場人物を追加</button>
   </div>
 
+  <!-- キャラシート -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🧑‍🎨</span> キャラクターシート生成プロンプト</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">上のキャラクター設定をもとに、キャラシートを画像AIに作らせるためのプロンプトです。</p>
+    <div class="info-box" style="margin-bottom:14px;">
+      生成した画像を画像AIに<strong>参照画像として添付</strong>すると、コマごとの顔ブレを防げます。<br>
+      STEP3・4に進む前にここで作っておきましょう。
+    </div>
+    <button class="gen-btn" onclick="genCharaSheet()">🧑‍🎨 キャラシートプロンプトを生成</button>
+    <div id="s4out1" style="display:none;">
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyEl('s4text1',this)">コピー</button>
+        <pre id="s4text1"></pre>
+      </div>
+    </div>
+  </div>
+
   <!-- 背景 -->
   <div class="card">
     <div class="card-title"><span class="icon">🏠</span> 背景・世界観設定</div>
@@ -540,19 +557,7 @@ textarea{resize:vertical;min-height:72px;}
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🧑‍🎨</span> ① キャラシート生成プロンプト</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">キャラシート（四面図）を画像AIに作らせるためのプロンプトです。<br>生成した画像を画像AIに参照画像として添付すると、コマごとの顔ブレを防げます。</p>
-    <button class="gen-btn" onclick="genCharaSheet()">🧑‍🎨 キャラシートプロンプトを生成</button>
-    <div id="s4out1" style="display:none;">
-      <div class="prompt-box">
-        <button class="copy-btn" onclick="copyEl('s4text1',this)">コピー</button>
-        <pre id="s4text1"></pre>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">🖼️</span> ② コマ別画像生成プロンプト</div>
+    <div class="card-title"><span class="icon">🖼️</span> コマ別画像生成プロンプト</div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">コマ割りシナリオをもとに、1ページずつ画像生成プロンプトを作るためのプロンプトです。</p>
     <div class="fg">
       <label>コマ割りシナリオ（STEP3で生成した内容を貼り付けてください）</label>
