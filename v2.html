@@ -368,14 +368,14 @@ textarea{resize:vertical;min-height:72px;}
     </div>
   </div>
 
-  <!-- プロンプト生成 -->
-  <button class="gen-btn full" onclick="genStep1()">✨ 企画プロンプトを生成する</button>
+  <!-- タイトル案生成 -->
+  <button class="gen-btn full" onclick="genStep1()">💡 タイトルをAIに考えてもらう</button>
   <div id="s1out" style="display:none;">
     <div class="prompt-box">
       <button class="copy-btn" onclick="copyEl('s1text',this)">コピー</button>
       <pre id="s1text"></pre>
     </div>
-    <div class="info-box">💡 このプロンプトをGemini / Claude / ChatGPTに貼り付けてください。返ってきた内容をもとにSTEP2へ進みましょう。</div>
+    <div class="info-box">💡 このプロンプトをGemini / Claude / ChatGPTに貼り付けてください。気に入ったタイトルを上の「作品タイトル」欄にコピーしてください。</div>
   </div>
 
   <div class="nav-buttons">
@@ -947,39 +947,22 @@ function getBgText() {
   return L.join('\n');
 }
 
-// STEP1: 企画プロンプト
+// STEP1: タイトル案生成
 function genStep1() {
-  var pages = v('p1_pages') || '20';
   var L = [];
-  L.push('# 漫画企画書プロンプト');
+  L.push('以下の漫画のストーリーをもとに、タイトル案とキャッチコピーを考えてください。');
   L.push('');
-  L.push('以下の企画内容をもとに、漫画のページ構成とセリフ・アングル指示を作成してください。');
-  L.push('1章分（' + pages + 'ページ）を一括で出力してください。');
-  L.push('');
-  L.push('## 企画概要');
-  if(v('p1_theme')) L.push('題材・テーマ：' + v('p1_theme'));
+  if(v('p1_theme')) L.push('テーマ：' + v('p1_theme'));
   if(v('p1_target')) L.push('対象読者：' + v('p1_target'));
-  if(v('p1_bg')) L.push('制作背景・目的：' + v('p1_bg'));
-  if(v('p1_media')) L.push('メディア・用途：' + v('p1_media'));
-  if(v('p1_cta')) L.push('読者への期待行動：' + v('p1_cta'));
-  if(v('p1_concept')) { L.push(''); L.push('## コンセプト'); L.push(v('p1_concept')); }
-  L.push('');
-  var structure = getSelected('g-structure')[0] || '';
-  if(structure) { L.push('## 構成の型'); L.push(structure + 'の型に沿って構成してください。'); L.push(''); }
-  L.push('## ストーリー概要');
-  if(v('p1_s1')) L.push('日常：' + v('p1_s1'));
-  if(v('p1_s2')) L.push('事件：' + v('p1_s2'));
-  if(v('p1_s3')) L.push('転機：' + v('p1_s3'));
-  if(v('p1_s4')) L.push('成長：' + v('p1_s4'));
+  if(v('p1_s1')) L.push('悩み（出発点）：' + v('p1_s1'));
+  if(v('p1_honne')) L.push('本音：' + v('p1_honne'));
+  if(v('p1_wall')) L.push('壁：' + v('p1_wall'));
+  if(v('p1_key')) L.push('カギ：' + v('p1_key'));
   if(v('p1_s5')) L.push('結末：' + v('p1_s5'));
   L.push('');
-  L.push('## 依頼内容');
-  L.push('上記の企画をもとに以下を提案してください：');
-  L.push('1. タイトル案（3つ）');
-  L.push('2. キャッチコピー（1行）');
-  L.push('3. 章立て（' + pages + 'ページ1章として何章構成が適切か）');
-  L.push('4. 第1章のページ構成表');
-  L.push('   形式：| P | 内容 | 役割 | 感情 |');
+  L.push('## 出力形式');
+  L.push('タイトル案を3つ、それぞれにキャッチコピー（1行）をつけて提案してください。');
+  L.push('読者の心に刺さる、感情を動かすタイトルにしてください。');
   showOut('s1out', L.join('\n'));
 }
 
