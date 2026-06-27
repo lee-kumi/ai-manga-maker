@@ -305,6 +305,12 @@ textarea{resize:vertical;min-height:72px;}
       <div class="info-box" style="margin-top:10px;">
         コピーした内容を <strong>Gemini / Claude / ChatGPT</strong> に貼り付けると、ストーリーへのフィードバックや肉付けをしてもらえます。内容が固まったらSTEP2へ進みましょう。
       </div>
+      <div id="story-export-out" style="display:none;margin-top:10px;">
+        <div class="prompt-box">
+          <button class="copy-btn" onclick="copyEl('story-export-text',this)">コピー</button>
+          <pre id="story-export-text"></pre>
+        </div>
+      </div>
     </div>
 
     <!-- AIと一緒に考える（折りたたみ） -->
@@ -1006,11 +1012,8 @@ function exportStory() {
   lines.push('');
   lines.push('■ 全体のページ数：' + (v('p1_pages') || '20') + 'ページ');
   var text = lines.join('\n');
-  navigator.clipboard.writeText(text).then(function() {
-    alert('コピーしました！ClaudeやChatGPTに貼り付けてください。');
-  }).catch(function() {
-    alert('コピーに失敗しました。ブラウザの設定でクリップボードへのアクセスを許可してください。');
-  });
+  document.getElementById('story-export-text').textContent = text;
+  document.getElementById('story-export-out').style.display = 'block';
 }
 
 function copyAndOpenAI() {
