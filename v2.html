@@ -319,20 +319,24 @@ textarea{resize:vertical;min-height:72px;}
         <div class="info-box">💡 4つの質問に答えてコピー → AIに貼り付けるだけで、ストーリーのヒントが返ってきます。返ってきた内容を上のフォームに書き写してください。</div>
         <div class="kabeuchi-box">
           <div class="q-row">
-            <p class="q-label"><span class="q-num">Q1</span>主人公はどんな人ですか？</p>
-            <textarea id="p1_q1" placeholder="例：14歳の男の子、地方の漁師の息子、母と2人暮らし" style="min-height:56px;" oninput="autoSave()"></textarea>
+            <p class="q-label"><span class="q-num">Q1</span>この漫画は何のために作りますか？</p>
+            <textarea id="p1_q1" placeholder="例：自己紹介したい／商品を知ってほしい／地域をPRしたい／人生ストーリーを伝えたい" style="min-height:56px;" oninput="autoSave()"></textarea>
           </div>
           <div class="q-row">
-            <p class="q-label"><span class="q-num">Q2</span>その人の「一番つらかったこと」は何ですか？</p>
-            <textarea id="p1_q2" placeholder="例：突然の事故で仕事を失い、家族と離れ離れになってしまった。" style="min-height:56px;" oninput="autoSave()"></textarea>
+            <p class="q-label"><span class="q-num">Q2</span>誰に読んでほしいですか？</p>
+            <textarea id="p1_q2" placeholder="例：50代で何か始めたい女性／地域に興味がある人／同じ悩みを持つ人" style="min-height:56px;" oninput="autoSave()"></textarea>
           </div>
           <div class="q-row">
-            <p class="q-label"><span class="q-num">Q3</span>最後にどうなりましたか？</p>
-            <textarea id="p1_q3" placeholder="例：長い苦労の末に夢を実現し、家族と再会できた。" style="min-height:56px;" oninput="autoSave()"></textarea>
+            <p class="q-label"><span class="q-num">Q3</span>主人公はどんな悩みを持っていますか？</p>
+            <textarea id="p1_q3" placeholder="例：自信がない、何から始めたらいいかわからない、年齢が気になる" style="min-height:56px;" oninput="autoSave()"></textarea>
+          </div>
+          <div class="q-row">
+            <p class="q-label"><span class="q-num">Q4</span>何と出会って変わりますか？</p>
+            <textarea id="p1_q4" placeholder="例：AIとの出会い／ある人の言葉／商品・サービス／地域の魅力の再発見" style="min-height:56px;" oninput="autoSave()"></textarea>
           </div>
           <div class="q-row" style="margin-bottom:0;">
-            <p class="q-label"><span class="q-num">Q4</span>読んだ人に何をしてほしいですか？</p>
-            <textarea id="p1_q4" placeholder="例：○○に行ってみたいと思ってほしい。" style="min-height:56px;" oninput="autoSave()"></textarea>
+            <p class="q-label"><span class="q-num">Q5</span>読後にどう感じてほしいですか？</p>
+            <textarea id="p1_q5" placeholder="例：私にもできるかも／相談してみたい／行ってみたい／勇気が出た" style="min-height:56px;" oninput="autoSave()"></textarea>
           </div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:14px;flex-wrap:wrap;">
             <button class="gen-btn" style="margin-top:0;" onclick="copyAndOpenAI()">📋 コピーしてAIで開く →</button>
@@ -343,7 +347,7 @@ textarea{resize:vertical;min-height:72px;}
           <div style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7;">
             ① コピーしてAIのチャット欄に貼り付ける<br>
             ② 返ってきたストーリーのヒントを見る<br>
-            ③ 上の「日常」「結末」などの欄に自分の言葉で書く
+            ③ 上の「日常」「本音」「壁」などの欄に自分の言葉で書き写す
           </div>
         </div>
       </div>
@@ -989,19 +993,23 @@ function exportStory() {
 
 function copyAndOpenAI() {
   var L = [];
-  L.push('漫画のストーリーのヒントを一緒に考えてください。');
-  L.push('以下の4つの質問への回答をもとに、ストーリーのアイデアを提案してください。');
+  L.push('漫画のストーリー設計を一緒に考えてください。');
+  L.push('以下の5つの質問への回答をもとに、ストーリーのヒントを提案してください。');
   L.push('');
-  L.push('Q1. 主人公はどんな人ですか？'); L.push(v('p1_q1') || '（未入力）'); L.push('');
-  L.push('Q2. その人の「一番つらかったこと」は何ですか？'); L.push(v('p1_q2') || '（未入力）'); L.push('');
-  L.push('Q3. 最後にどうなりましたか？'); L.push(v('p1_q3') || '（未入力）'); L.push('');
-  L.push('Q4. 読んだ人に何をしてほしいですか？'); L.push(v('p1_q4') || '（未入力）'); L.push('');
+  L.push('Q1. この漫画は何のために作りますか？'); L.push(v('p1_q1') || '（未入力）'); L.push('');
+  L.push('Q2. 誰に読んでほしいですか？'); L.push(v('p1_q2') || '（未入力）'); L.push('');
+  L.push('Q3. 主人公はどんな悩みを持っていますか？'); L.push(v('p1_q3') || '（未入力）'); L.push('');
+  L.push('Q4. 何と出会って変わりますか？'); L.push(v('p1_q4') || '（未入力）'); L.push('');
+  L.push('Q5. 読後にどう感じてほしいですか？'); L.push(v('p1_q5') || '（未入力）'); L.push('');
   L.push('以下の形式でストーリーのヒントを提案してください：');
-  L.push('① 日常（主人公の出発点）');
+  L.push('① 日常（主人公の出発点・状況）');
   L.push('② 事件（転換点）');
-  L.push('③ 転機（状況が変わるきっかけ）');
-  L.push('④ 成長（主人公が変わる）');
-  L.push('⑤ 結末（最後にどうなるか）');
+  L.push('③ 転機（何と出会って変わるか）');
+  L.push('④ 本音（主人公の心の奥にある言葉）');
+  L.push('⑤ 壁（途中でつまずくこと）');
+  L.push('⑥ カギ（前に進む気づき・きっかけ）');
+  L.push('⑦ 成長（主人公がどう変わるか）');
+  L.push('⑧ 結末（最後にどうなるか）');
   navigator.clipboard.writeText(L.join('\n')).then(function() {
     showToast('コピーしました！AIのチャットに貼り付けてください');
   });
