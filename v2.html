@@ -233,15 +233,14 @@ textarea{resize:vertical;min-height:72px;}
   <!-- 企画概要 -->
   <div class="card">
     <div class="card-title"><span class="icon">🎯</span> 企画概要</div>
-    <div class="grid2">
-      <div class="fg">
-        <label>題材・テーマ<span class="req-badge">必須</span></label>
-        <input type="text" id="p1_theme" placeholder="例：地元の偉人・観光PR・家族の物語" oninput="autoSave()">
-      </div>
-      <div class="fg">
-        <label>対象読者<span class="opt-badge">任意</span></label>
-        <input type="text" id="p1_target" placeholder="例：子どもから大人まで" oninput="autoSave()">
-      </div>
+    <div class="fg">
+      <label>題材・テーマ<span class="req-badge">必須</span></label>
+      <input type="text" id="p1_theme" placeholder="例：地元の偉人・観光PR・家族の物語" oninput="autoSave()">
+    </div>
+    <div class="fg">
+      <label>👤 ペルソナ（読者の原型）<span class="req-badge">必須</span></label>
+      <div class="info-box" style="margin-bottom:8px;font-size:12px;">読者は「みんな」ではなく<strong>たった一人</strong>に絞るほど刺さります。実在の知人を思い浮かべてOK。この人が主人公の原型になります。</div>
+      <input type="text" id="p1_persona" placeholder="例：佐藤みなこ・42歳・事務職・夫と子ども2人・副業に興味があるが一歩踏み出せない" oninput="autoSave()">
     </div>
   </div>
 
@@ -970,8 +969,7 @@ function exportStory() {
   lines.push('');
   if (d.p1_title) lines.push('■ タイトル：' + d.p1_title);
   if (d.p1_theme) lines.push('■ テーマ：' + d.p1_theme);
-  if (d.p1_target) lines.push('■ ターゲット：' + d.p1_target);
-  if (d.p1_cta) lines.push('■ 読者への期待行動：' + d.p1_cta);
+  if (d.p1_persona) lines.push('■ ペルソナ（読者の原型）：' + d.p1_persona);
   lines.push('');
   lines.push('■ 日常（出発点）：' + (d.p1_s1 || '未入力'));
   lines.push('■ 事件（転換点）：' + (d.p1_s2 || '未入力'));
@@ -1037,6 +1035,7 @@ function genPagePlan() {
   L.push('# ページ構成表の作成をお願いします');
   L.push('');
   if(v('p1_theme') || gv('p1_theme')) L.push('題材・テーマ：' + (v('p1_theme') || gv('p1_theme')));
+  if(v('p1_persona') || gv('p1_persona')) L.push('ペルソナ（読者の原型）：' + (v('p1_persona') || gv('p1_persona')));
   if(v('p1_s1') || gv('p1_s1')) L.push('日常（出発点）：' + (v('p1_s1') || gv('p1_s1')));
   if(v('p1_s2') || gv('p1_s2')) L.push('事件（転換点）：' + (v('p1_s2') || gv('p1_s2')));
   if(v('p1_s3') || gv('p1_s3')) L.push('転機：' + (v('p1_s3') || gv('p1_s3')));
