@@ -1233,7 +1233,7 @@ function genImagePrompt() {
   L.push('・コマ枠：はっきり描く・黒枠');
   L.push('・コマとコマの間には必ず白い余白（ガター）を入れる（目安10〜15px）');
   L.push('・コマ枠は黒線・余白は白・背景色は白にする');
-  L.push('・ページ番号・ノンブルは絶対に入れない');
+  L.push('⚠️ ページ番号・ノンブル（数字）は画像内に絶対に描かない。どのコマにも数字を入れないこと');
   L.push('');
   var textMode = getSelected('g-text-mode');
   var isBlank = textMode.indexOf('吹き出し空欄') >= 0;
