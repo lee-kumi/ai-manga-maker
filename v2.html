@@ -243,20 +243,6 @@ textarea{resize:vertical;min-height:72px;}
         <input type="text" id="p1_target" placeholder="例：子どもから大人まで" oninput="autoSave()">
       </div>
     </div>
-    <div class="fg">
-      <label>制作背景・目的<span class="opt-badge">任意</span></label>
-      <textarea id="p1_bg" placeholder="例：観光誘致・周年記念など、なぜ作るかを書くとAIの精度が上がります" oninput="autoSave()"></textarea>
-    </div>
-    <div class="grid2">
-      <div class="fg">
-        <label>メディア・用途<span class="opt-badge">任意</span></label>
-        <input type="text" id="p1_media" placeholder="例：Web掲載・パンフレット・SNS" oninput="autoSave()">
-      </div>
-      <div class="fg">
-        <label>読者への期待行動<span class="opt-badge">任意</span></label>
-        <input type="text" id="p1_cta" placeholder="例：○○に行きたい・続きが読みたい" oninput="autoSave()">
-      </div>
-    </div>
   </div>
 
   <!-- 構成の型 -->
@@ -286,19 +272,34 @@ textarea{resize:vertical;min-height:72px;}
         <textarea id="p1_s2" placeholder="例：突然○○が起きて、△△してしまう" oninput="autoSave()"></textarea>
       </div>
     </div>
+    <div class="fg">
+      <label>転機<span class="opt-badge">任意</span></label>
+      <textarea id="p1_s3" placeholder="例：○○との出会いで状況が変わる" oninput="autoSave()"></textarea>
+    </div>
+    <div class="fg">
+      <label>💭 本音（心の声）<span class="opt-badge">任意</span></label>
+      <div class="info-box" style="margin-bottom:8px;font-size:12px;">物語の心臓。建前ではなく、人には言えない泥臭い本音。ここがそのまま主人公のモノローグになります。</div>
+      <textarea id="p1_honne" placeholder="例：「このままじゃ終わりたくない。でも何もできない自分が情けない」" oninput="autoSave()"></textarea>
+    </div>
     <div class="grid2">
       <div class="fg">
-        <label>転機<span class="opt-badge">任意</span></label>
-        <textarea id="p1_s3" placeholder="例：○○との出会いで状況が変わる" oninput="autoSave()"></textarea>
+        <label>🧱 壁（挫折・つまずき）<span class="opt-badge">任意</span></label>
+        <textarea id="p1_wall" placeholder="例：勇気を出して試したのに失敗。また諦めそうになる" oninput="autoSave()"></textarea>
       </div>
+      <div class="fg">
+        <label>🔑 カギ（気づき・きっかけ）<span class="opt-badge">任意</span></label>
+        <textarea id="p1_key" placeholder="例：ある言葉・出会い・体験が背中を押してくれた" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+    <div class="grid2">
       <div class="fg">
         <label>成長<span class="opt-badge">任意</span></label>
         <textarea id="p1_s4" placeholder="例：○○を学び、△△するようになる" oninput="autoSave()"></textarea>
       </div>
-    </div>
-    <div class="fg">
-      <label>結末<span class="req-badge">必須</span></label>
-      <textarea id="p1_s5" placeholder="例：○○を達成し、△△な人物になった" oninput="autoSave()"></textarea>
+      <div class="fg">
+        <label>結末<span class="req-badge">必須</span></label>
+        <textarea id="p1_s5" placeholder="例：○○を達成し、△△な人物になった" oninput="autoSave()"></textarea>
+      </div>
     </div>
 
     <!-- テキスト書き出しボタン -->
@@ -975,6 +976,9 @@ function exportStory() {
   lines.push('■ 日常（出発点）：' + (d.p1_s1 || '未入力'));
   lines.push('■ 事件（転換点）：' + (d.p1_s2 || '未入力'));
   lines.push('■ 転機：' + (d.p1_s3 || '未入力'));
+  if (d.p1_honne) lines.push('■ 本音（心の声）：' + d.p1_honne);
+  if (d.p1_wall) lines.push('■ 壁（挫折）：' + d.p1_wall);
+  if (d.p1_key) lines.push('■ カギ（気づき）：' + d.p1_key);
   lines.push('■ 成長：' + (d.p1_s4 || '未入力'));
   lines.push('■ 結末：' + (d.p1_s5 || '未入力'));
   lines.push('');
@@ -1033,9 +1037,14 @@ function genPagePlan() {
   L.push('# ページ構成表の作成をお願いします');
   L.push('');
   if(v('p1_theme') || gv('p1_theme')) L.push('題材・テーマ：' + (v('p1_theme') || gv('p1_theme')));
-  if(v('p1_s1') || gv('p1_s1')) L.push('日常：' + (v('p1_s1') || gv('p1_s1')));
+  if(v('p1_s1') || gv('p1_s1')) L.push('日常（出発点）：' + (v('p1_s1') || gv('p1_s1')));
+  if(v('p1_s2') || gv('p1_s2')) L.push('事件（転換点）：' + (v('p1_s2') || gv('p1_s2')));
+  if(v('p1_s3') || gv('p1_s3')) L.push('転機：' + (v('p1_s3') || gv('p1_s3')));
+  if(v('p1_honne') || gv('p1_honne')) L.push('本音（心の声）：' + (v('p1_honne') || gv('p1_honne')));
+  if(v('p1_wall') || gv('p1_wall')) L.push('壁（挫折）：' + (v('p1_wall') || gv('p1_wall')));
+  if(v('p1_key') || gv('p1_key')) L.push('カギ（気づき）：' + (v('p1_key') || gv('p1_key')));
+  if(v('p1_s4') || gv('p1_s4')) L.push('成長：' + (v('p1_s4') || gv('p1_s4')));
   if(v('p1_s5') || gv('p1_s5')) L.push('結末：' + (v('p1_s5') || gv('p1_s5')));
-  if(v('p1_concept') || gv('p1_concept')) { L.push(''); L.push('コンセプト：' + (v('p1_concept') || gv('p1_concept'))); }
   L.push('');
   var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
   L.push('## 出力してほしいもの');
@@ -1082,6 +1091,16 @@ function genScenario() {
   L.push('');
   var structure = getSelected('g-structure')[0] || gv('g-structure') && JSON.parse(gv('g-structure') || '[]')[0] || '';
   if(structure) { L.push('【構成の型】'); L.push(structure + 'の流れを意識してシナリオを組み立ててください。'); L.push(''); }
+  var honne = v('p1_honne') || gv('p1_honne') || '';
+  var wall = v('p1_wall') || gv('p1_wall') || '';
+  var key = v('p1_key') || gv('p1_key') || '';
+  if(honne || wall || key) {
+    L.push('【感情の核心（必ずシナリオに反映すること）】');
+    if(honne) L.push('・本音（主人公のモノローグに使う）：' + honne);
+    if(wall) L.push('・壁（挫折シーン）：' + wall);
+    if(key) L.push('・カギ（気づき・転換シーン）：' + key);
+    L.push('');
+  }
   if(art) { L.push('【画風・スタイル】'); L.push(art); L.push(''); }
   var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
   var bt = getBgText(); if(bt) { L.push(bt); L.push(''); }
