@@ -1009,7 +1009,7 @@ function copyAndOpenAI() {
   L.push('Q4. 何と出会って変わりますか？'); L.push(v('p1_q4') || '（未入力）'); L.push('');
   L.push('Q5. 読後にどう感じてほしいですか？'); L.push(v('p1_q5') || '（未入力）'); L.push('');
   L.push('以下の形式でストーリーのヒントを提案してください：');
-  L.push('① 日常（主人公の出発点・状況）');
+  L.push('① 悩み（主人公の出発点・状況）');
   L.push('② 事件（転換点）');
   L.push('③ 転機（何と出会って変わるか）');
   L.push('④ 本音（主人公の心の奥にある言葉）');
@@ -1051,7 +1051,7 @@ function genPagePlan() {
   L.push('');
   if(v('p1_theme') || gv('p1_theme')) L.push('題材・テーマ：' + (v('p1_theme') || gv('p1_theme')));
   if(v('p1_persona') || gv('p1_persona')) L.push('ペルソナ（読者の原型）：' + (v('p1_persona') || gv('p1_persona')));
-  if(v('p1_s1') || gv('p1_s1')) L.push('日常（出発点）：' + (v('p1_s1') || gv('p1_s1')));
+  if(v('p1_s1') || gv('p1_s1')) L.push('悩み（出発点）：' + (v('p1_s1') || gv('p1_s1')));
   if(v('p1_s2') || gv('p1_s2')) L.push('事件（転換点）：' + (v('p1_s2') || gv('p1_s2')));
   if(v('p1_s3') || gv('p1_s3')) L.push('転機：' + (v('p1_s3') || gv('p1_s3')));
   if(v('p1_honne') || gv('p1_honne')) L.push('本音（心の声）：' + (v('p1_honne') || gv('p1_honne')));
