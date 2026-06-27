@@ -166,7 +166,11 @@ textarea{resize:vertical;min-height:72px;}
   <div class="card hl">
     <div class="card-title"><span class="icon">📁</span> 作品を選ぶ</div>
     <div class="proj-bar" id="projBar"></div>
-    <div class="info-box" style="margin-bottom:0;">💡 作品ごとに独立して保存されます。複数の漫画を同時進行できます。作品名は✏️<strong>ダブルクリックで変更</strong>できます。</div>
+    <div class="info-box" style="margin-bottom:10px;">💡 作品ごとに独立して保存されます。複数の漫画を同時進行できます。作品名は✏️<strong>ダブルクリックで変更</strong>できます。</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button onclick="backupData()" style="font-family:inherit;font-size:12px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;">💾 バックアップを保存</button>
+      <label style="font-family:inherit;font-size:12px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;">📂 バックアップから復元<input type="file" accept=".json" onchange="restoreData(event)" style="display:none;"></label>
+    </div>
   </div>
 
   <div class="flow-cards">
@@ -1373,6 +1377,51 @@ function genFixPrompt() {
   var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
   L.push('それ以外の部分（コマ割り・構図・他のキャラ）は変えないでください。');
   showOut('s4out3', L.join('\n'));
+}
+
+// ===== BACKUP / RESTORE =====
+function backupData() {
+  var data = {};
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    if (k.indexOf('v2_') === 0) data[k] = localStorage.getItem(k);
+  }
+  var json = JSON.stringify(data, null, 2);
+  var blob = new Blob([json], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  var date = new Date().toISOString().slice(0, 10);
+  a.download = 'ai-manga-backup-' + date + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('バックアップを保存しました');
+}
+function restoreData(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      Object.keys(data).forEach(function(k) {
+        if (k.indexOf('v2_') === 0) localStorage.setItem(k, data[k]);
+      });
+      var ps = data['v2_projects'];
+      if (ps) projects = JSON.parse(ps);
+      var cp = data['v2_curProj'];
+      if (cp) curProj = cp;
+      renderProjBar();
+      loadData();
+      renderChara();
+      renderBg();
+      restoreToggles();
+      showToast('復元しました！');
+    } catch(err) {
+      alert('ファイルの読み込みに失敗しました。正しいバックアップファイルか確認してください。');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 
 // ===== INIT =====
