@@ -988,27 +988,28 @@ function toggleKabeuchi() {
 
 // コピー＋AIで開く
 function exportStory() {
-  var d = loadData();
   var lines = [];
   lines.push('【ストーリー設計】');
   lines.push('');
-  if (d.p1_title) lines.push('■ タイトル：' + d.p1_title);
-  if (d.p1_theme) lines.push('■ テーマ：' + d.p1_theme);
-  if (d.p1_persona) lines.push('■ ペルソナ（読者の原型）：' + d.p1_persona);
+  if (v('p1_title')) lines.push('■ タイトル：' + v('p1_title'));
+  if (v('p1_theme')) lines.push('■ テーマ：' + v('p1_theme'));
+  if (v('p1_persona')) lines.push('■ ペルソナ（読者の原型）：' + v('p1_persona'));
   lines.push('');
-  lines.push('■ 日常（出発点）：' + (d.p1_s1 || '未入力'));
-  lines.push('■ 事件（転換点）：' + (d.p1_s2 || '未入力'));
-  lines.push('■ 転機：' + (d.p1_s3 || '未入力'));
-  if (d.p1_honne) lines.push('■ 本音（心の声）：' + d.p1_honne);
-  if (d.p1_wall) lines.push('■ 壁（挫折）：' + d.p1_wall);
-  if (d.p1_key) lines.push('■ カギ（気づき）：' + d.p1_key);
-  lines.push('■ 成長：' + (d.p1_s4 || '未入力'));
-  lines.push('■ 結末：' + (d.p1_s5 || '未入力'));
+  lines.push('■ 悩み（出発点）：' + (v('p1_s1') || '未入力'));
+  if (v('p1_honne')) lines.push('■ 本音（心の声）：' + v('p1_honne'));
+  if (v('p1_wall')) lines.push('■ 壁（挫折）：' + v('p1_wall'));
+  if (v('p1_key')) lines.push('■ カギ（気づき）：' + v('p1_key'));
+  lines.push('■ 結末：' + (v('p1_s5') || '未入力'));
+  if (v('p1_s2')) lines.push('■ 事件（転換点）：' + v('p1_s2'));
+  if (v('p1_s3')) lines.push('■ 転機：' + v('p1_s3'));
+  if (v('p1_s4')) lines.push('■ 成長：' + v('p1_s4'));
   lines.push('');
-  lines.push('■ 全体のページ数：' + (d.p1_pages || '20') + 'ページ');
+  lines.push('■ 全体のページ数：' + (v('p1_pages') || '20') + 'ページ');
   var text = lines.join('\n');
   navigator.clipboard.writeText(text).then(function() {
     alert('コピーしました！ClaudeやChatGPTに貼り付けてください。');
+  }).catch(function() {
+    alert('コピーに失敗しました。ブラウザの設定でクリップボードへのアクセスを許可してください。');
   });
 }
 
