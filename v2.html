@@ -308,7 +308,7 @@ textarea{resize:vertical;min-height:72px;}
       <div id="story-export-out" style="display:none;margin-top:10px;">
         <div class="prompt-box">
           <button class="copy-btn" onclick="copyEl('story-export-text',this)">コピー</button>
-          <pre id="story-export-text"></pre>
+          <pre id="story-export-text" style="margin-top:28px;"></pre>
         </div>
       </div>
     </div>
@@ -1012,8 +1012,7 @@ function exportStory() {
   lines.push('');
   lines.push('■ 全体のページ数：' + (v('p1_pages') || '20') + 'ページ');
   var text = lines.join('\n');
-  document.getElementById('story-export-text').textContent = text;
-  document.getElementById('story-export-out').style.display = 'block';
+  showOut('story-export-out', text);
 }
 
 function copyAndOpenAI() {
