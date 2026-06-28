@@ -531,15 +531,21 @@ textarea{resize:vertical;min-height:72px;}
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオを一括生成する</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">ページ・コマ数・構図・セリフ・モノローグ・ナレーション・オノマトペをまとめて出力します。</p>
-    <button class="gen-btn" onclick="genScenario()">🎬 コマ割りシナリオプロンプトを生成</button>
+    <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオをページごとに生成する</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">ページ番号を指定して1ページずつ生成します。1ページ確認・修正してから次へ進みましょう。</p>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+      <button class="nav-btn prev" style="padding:6px 14px;font-size:14px;" onclick="changeTargetPage(-1)">◀ 前</button>
+      <label style="font-size:14px;font-weight:600;">ページ番号：</label>
+      <input type="number" id="p3_target_page" min="1" value="1" style="width:70px;padding:6px 10px;font-size:16px;border:2px solid var(--border);border-radius:8px;text-align:center;" oninput="autoSave()">
+      <button class="nav-btn next" style="padding:6px 14px;font-size:14px;" onclick="changeTargetPage(1)">次 ▶</button>
+    </div>
+    <button class="gen-btn" onclick="genScenario()">🎬 このページのシナリオプロンプトを生成</button>
     <div id="s3out2" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s3text2',this)">コピー</button>
         <pre id="s3text2"></pre>
       </div>
-      <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>⚠️ <strong>長編漫画は章ごとに分けて出力しましょう。</strong>一度に20ページ以上を依頼すると途中で止まることがあります。1章8〜15ページを目安に、章ごとに繰り返してください。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。</div>
+      <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>生成したら次のページ番号に進んで繰り返してください。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。</div>
     </div>
   </div>
 
@@ -1097,14 +1103,23 @@ function genPagePlan() {
   showOut('s3out1', L.join('\n'));
 }
 
+function changeTargetPage(delta) {
+  var el = document.getElementById('p3_target_page');
+  var cur = parseInt(el.value) || 1;
+  var next = Math.max(1, cur + delta);
+  el.value = next;
+  autoSave();
+}
+
 // STEP3: コマ割りシナリオ
 function genScenario() {
   var art = getArtStyle();
   var voice = v('p2_voice') || gv('p2_voice') || '';
+  var targetPage = parseInt(v('p3_target_page')) || 1;
   var L = [];
-  L.push('# コマ割りシナリオの一括生成をお願いします');
+  L.push('# ページ' + targetPage + 'のコマ割りシナリオ作成をお願いします');
   L.push('');
-  L.push('ページ構成表の内容で全ページのコマ割りシナリオを一括出力してください。');
+  L.push('ページ構成表の「ページ' + targetPage + '」の内容で、コマ割りシナリオを1ページ分だけ出力してください。');
   L.push('');
   L.push('⚠️ 重要ルール：セリフ・モノローグ・ナレーションのすべてに句点（。）を使わないこと。漫画のセリフに句点は不要です。出力後に句点がないか必ず確認してください。');
   L.push('');
