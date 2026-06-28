@@ -522,27 +522,29 @@ textarea{resize:vertical;min-height:72px;}
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオを1ページずつ生成する</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">①で得たページ構成表を貼り付けて、ページ番号を指定するだけでコマ割りシナリオを生成します。</p>
+    <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオを章ごとに生成する</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">①で得たページ構成表を貼り付けて章番号を指定するだけで、その章まるごとのコマ割りシナリオを生成します。</p>
     <div class="fg">
       <label>①で得たページ構成表を貼り付ける</label>
       <textarea id="p3_page_plan" placeholder="①のプロンプトをAIに貼り付けて得たページ構成表をここに貼ってください。" style="min-height:120px;" oninput="autoSave()"></textarea>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-      <button class="nav-btn prev" style="padding:6px 14px;font-size:14px;" onclick="changeTargetPage(-1)">◀ 前</button>
-      <label style="font-size:14px;font-weight:600;">ページ番号：</label>
-      <input type="number" id="p3_target_page" min="1" value="1" style="width:70px;padding:6px 10px;font-size:16px;border:2px solid var(--border);border-radius:8px;text-align:center;" oninput="autoSave()">
-      <button class="nav-btn next" style="padding:6px 14px;font-size:14px;" onclick="changeTargetPage(1)">次 ▶</button>
-      <label style="font-size:14px;font-weight:600;margin-left:10px;">コマ数：</label>
-      <input type="number" id="p3_koma" min="1" max="6" value="3" style="width:60px;padding:6px 10px;font-size:16px;border:2px solid var(--border);border-radius:8px;text-align:center;" oninput="autoSave()">
+    <div class="grid2">
+      <div class="fg">
+        <label>章番号</label>
+        <input type="number" id="p3_chapter" min="1" value="1" placeholder="例：1" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>1ページあたりのコマ数</label>
+        <input type="number" id="p3_koma" min="1" max="6" value="3" placeholder="例：3" oninput="autoSave()">
+      </div>
     </div>
-    <button class="gen-btn" onclick="genScenario()">🎬 このページのコマ割りシナリオプロンプトを生成</button>
+    <button class="gen-btn" onclick="genScenario()">🎬 この章のコマ割りシナリオプロンプトを生成</button>
     <div id="s3out2" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s3text2',this)">コピー</button>
         <pre id="s3text2"></pre>
       </div>
-      <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>生成したら「次 ▶」でページを進めて繰り返してください。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。</div>
+      <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>章ごとに繰り返してください（章番号を2→3と変えるだけ）。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。</div>
     </div>
   </div>
 
@@ -1123,16 +1125,9 @@ function genPagePlan() {
   showOut('s3out1', L.join('\n'));
 }
 
-function changeTargetPage(delta) {
-  var el = document.getElementById('p3_target_page');
-  var cur = parseInt(el.value) || 1;
-  el.value = Math.max(1, cur + delta);
-  autoSave();
-}
-
-// STEP3: コマ割りシナリオ（1ページ指定）
+// STEP3: コマ割りシナリオ（章単位）
 function genScenario() {
-  var targetPage = parseInt(v('p3_target_page')) || 1;
+  var chapter = parseInt(v('p3_chapter') || gv('p3_chapter')) || 1;
   var koma = parseInt(v('p3_koma') || gv('p3_koma')) || 3;
   var pagePlan = v('p3_page_plan') || gv('p3_page_plan') || '';
   var art = getArtStyle();
@@ -1141,10 +1136,10 @@ function genScenario() {
   var bt = getBgText();
 
   var L = [];
-  L.push('# ページ' + targetPage + 'のコマ割りシナリオ作成をお願いします');
+  L.push('# 第' + chapter + '章のコマ割りシナリオ作成をお願いします');
   L.push('');
-  L.push('以下のページ構成表をもとに、ページ' + targetPage + 'のコマ割りシナリオを作成してください。');
-  L.push('コマ数の目安：' + koma + 'コマ（クライマックスは1〜2コマ・テンポシーンは4〜5コマも可）');
+  L.push('以下のページ構成表をもとに、第' + chapter + '章のコマ割りシナリオを最初から最後まで、ページ単位でまとめて作成してください。');
+  L.push('1ページあたりのコマ数：' + koma + 'コマ（クライマックスは1〜2コマ・テンポシーンは4〜5コマも可）');
   L.push('');
   if(pagePlan) {
     L.push('【ページ構成表】');
@@ -1163,13 +1158,13 @@ function genScenario() {
   L.push('【コマ割りのルール】');
   L.push('・スマホ読み前提：1ページで伝えることは1つに絞る');
   L.push('・クライマックス・感情ピークは大ゴマ（高さ40〜60%）で止める');
-  L.push('・構図を変える（正面・俯瞰・煽り・クローズアップ・引きを混ぜる）');
+  L.push('・構図を毎ページ変える（正面・俯瞰・煽り・クローズアップ・引きを混ぜる）');
   L.push('・最後のコマは「めくり」＝全部見せず次が読みたくなる所で止める');
   L.push('');
-  L.push('【出力形式】');
+  L.push('【出力形式（章の最初から最後まで続けること。最後に「第' + chapter + '章 完」）】');
   L.push('━━━━━━━━━━━━━━━━━━');
-  L.push('【ページ' + targetPage + '】　コマ数：' + koma + '　レイアウト：（横割り／縦割り混在など）');
-  L.push('　P' + targetPage + '-コマ1（大・高さ50%・横100%）');
+  L.push('【ページX】　コマ数：3　レイアウト：（横割り／縦割り混在など）');
+  L.push('　PX-コマ1（大・高さ50%・横100%）');
   L.push('　　キャラクター：（登場するキャラ名）');
   L.push('　　構図／演出：（場面・動作・表情・アングル）');
   L.push('　　セリフ：（キャラ名）「台詞」　※なければ「なし」');
