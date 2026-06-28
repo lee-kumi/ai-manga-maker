@@ -310,38 +310,9 @@ textarea{resize:vertical;min-height:72px;}
         <span id="kabeuchiArrow" style="margin-left:auto;">▼</span>
       </button>
       <div id="kabeuchiSection" style="display:none;margin-top:10px;">
-        <div class="kabeuchi-box">
-          <div class="q-row">
-            <p class="q-label"><span class="q-num">Q1</span>この漫画は何のために作りますか？</p>
-            <textarea id="p1_q1" placeholder="例：自己紹介したい／商品を知ってほしい／地域をPRしたい／人生ストーリーを伝えたい" style="min-height:56px;" oninput="autoSave()"></textarea>
-          </div>
-          <div class="q-row">
-            <p class="q-label"><span class="q-num">Q2</span>誰に読んでほしいですか？</p>
-            <textarea id="p1_q2" placeholder="例：50代で何か始めたい女性／地域に興味がある人／同じ悩みを持つ人" style="min-height:56px;" oninput="autoSave()"></textarea>
-          </div>
-          <div class="q-row">
-            <p class="q-label"><span class="q-num">Q3</span>主人公はどんな悩みを持っていますか？</p>
-            <textarea id="p1_q3" placeholder="例：自信がない、何から始めたらいいかわからない、年齢が気になる" style="min-height:56px;" oninput="autoSave()"></textarea>
-          </div>
-          <div class="q-row">
-            <p class="q-label"><span class="q-num">Q4</span>何と出会って変わりますか？</p>
-            <textarea id="p1_q4" placeholder="例：AIとの出会い／ある人の言葉／商品・サービス／地域の魅力の再発見" style="min-height:56px;" oninput="autoSave()"></textarea>
-          </div>
-          <div class="q-row" style="margin-bottom:0;">
-            <p class="q-label"><span class="q-num">Q5</span>読後にどう感じてほしいですか？</p>
-            <textarea id="p1_q5" placeholder="例：私にもできるかも／相談してみたい／行ってみたい／勇気が出た" style="min-height:56px;" oninput="autoSave()"></textarea>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:14px;flex-wrap:wrap;">
-            <button class="gen-btn" style="margin-top:0;" onclick="copyAndOpenAI()">📋 コピーしてAIで開く →</button>
-            <a href="https://gemini.google.com/" target="_blank" class="tool-link">🔵 Gemini</a>
-            <a href="https://claude.ai/" target="_blank" class="tool-link">🟣 Claude</a>
-            <a href="https://chatgpt.com/" target="_blank" class="tool-link">🟢 ChatGPT</a>
-          </div>
-          <div style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7;">
-            ① コピーしてAIのチャット欄に貼り付ける<br>
-            ② 返ってきたストーリーのヒントを見る<br>
-            ③ 上の「悩み」「本音」「壁」などの欄に自分の言葉で書き写す
-          </div>
+        <div class="kabeuchi-box" style="text-align:center;padding:20px;">
+          <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">専用GPTがストーリー作りをサポートします。下のボタンから開いてください。</p>
+          <a href="https://chatgpt.com/g/g-6a40fecaf8748191a7ac9959dc2116be-aiman-hua-mekav2qi-hua-zuo-cheng-gpt" target="_blank" rel="noopener" style="display:inline-block;background:var(--accent);color:#fff;border-radius:8px;padding:12px 28px;font-size:15px;font-weight:700;text-decoration:none;">🤖 専用GPTで相談する →</a>
         </div>
       </div>
     </div>
