@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>キャラクターシート生成 | AI漫画ツール</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #6C63FF;
+  --primary-light: #EEF0FF;
+  --accent: #43B89C;
+  --bg: #F4F6FC;
+  --card: #FFFFFF;
+  --text: #1A1A2E;
+  --muted: #6B7280;
+  --border: #E5E7EB;
+  --r: 12px;
+  --shadow: 0 4px 20px rgba(108,99,255,0.1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+input, textarea, select, button { font-family: inherit; }
+
+/* Header */
+.header { background: var(--card); border-bottom: 2px solid var(--primary-light); padding: 12px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(108,99,255,0.08); }
+.header-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+.logo { font-size: 17px; font-weight: 900; color: var(--primary); flex: 1; }
+.back-link { font-size: 12px; color: var(--muted); text-decoration: none; padding: 5px 12px; border: 1.5px solid var(--border); border-radius: 20px; transition: all 0.2s; white-space: nowrap; }
+.back-link:hover { border-color: var(--primary); color: var(--primary); }
+.save-ind { font-size: 12px; color: var(--accent); white-space: nowrap; opacity: 0; transition: opacity 0.3s; }
+.save-ind.show { opacity: 1; }
+
+/* Layout */
+.main { max-width: 800px; margin: 28px auto; padding: 0 20px 60px; }
+
+/* Page header */
+.page-header { margin-bottom: 24px; }
+.page-badge { display: inline-flex; align-items: center; background: var(--primary); color: white; padding: 3px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+.page-header h1 { font-size: 24px; font-weight: 900; margin-bottom: 6px; line-height: 1.3; }
+.page-header p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+/* Cards */
+.card { background: var(--card); border-radius: var(--r); padding: 22px; margin-bottom: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.card.hl { border: 2px solid var(--primary); }
+.card-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.card-title .icon { width: 26px; height: 26px; background: var(--primary-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+
+/* Forms */
+.fg { margin-bottom: 14px; }
+.fg:last-child { margin-bottom: 0; }
+label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.req { color: #EF4444; font-weight: 700; margin-left: 3px; }
+input[type=text], textarea { width: 100%; padding: 9px 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text); background: #FAFAFA; transition: border-color 0.2s; outline: none; }
+input[type=text]:focus, textarea:focus { border-color: var(--primary); background: white; }
+textarea { resize: vertical; min-height: 60px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* Boxes */
+.info-box { border-left: 4px solid var(--primary); background: var(--primary-light); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 14px 0; font-size: 13px; line-height: 1.7; }
+
+/* Buttons */
+.gen-btn { display: flex; align-items: center; justify-content: center; gap: 7px; background: var(--primary); color: white; border: none; padding: 13px 28px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%; }
+.gen-btn:hover { background: #5954D6; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(108,99,255,0.3); }
+.clear-btn { display: inline-flex; align-items: center; gap: 6px; background: white; color: var(--muted); border: 2px solid var(--border); padding: 9px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.clear-btn:hover { border-color: #EF4444; color: #EF4444; }
+
+/* Prompt output */
+.prompt-box { background: #1A1A2E; border-radius: 10px; padding: 18px; margin-top: 14px; position: relative; display: none; }
+.prompt-box pre { color: #E8E8F0; font-family: 'Consolas', 'Courier New', monospace; font-size: 12px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; margin-top: 28px; }
+.copy-btn { position: absolute; top: 10px; right: 10px; background: var(--primary); color: white; border: none; padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.copy-btn:hover { background: #5954D6; }
+.copy-btn.ok { background: var(--accent); }
+
+/* Toast */
+.toast { position: fixed; bottom: 20px; right: 20px; background: #1A1A2E; color: white; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; z-index: 9999; transform: translateY(70px); opacity: 0; transition: all 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* Character tabs */
+.char-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+.char-tab { font-size: 12px; padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: white; color: var(--muted); cursor: pointer; transition: all 0.2s; font-weight: 700; font-family: inherit; }
+.char-tab:hover { background: var(--primary-light); }
+.char-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+.char-tab-add { font-size: 12px; padding: 6px 12px; border-radius: 20px; border: 1.5px dashed var(--border); background: white; color: var(--muted); cursor: pointer; font-family: inherit; transition: all 0.2s; }
+.char-tab-add:hover { border-color: var(--primary); color: var(--primary); }
+.char-tab-del { font-size: 11px; margin-left: 4px; opacity: 0.6; }
+.char-tab-del:hover { opacity: 1; }
+
+@media (max-width: 600px) {
+  .grid2, .grid3 { grid-template-columns: 1fr; }
+  .header-inner { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="back-link">← ツール一覧</a>
+    <div class="logo">🎭 キャラクターシート生成</div>
+    <span class="save-ind" id="saveInd">✓ 保存済み</span>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="page-header">
+    <div class="page-badge">🎭 キャラクターシート</div>
+    <h1>キャラクターシート<br>プロンプト生成ツール</h1>
+    <p>各項目を入力して「プロンプトを生成」を押すと、画像AI（ChatGPT・Gemini・Nano Banana）に渡せるキャラクターシート作成プロンプトが完成します。空欄の項目はAIが自動補完します。</p>
+  </div>
+
+  <div class="info-box">💡 <strong>使い方：</strong>フォームを入力 → 「プロンプトを生成」→ コピーして画像AIに貼り付け → キャラシート画像が完成。<br>生成したキャラシート画像は、漫画メーカーのSTEP2で参考画像として添付するとコマごとの見た目のブレを防げます。</div>
+
+  <!-- キャラクタータブ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📁</span> キャラクターを切り替える</div>
+    <div class="char-tabs" id="charTabs"></div>
+    <p style="font-size:12px;color:var(--muted);">複数のキャラクターを保存して切り替えられます。ブラウザに自動保存されます。</p>
+  </div>
+
+  <!-- キャラクター基本情報 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">👤</span> キャラクター基本情報</div>
+    <div class="grid2">
+      <div class="fg">
+        <label>名前<span class="req">*必須</span></label>
+        <input type="text" id="c_name" placeholder="例：佐藤みなこ" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>年齢</label>
+        <input type="text" id="c_age" placeholder="例：28歳" oninput="autoSave()">
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="fg">
+        <label>性別</label>
+        <input type="text" id="c_gender" placeholder="例：女性" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>職業・立場</label>
+        <input type="text" id="c_job" placeholder="例：OL・事務職" oninput="autoSave()">
+      </div>
+    </div>
+  </div>
+
+  <!-- 外見 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">👁️</span> 外見</div>
+    <div class="grid2">
+      <div class="fg">
+        <label>顔型</label>
+        <input type="text" id="c_face" placeholder="例：卵型・丸顔" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>目の形</label>
+        <input type="text" id="c_eyes" placeholder="例：大きくて丸い・切れ長" oninput="autoSave()">
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="fg">
+        <label>眉</label>
+        <input type="text" id="c_eyebrows" placeholder="例：細め・ナチュラル" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>鼻</label>
+        <input type="text" id="c_nose" placeholder="例：小さめ・スッとした" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>口</label>
+        <input type="text" id="c_mouth" placeholder="例：薄め・ぽってり" oninput="autoSave()">
+      </div>
+    </div>
+    <div class="fg">
+      <label>肌の色</label>
+      <input type="text" id="c_skin" placeholder="例：明るい肌色・小麦色" oninput="autoSave()">
+    </div>
+  </div>
+
+  <!-- 髪型 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">💇</span> 髪型</div>
+    <div class="grid2">
+      <div class="fg">
+        <label>髪型</label>
+        <input type="text" id="c_hairstyle" placeholder="例：ストレート・ウェーブ・ポニーテール" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>髪色</label>
+        <input type="text" id="c_haircolor" placeholder="例：黒髪・ブラウン・アッシュブロンド" oninput="autoSave()">
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="fg">
+        <label>前髪</label>
+        <input type="text" id="c_bangs" placeholder="例：斜めバング・パッツン" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>長さ</label>
+        <input type="text" id="c_hairlen" placeholder="例：ショート・ミディアム・ロング" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>特徴</label>
+        <input type="text" id="c_hairfeat" placeholder="例：アホ毛・内巻き・ハイライト" oninput="autoSave()">
+      </div>
+    </div>
+  </div>
+
+  <!-- 服装 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">👗</span> 服装</div>
+    <div class="grid2">
+      <div class="fg">
+        <label>上半身</label>
+        <input type="text" id="c_top" placeholder="例：白いブラウス・パーカー" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>下半身</label>
+        <input type="text" id="c_bottom" placeholder="例：黒いスカート・ジーンズ" oninput="autoSave()">
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="fg">
+        <label>靴</label>
+        <input type="text" id="c_shoes" placeholder="例：ローファー・スニーカー" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>アクセサリー</label>
+        <input type="text" id="c_acc" placeholder="例：シルバーのネックレス・眼鏡" oninput="autoSave()">
+      </div>
+    </div>
+  </div>
+
+  <!-- 性格 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">💭</span> 性格・印象</div>
+    <div class="fg">
+      <label>性格</label>
+      <input type="text" id="c_personality" placeholder="例：内向的だが芯が強い・明るくて社交的" oninput="autoSave()">
+    </div>
+    <div class="fg">
+      <label>第一印象</label>
+      <input type="text" id="c_impression" placeholder="例：真面目そう・親しみやすい・ミステリアス" oninput="autoSave()">
+    </div>
+    <div class="fg">
+      <label>特徴的な仕草・癖</label>
+      <input type="text" id="c_feat" placeholder="例：考えるとき髪を触る・よくため息をつく" oninput="autoSave()">
+    </div>
+  </div>
+
+  <!-- 画風 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🎨</span> 画風</div>
+    <div class="fg">
+      <label>画風・アートスタイル</label>
+      <input type="text" id="c_artstyle" placeholder="例：漫画風・アニメ風・シンプルな線画（空欄でAIが自動選択）" oninput="autoSave()">
+    </div>
+    <div class="info-box" style="margin-top:0;margin-bottom:0;">💡 空欄にするとAIがキャラクターの特徴に合った画風で描きます。漫画メーカーのSTEP2で設定した画風と合わせると統一感が出ます。</div>
+  </div>
+
+  <!-- 生成ボタン -->
+  <div class="card hl">
+    <div class="card-title"><span class="icon">⚡</span> プロンプトを生成する</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">上の入力内容をもとに、画像AIに渡すキャラクターシート作成プロンプトを生成します。コピーして画像AIに貼り付けるだけで完成します。</p>
+    <button class="gen-btn" onclick="generatePrompt()">🎭 キャラクターシートプロンプトを生成</button>
+    <div class="prompt-box" id="promptBox">
+      <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">コピー</button>
+      <pre id="promptText"></pre>
+    </div>
+    <div class="info-box" id="afterInfo" style="display:none;margin-top:10px;margin-bottom:0;">
+      👆 「コピー」→ <strong>ChatGPT / Gemini / Nano Banana</strong> に貼り付けて送信。<br>
+      ✅ 生成されたキャラシート画像を保存して、漫画メーカーの<strong>STEP2「キャラクター設定」に参考画像として添付</strong>するとコマごとの見た目のブレが防げます。
+    </div>
+  </div>
+
+  <!-- クリア -->
+  <div style="display:flex;justify-content:flex-end;margin-top:4px;">
+    <button class="clear-btn" onclick="clearChar()">🗑️ このキャラをリセット</button>
+  </div>
+
+</main>
+
+<script>
+const SK = 'charsheet_v2';
+
+/* ── データ管理 ── */
+let state = { current: 0, chars: [emptyChar()] };
+
+function emptyChar() {
+  return { name:'', age:'', gender:'', job:'', face:'', eyes:'', eyebrows:'', nose:'', mouth:'', skin:'',
+           hairstyle:'', haircolor:'', bangs:'', hairlen:'', hairfeat:'',
+           top:'', bottom:'', shoes:'', acc:'', personality:'', impression:'', feat:'', artstyle:'' };
+}
+
+const FIELDS = ['c_name','c_age','c_gender','c_job','c_face','c_eyes','c_eyebrows','c_nose','c_mouth','c_skin',
+                'c_hairstyle','c_haircolor','c_bangs','c_hairlen','c_hairfeat',
+                'c_top','c_bottom','c_shoes','c_acc','c_personality','c_impression','c_feat','c_artstyle'];
+const KEYS   = ['name','age','gender','job','face','eyes','eyebrows','nose','mouth','skin',
+                'hairstyle','haircolor','bangs','hairlen','hairfeat',
+                'top','bottom','shoes','acc','personality','impression','feat','artstyle'];
+
+function readForm() {
+  const d = {};
+  FIELDS.forEach((id, i) => { d[KEYS[i]] = document.getElementById(id).value.trim(); });
+  return d;
+}
+
+function fillForm(d) {
+  FIELDS.forEach((id, i) => { document.getElementById(id).value = d[KEYS[i]] || ''; });
+}
+
+function autoSave() {
+  state.chars[state.current] = readForm();
+  localStorage.setItem(SK, JSON.stringify(state));
+  const el = document.getElementById('saveInd');
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 1500);
+  renderTabs();
+}
+
+function loadState() {
+  const raw = localStorage.getItem(SK);
+  if (raw) {
+    try { state = JSON.parse(raw); } catch(e) {}
+  }
+  if (!state.chars || !state.chars.length) state.chars = [emptyChar()];
+  if (state.current >= state.chars.length) state.current = 0;
+}
+
+/* ── タブ ── */
+function renderTabs() {
+  const wrap = document.getElementById('charTabs');
+  wrap.innerHTML = '';
+  state.chars.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'char-tab' + (i === state.current ? ' active' : '');
+    const label = c.name || `キャラ${i + 1}`;
+    btn.innerHTML = label + (state.chars.length > 1 ? ` <span class="char-tab-del" onclick="deleteChar(${i},event)">✕</span>` : '');
+    btn.onclick = () => switchChar(i);
+    wrap.appendChild(btn);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'char-tab-add';
+  addBtn.textContent = '＋ 追加';
+  addBtn.onclick = addChar;
+  wrap.appendChild(addBtn);
+}
+
+function switchChar(i) {
+  state.chars[state.current] = readForm();
+  state.current = i;
+  fillForm(state.chars[i]);
+  renderTabs();
+  document.getElementById('promptBox').style.display = 'none';
+  document.getElementById('afterInfo').style.display = 'none';
+  localStorage.setItem(SK, JSON.stringify(state));
+}
+
+function addChar() {
+  state.chars[state.current] = readForm();
+  state.chars.push(emptyChar());
+  state.current = state.chars.length - 1;
+  fillForm(emptyChar());
+  renderTabs();
+  document.getElementById('promptBox').style.display = 'none';
+  document.getElementById('afterInfo').style.display = 'none';
+  localStorage.setItem(SK, JSON.stringify(state));
+  document.getElementById('c_name').focus();
+}
+
+function deleteChar(i, e) {
+  e.stopPropagation();
+  if (!confirm(`「${state.chars[i].name || 'キャラ' + (i+1)}」を削除しますか？`)) return;
+  state.chars.splice(i, 1);
+  if (!state.chars.length) state.chars = [emptyChar()];
+  if (state.current >= state.chars.length) state.current = state.chars.length - 1;
+  fillForm(state.chars[state.current]);
+  renderTabs();
+  document.getElementById('promptBox').style.display = 'none';
+  document.getElementById('afterInfo').style.display = 'none';
+  localStorage.setItem(SK, JSON.stringify(state));
+}
+
+/* ── プロンプト生成 ── */
+function L(label, val) {
+  return val ? `${label}：${val}` : `${label}：（未指定）`;
+}
+
+function generatePrompt() {
+  const d = readForm();
+  if (!d.name) { toast('⚠️ 名前を入力してください'); return; }
+
+  const artLine = d.artstyle
+    ? d.artstyle
+    : 'キャラクターの特徴が最も伝わる自然な画風で描写する';
+
+  const text = `以下のキャラクター情報をもとに、漫画・イラスト制作で使用できる本格的なキャラクターシート（Character Design Sheet）を1枚の画像で作成してください。
+
+【キャラクター情報】
+${L('名前', d.name)}
+${L('年齢', d.age)}
+${L('性別', d.gender)}
+${L('職業', d.job)}
+
+【外見】
+${L('顔型', d.face)}
+${L('目の形', d.eyes)}
+${L('眉', d.eyebrows)}
+${L('鼻', d.nose)}
+${L('口', d.mouth)}
+${L('肌の色', d.skin)}
+
+【髪型】
+${L('髪型', d.hairstyle)}
+${L('髪色', d.haircolor)}
+${L('前髪', d.bangs)}
+${L('長さ', d.hairlen)}
+${L('特徴', d.hairfeat)}
+
+【服装】
+${L('上半身', d.top)}
+${L('下半身', d.bottom)}
+${L('靴', d.shoes)}
+${L('アクセサリー', d.acc)}
+
+【性格】
+${L('性格', d.personality)}
+${L('第一印象', d.impression)}
+${L('特徴', d.feat)}
+
+【キャラクターシート構成】
+
+① 全身正面（Front View）
+
+② 全身側面（Side View）
+
+③ 全身背面（Back View）
+
+④ 顔アップ（Face Close-up）
+
+⑤ 表情集（Expressions）
+・通常
+・笑顔
+・怒り
+・悲しみ
+・驚き
+・困り顔
+
+⑥ 小物設定（Props）
+${d.name}がよく使用する持ち物を描く
+
+⑦ カラーパレット（Color Palette）
+・髪色
+・肌色
+・服装
+・アクセントカラー
+
+【レイアウト】
+・白背景
+・キャラクターデザイン資料集形式
+・見やすく整理された構成
+・全身が切れないように配置
+・高解像度
+
+【ラベル】
+Character Design Sheet
+Front View
+Side View
+Back View
+Face Close-up
+Expressions
+Props
+Color Palette
+
+【画風】
+${artLine}`;
+
+  document.getElementById('promptText').textContent = text;
+  const box = document.getElementById('promptBox');
+  box.style.display = 'block';
+  document.getElementById('afterInfo').style.display = 'block';
+  setTimeout(() => box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+function copyPrompt() {
+  const text = document.getElementById('promptText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ コピー済み';
+    btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('ok'); }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('✓ コピーしました');
+  });
+}
+
+function clearChar() {
+  if (!confirm('このキャラクターの入力をリセットしますか？')) return;
+  state.chars[state.current] = emptyChar();
+  fillForm(emptyChar());
+  document.getElementById('promptBox').style.display = 'none';
+  document.getElementById('afterInfo').style.display = 'none';
+  localStorage.setItem(SK, JSON.stringify(state));
+  renderTabs();
+  toast('🗑️ リセットしました');
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+/* ── 初期化 ── */
+loadState();
+fillForm(state.chars[state.current]);
+renderTabs();
+</script>
+</body>
+</html>
