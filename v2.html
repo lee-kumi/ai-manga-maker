@@ -358,6 +358,14 @@ textarea{resize:vertical;min-height:72px;}
     </div>
   </div>
 
+  <!-- 章立て -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📚</span> 章立て</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">章ごとのタイトル・内容を登録しておくと、②のコマ割り生成プロンプトに自動で反映されます。</p>
+    <div id="chapterList"></div>
+    <button class="add-btn" onclick="addChapter()">＋ 章を追加</button>
+  </div>
+
   <!-- タイトル案生成 -->
   <button class="gen-btn full" onclick="genStep1()">💡 仮タイトルをAIに考えてもらう</button>
   <div id="s1out" style="display:none;">
@@ -848,6 +856,42 @@ function restoreToggles() {
   }
 }
 
+// ===== CHAPTERS =====
+var chapters = [];
+function loadChapters() { chapters = JSON.parse(gv('chapters') || '[]'); }
+function saveChapters() { sv('chapters', JSON.stringify(chapters)); showSave(); }
+function addChapter() {
+  chapters.push({ title: '', role: '', pages: '' });
+  saveChapters();
+  renderChapters();
+}
+function delChapter(i) { chapters.splice(i, 1); saveChapters(); renderChapters(); }
+function updateChapter(i, field, val) { chapters[i][field] = val; saveChapters(); }
+function renderChapters() {
+  var list = document.getElementById('chapterList');
+  list.innerHTML = '';
+  chapters.forEach(function(c, i) {
+    var div = document.createElement('div');
+    div.className = 'dyn-block';
+    div.innerHTML =
+      '<div class="dyn-head"><span class="dyn-num">第' + (i+1) + '章</span>' +
+      '<button class="del-btn" onclick="delChapter(' + i + ')">×</button></div>' +
+      '<div class="fg"><label>章タイトル</label><input type="text" value="' + esc(c.title) + '" placeholder="例：出会い・挫折・気づき" onchange="updateChapter(' + i + ',\'title\',this.value)"></div>' +
+      '<div class="fg"><label>この章の内容・役割</label><textarea style="min-height:56px;" placeholder="例：主人公がAIと出会い、最初は戸惑うが少しずつ可能性を感じ始める章" onchange="updateChapter(' + i + ',\'role\',this.value)">' + esc(c.role) + '</textarea></div>' +
+      '<div class="fg"><label>目標ページ数<span class="opt-badge">任意</span></label><input type="number" value="' + esc(c.pages) + '" placeholder="例：20" onchange="updateChapter(' + i + ',\'pages\',this.value)" style="width:80px;"></div>';
+    list.appendChild(div);
+  });
+}
+function getChapterText(chNum) {
+  var c = chapters[chNum - 1];
+  if (!c) return '';
+  var L = ['【第' + chNum + '章の情報】'];
+  if (c.title) L.push('タイトル：' + c.title);
+  if (c.role)  L.push('内容・役割：' + c.role);
+  if (c.pages) L.push('目標ページ数：約' + c.pages + 'ページ');
+  return L.join('\n');
+}
+
 // ===== CHARACTERS =====
 var charas = [];
 function loadCharas() { charas = JSON.parse(gv('charas') || '[]'); }
@@ -1171,6 +1215,7 @@ function genScenario() {
   if(s4)        L.push('成長：' + s4);
   if(s5)        L.push('結末：' + s5);
   L.push('');
+  var chapterInfo = getChapterText(chapter); if(chapterInfo) { L.push(chapterInfo); L.push(''); }
   var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
   var bt = getBgText();    if(bt) { L.push(bt); L.push(''); }
   if(art)   { L.push('【画風・スタイル】');  L.push(art);   L.push(''); }
@@ -1381,6 +1426,8 @@ loadCharas();
 renderChara();
 loadBgs();
 renderBg();
+loadChapters();
+renderChapters();
 restoreToggles();
 </script>
 </body>
