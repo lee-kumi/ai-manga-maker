@@ -437,17 +437,8 @@ textarea{resize:vertical;min-height:72px;}
 
     <div class="divider"></div>
 
-    <span class="tog-label">キャンバスサイズ<span class="opt-badge">任意</span></span>
-    <div class="tog-group" id="g-size">
-      <button class="tog" onclick="pickSize(this,'1000×1414px（A4縦）')">1000×1414px<br><span style="font-size:10px;">A4縦・標準</span></button>
-      <button class="tog" onclick="pickSize(this,'1080×1080px（SNS正方形）')">1080×1080px<br><span style="font-size:10px;">SNS正方形</span></button>
-      <button class="tog" onclick="pickSize(this,'1080×1920px（縦型SNS）')">1080×1920px<br><span style="font-size:10px;">縦型SNS・リール</span></button>
-      <button class="tog" onclick="pickSize(this,'')">カスタム</button>
-    </div>
-    <div id="size-custom" style="display:none;margin-top:8px;">
-      <input type="text" id="p2_size_custom" placeholder="例：2480×3508px（印刷用A4）" oninput="autoSave()">
-    </div>
-    <input type="hidden" id="p2_size" oninput="autoSave()">
+    <span class="tog-label">キャンバスサイズ</span>
+    <p style="font-size:13px;color:var(--muted);margin:4px 0 0;">1000×1414px（A4縦・固定）</p>
 
     <div class="divider"></div>
     <div class="fg" style="margin-bottom:0;">
@@ -599,6 +590,7 @@ textarea{resize:vertical;min-height:72px;}
         <button class="tog" onclick="multi(this)">主人公をもっと大きく</button>
         <button class="tog" onclick="multi(this)">フォントが違う</button>
         <button class="tog" onclick="multi(this)">画像サイズが変わった</button>
+        <button class="tog" onclick="multi(this)">キャンバスサイズを1000×1414pxに戻して</button>
         <button class="tog" onclick="multi(this)">斜めコマにしたい</button>
         <button class="tog" onclick="multi(this)">ぶち抜きにしたい</button>
         <button class="tog" onclick="multi(this)">断ち切りにしたい</button>
@@ -784,9 +776,7 @@ function pickSize(btn, val) {
   saveToggles();
 }
 function getSize() {
-  var custom = (v('p2_size_custom') || gv('p2_size_custom') || '').trim();
-  var sel = (v('p2_size') || gv('p2_size') || '').trim();
-  return custom || sel || '1000×1414px（A4縦）';
+  return '1000×1414px（A4縦）';
 }
 
 var structureDescs = {
