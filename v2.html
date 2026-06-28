@@ -352,14 +352,14 @@ textarea{resize:vertical;min-height:72px;}
   <div class="card">
     <div class="card-title"><span class="icon">📄</span> ページ数</div>
     <div style="display:flex;align-items:center;gap:12px;">
-      <label style="margin:0;white-space:nowrap;font-size:13px;font-weight:700;text-transform:none;letter-spacing:0;">全体のページ数<span class="req-badge">必須</span></label>
+      <label style="margin:0;white-space:nowrap;font-size:13px;font-weight:700;text-transform:none;letter-spacing:0;">全体のページ数<span class="opt-badge">任意</span></label>
       <input type="number" id="p1_pages" value="20" min="4" max="100" style="width:80px;text-align:center;font-size:16px;font-weight:700;" oninput="autoSave()">
       <span style="font-size:13px;color:var(--muted);">ページ</span>
     </div>
   </div>
 
   <!-- タイトル案生成 -->
-  <button class="gen-btn full" onclick="genStep1()">💡 タイトルをAIに考えてもらう</button>
+  <button class="gen-btn full" onclick="genStep1()">💡 仮タイトルをAIに考えてもらう</button>
   <div id="s1out" style="display:none;">
     <div class="prompt-box">
       <button class="copy-btn" onclick="copyEl('s1text',this)">コピー</button>
@@ -570,13 +570,6 @@ textarea{resize:vertical;min-height:72px;}
       <label>コマ割りシナリオ（STEP3で生成した内容を貼り付けてください）</label>
       <textarea id="p4_scenario" placeholder="AIが生成したコマ割りシナリオをここに貼り付けてください" style="min-height:120px;" oninput="autoSave()"></textarea>
     </div>
-    <div class="fg">
-      <label>セリフの扱い</label>
-      <div class="tog-group" id="g-text-mode">
-        <button class="tog active" onclick="pick(this,'g-text-mode')" id="tog-text-ai">AIに描かせる</button>
-        <button class="tog" onclick="pick(this,'g-text-mode')" id="tog-text-blank">吹き出し空欄（Canvaで入れる）</button>
-      </div>
-    </div>
     <button class="gen-btn" onclick="genImagePrompt()">🖼️ 画像生成プロンプトを生成</button>
     <div id="s4out2" style="display:none;">
       <div class="prompt-box">
@@ -600,6 +593,8 @@ textarea{resize:vertical;min-height:72px;}
         <button class="tog" onclick="multi(this)">主人公をもっと大きく</button>
         <button class="tog" onclick="multi(this)">フォントが違う</button>
         <button class="tog" onclick="multi(this)">画像サイズが変わった</button>
+        <button class="tog" onclick="multi(this)">斜めコマにしたい</button>
+        <button class="tog" onclick="multi(this)">ぶち抜きにしたい</button>
       </div>
     </div>
     <div class="fg">
@@ -823,6 +818,20 @@ function restoreToggles() {
       b.classList.toggle('on', saved.indexOf(b.textContent.trim()) > -1);
     });
   });
+  // キャンバスサイズの選択状態を復元
+  var savedSize = gv('p2_size') || '';
+  var savedCustom = gv('p2_size_custom') || '';
+  if(savedSize || savedCustom) {
+    document.querySelectorAll('#g-size .tog').forEach(function(b) {
+      var val = b.getAttribute('onclick').match(/'([^']*)'\)/);
+      if(val) {
+        var isCustom = val[1] === '' && savedCustom;
+        var isMatch = val[1] === savedSize;
+        b.classList.toggle('on', isMatch || isCustom);
+      }
+    });
+    if(savedCustom) document.getElementById('size-custom').style.display = 'block';
+  }
 }
 
 // ===== CHARACTERS =====
@@ -1302,26 +1311,17 @@ function genImagePrompt() {
   L.push('・コマ枠は黒線・余白は白・背景色は白にする');
   L.push('⚠️ ページ番号・ノンブル（数字）は画像内に絶対に描かない。どのコマにも数字を入れないこと');
   L.push('');
-  var textMode = getSelected('g-text-mode');
-  var isBlank = textMode.indexOf('吹き出し空欄') >= 0;
   L.push('【セリフ・文字の仕様】');
-  if(isBlank) {
-    L.push('⚠️ 吹き出しはすべて空欄のまま描いてください。セリフのテキストは一切書かないこと。');
-    L.push('・吹き出しの形（丸・角丸・四角など）だけ描く。中身は空白にする');
-    L.push('・モノローグ用の角丸吹き出し・ナレーション用の四角い枠も空欄で描く');
-    L.push('・文字・ひらがな・カタカナ・漢字をコマ内に一切描かないこと');
-  } else {
-    L.push('・文字は必ず縦書き（上から下・行は右から左）');
-    L.push('・セリフに句点（。）は使わない（漫画のルール）');
-    L.push('・吹き出し内のテキストは上端をそろえる（上揃え）');
-    L.push('・吹き出し内にセリフを入れる');
-    L.push('・フォントイメージ：Noto Sans / アンチックセザンヌ / 源英アンチック（明朝系・漫画フォント）');
-    L.push('・文字サイズ（Canva 1000×1414px基準）：');
-    L.push('　通常コマ（3〜4コマ）：26pt相当');
-    L.push('　大ゴマ（1〜2コマ）：32〜42pt相当');
-    L.push('・モノローグは角丸・薄い吹き出し、ナレーションは四角い枠で区別する');
+  L.push('・文字は必ず縦書き（上から下・行は右から左）');
+  L.push('・セリフに句点（。）は使わない（漫画のルール）');
+  L.push('・吹き出し内のテキストは上端をそろえる（上揃え）');
+  L.push('・吹き出し内にセリフを入れる');
+  L.push('・フォントイメージ：Noto Sans / アンチックセザンヌ / 源英アンチック（明朝系・漫画フォント）');
+  L.push('・文字サイズ（Canva 1000×1414px基準）：');
+  L.push('　通常コマ（3〜4コマ）：26pt相当');
+  L.push('　大ゴマ（1〜2コマ）：32〜42pt相当');
+  L.push('・モノローグは角丸・薄い吹き出し、ナレーションは四角い枠で区別する');
   L.push('・吹き出しの背景は必ず純白（#FFFFFF）にする。色をつけない・グラデーションなし・半透明禁止');
-  }
   L.push('');
   L.push('【コマ割りのルール】');
   L.push('・コマ枠をはっきり描く。読む順は右上→左下（右→左の日本式）');
