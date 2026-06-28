@@ -559,6 +559,10 @@ textarea{resize:vertical;min-height:72px;}
       <label>補足・演出メモ<span class="opt-badge">任意</span></label>
       <textarea id="p3_ch_notes" placeholder="例：嵐のシーンは迫力重視。救出シーンは感動的に。" style="min-height:60px;" oninput="autoSave()"></textarea>
     </div>
+    <div class="fg">
+      <label>①で得たページ構成表を貼り付ける<span class="opt-badge">任意</span></label>
+      <textarea id="p3_page_plan" placeholder="①のプロンプトをAIに貼り付けて得たページ構成表をここに貼ってください。貼ると精度が上がります。" style="min-height:100px;" oninput="autoSave()"></textarea>
+    </div>
     <button class="gen-btn" onclick="genScenario()">🎬 この章のコマ割りシナリオプロンプトを生成</button>
     <div id="s3out2" style="display:none;">
       <div class="prompt-box">
@@ -1182,6 +1186,12 @@ function genScenario() {
   if(s4)      L.push('成長：' + s4);
   if(s5)      L.push('結末：' + s5);
   L.push('');
+  var pagePlan = v('p3_page_plan') || gv('p3_page_plan') || '';
+  if(pagePlan) {
+    L.push('【ページ構成表（この内容をもとにコマ割りを作ること）】');
+    L.push(pagePlan);
+    L.push('');
+  }
   if(chTitle) { L.push('【第' + chapter + '章】'); L.push('タイトル：' + chTitle); }
   else { L.push('【第' + chapter + '章】'); }
   if(chRole)  L.push('この章の役割・内容：' + chRole);
