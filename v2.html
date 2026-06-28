@@ -305,12 +305,11 @@ textarea{resize:vertical;min-height:72px;}
 
     <!-- AIと一緒に考える（折りたたみ） -->
     <div style="margin-top:18px;">
-      <button onclick="toggleKabeuchi()" style="width:100%;background:#f8f8f5;border:1.5px dashed var(--border);border-radius:10px;padding:12px 16px;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:between;gap:8px;text-align:left;" id="kabeuchiToggleBtn">
+      <button onclick="toggleKabeuchi()" style="width:100%;background:var(--accent);border:none;border-radius:10px;padding:14px 18px;font-family:inherit;font-size:14px;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;text-align:left;" id="kabeuchiToggleBtn">
         <span>💭 ストーリーが思い浮かばない方へ — 専用GPTで一緒に考える</span>
         <span id="kabeuchiArrow" style="margin-left:auto;">▼</span>
       </button>
       <div id="kabeuchiSection" style="display:none;margin-top:10px;">
-        <div class="info-box">💡 4つの質問に答えてコピー → AIに貼り付けるだけで、ストーリーのヒントが返ってきます。返ってきた内容を上のフォームに書き写してください。</div>
         <div class="kabeuchi-box">
           <div class="q-row">
             <p class="q-label"><span class="q-num">Q1</span>この漫画は何のために作りますか？</p>
@@ -334,7 +333,6 @@ textarea{resize:vertical;min-height:72px;}
           </div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:14px;flex-wrap:wrap;">
             <button class="gen-btn" style="margin-top:0;" onclick="copyAndOpenAI()">📋 コピーしてAIで開く →</button>
-            <a href="https://chatgpt.com/g/g-6a40fecaf8748191a7ac9959dc2116be-aiman-hua-mekav2qi-hua-zuo-cheng-gpt" target="_blank" class="tool-link" style="background:var(--accent);color:#fff;font-weight:700;">🤖 専用GPT</a>
             <a href="https://gemini.google.com/" target="_blank" class="tool-link">🔵 Gemini</a>
             <a href="https://claude.ai/" target="_blank" class="tool-link">🟣 Claude</a>
             <a href="https://chatgpt.com/" target="_blank" class="tool-link">🟢 ChatGPT</a>
