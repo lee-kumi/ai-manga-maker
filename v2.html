@@ -390,25 +390,25 @@ textarea{resize:vertical;min-height:72px;}
     <span class="tog-label">画風（1つ選択）</span>
     <div class="tog-group" id="g-style">
       <div style="width:100%;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px;">漫画</div>
-      <button class="tog" onclick="pick(this,'g-style')">少年漫画風</button>
-      <button class="tog" onclick="pick(this,'g-style')">少女漫画風</button>
-      <button class="tog" onclick="pick(this,'g-style')">青年漫画風</button>
-      <button class="tog" onclick="pick(this,'g-style')">劇画風</button>
-      <button class="tog" onclick="pick(this,'g-style')">商業Webtoon風</button>
-      <button class="tog" onclick="pick(this,'g-style')">学習漫画風</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">少年漫画風</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">少女漫画風</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">青年漫画風</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">劇画風</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">商業Webtoon風</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">学習漫画風</button>
       <div style="width:100%;font-size:11px;color:var(--muted);font-weight:700;margin:8px 0 4px;">イラスト・キャラシート</div>
-      <button class="tog" onclick="pick(this,'g-style')">ゆるいイラスト風</button>
-      <button class="tog" onclick="pick(this,'g-style')">絵本風</button>
-      <button class="tog" onclick="pick(this,'g-style')">アメコミ風</button>
-      <button class="tog" onclick="pick(this,'g-style')">上品な商業イラスト風 × 北欧ナチュラル</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">ゆるいイラスト風</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">絵本風</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">アメコミ風</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">上品な商業イラスト風 × 北欧ナチュラル</button>
       <div style="width:100%;font-size:11px;color:var(--muted);font-weight:700;margin:8px 0 4px;">プロフィール・SNS</div>
-      <button class="tog" onclick="pick(this,'g-style')">女性誌挿絵風 × 北欧ナチュラル</button>
+      <button class="tog" onclick="pickStyle(this,'g-style')">女性誌挿絵風 × 北欧ナチュラル</button>
     </div>
 
     <div style="margin-top:12px;">
       <span class="tog-label">自由入力（画像から取得したプロンプトなど）</span>
-      <textarea id="p2_style_custom" placeholder="例：soft watercolor illustration, gentle lineart, pastel nordic tones, cozy atmosphere&#10;好きな画像からAIで抽出したプロンプトをそのまま貼り付けてOK" style="min-height:72px;margin-top:6px;" oninput="autoSave()"></textarea>
-      <p style="font-size:11px;color:var(--muted);margin-top:4px;">※ 上のボタンと組み合わせて使えます。両方入力した場合は自由入力が優先されます。</p>
+      <textarea id="p2_style_custom" placeholder="例：soft watercolor illustration, gentle lineart, pastel nordic tones, cozy atmosphere&#10;好きな画像からAIで抽出したプロンプトをそのまま貼り付けてOK" style="min-height:72px;margin-top:6px;" oninput="onStyleCustomInput()"></textarea>
+      <p style="font-size:11px;color:var(--muted);margin-top:4px;">※ ボタン選択か自由入力、どちらか一方を使ってください。</p>
     </div>
 
     <span class="tog-label">線・質感（複数選択可）</span>
@@ -798,6 +798,19 @@ function pick(btn, g) {
   saveToggles();
 }
 function multi(btn) { btn.classList.toggle('on'); saveToggles(); }
+function pickStyle(btn, g) {
+  // ボタン選択時は自由入力をクリア
+  document.getElementById('p2_style_custom').value = '';
+  sv('p2_style_custom', '');
+  pick(btn, g);
+}
+function onStyleCustomInput() {
+  // 自由入力時はボタン選択を解除
+  document.querySelectorAll('#g-style .tog').forEach(function(b) { b.classList.remove('on'); });
+  sv('p2_style_custom', document.getElementById('p2_style_custom').value);
+  saveToggles();
+  showSave();
+}
 function getSelected(g) {
   var s = [];
   document.querySelectorAll('#' + g + ' .tog.on').forEach(function(b) { s.push(b.textContent.trim()); });
