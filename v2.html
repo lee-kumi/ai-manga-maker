@@ -696,7 +696,7 @@ function v(id) { var el = document.getElementById(id); return el ? el.value.trim
 function autoSave() {
   var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
              'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
-             'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages',
+             'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
              'p2_voice','p3_koma','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
   showSave();
@@ -705,7 +705,7 @@ function autoSave() {
 function loadData() {
   var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
              'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
-             'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages',
+             'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
              'p2_voice','p3_koma','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) {
     var el = document.getElementById(id);
