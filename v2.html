@@ -531,21 +531,33 @@ textarea{resize:vertical;min-height:72px;}
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオをページごとに生成する</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">ページ番号を指定して1ページずつ生成します。1ページ確認・修正してから次へ進みましょう。</p>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-      <button class="nav-btn prev" style="padding:6px 14px;font-size:14px;" onclick="changeTargetPage(-1)">◀ 前</button>
-      <label style="font-size:14px;font-weight:600;">ページ番号：</label>
-      <input type="number" id="p3_target_page" min="1" value="1" style="width:70px;padding:6px 10px;font-size:16px;border:2px solid var(--border);border-radius:8px;text-align:center;" oninput="autoSave()">
-      <button class="nav-btn next" style="padding:6px 14px;font-size:14px;" onclick="changeTargetPage(1)">次 ▶</button>
+    <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオを章ごとに生成する</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">章の範囲を指定してコマ割りシナリオをまとめて生成します。1章ずつ確認・修正しながら進めましょう（目安：1章10〜20ページ）。</p>
+    <div class="grid2">
+      <div class="fg">
+        <label>章番号</label>
+        <input type="number" id="p3_chapter" min="1" value="1" placeholder="例：1" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>1ページあたりのコマ数</label>
+        <input type="number" id="p3_koma" min="1" max="6" value="3" placeholder="例：3" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>開始ページ</label>
+        <input type="number" id="p3_page_from" min="1" value="1" placeholder="例：1" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>終了ページ</label>
+        <input type="number" id="p3_page_to" min="1" value="20" placeholder="例：20" oninput="autoSave()">
+      </div>
     </div>
-    <button class="gen-btn" onclick="genScenario()">🎬 このページのシナリオプロンプトを生成</button>
+    <button class="gen-btn" onclick="genScenario()">🎬 この章のコマ割りシナリオプロンプトを生成</button>
     <div id="s3out2" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s3text2',this)">コピー</button>
         <pre id="s3text2"></pre>
       </div>
-      <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>生成したら次のページ番号に進んで繰り返してください。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。</div>
+      <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>⚠️ ①のページ構成表を同じAIの会話に貼った後、続けてこのプロンプトを貼ると精度が上がります。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。</div>
     </div>
   </div>
 
@@ -1112,23 +1124,19 @@ function genPagePlan() {
   showOut('s3out1', L.join('\n'));
 }
 
-function changeTargetPage(delta) {
-  var el = document.getElementById('p3_target_page');
-  var cur = parseInt(el.value) || 1;
-  var next = Math.max(1, cur + delta);
-  el.value = next;
-  autoSave();
-}
-
 // STEP3: コマ割りシナリオ
 function genScenario() {
   var art = getArtStyle();
   var voice = v('p2_voice') || gv('p2_voice') || '';
-  var targetPage = parseInt(v('p3_target_page')) || 1;
+  var chapter = parseInt(v('p3_chapter') || gv('p3_chapter')) || 1;
+  var koma = parseInt(v('p3_koma') || gv('p3_koma')) || 3;
+  var pageFrom = parseInt(v('p3_page_from') || gv('p3_page_from')) || 1;
+  var pageTo = parseInt(v('p3_page_to') || gv('p3_page_to')) || 20;
   var L = [];
-  L.push('# ページ' + targetPage + 'のコマ割りシナリオ作成をお願いします');
+  L.push('# 第' + chapter + '章のコマ割りシナリオ作成をお願いします');
   L.push('');
-  L.push('ページ構成表の「ページ' + targetPage + '」の内容で、コマ割りシナリオを1ページ分だけ出力してください。');
+  L.push('ページ構成表をもとに、第' + chapter + '章（P' + pageFrom + '〜P' + pageTo + '）のコマ割りシナリオを作成してください。');
+  L.push('1ページあたりのコマ数：' + koma + 'コマ（クライマックスは1〜2コマ・テンポシーンは4〜5コマも可）');
   L.push('');
   L.push('⚠️ 重要ルール：セリフ・モノローグ・ナレーションのすべてに句点（。）を使わないこと。漫画のセリフに句点は不要です。出力後に句点がないか必ず確認してください。');
   L.push('');
@@ -1351,15 +1359,9 @@ function genImagePrompt() {
   else { L.push('※ STEP3で生成したコマ割りシナリオを上の欄に貼り付けてください。'); L.push(''); }
   L.push('【注意】');
   L.push('・同じキャラクターは全コマで顔・髪・服を統一する');
-  if(isBlank) {
-    L.push('・吹き出しは空欄のまま。セリフは後からCanvaで追加する');
-    L.push('・Canvaで文字を入れる際のフォント推奨：アンチックセザンヌ / 源英アンチック / Noto Sans JP');
-    L.push('・文字サイズ目安（Canva 1000×1414px）：通常16〜18pt・感情強調22〜26pt・クライマックス28〜32pt');
-  } else {
-    L.push('・日本語のセリフはできるだけ正確に描く');
-    L.push('・吹き出しに収まらないセリフは短く言い換えてよい');
-    L.push('・日本語文字が崩れる場合は吹き出しを空欄にして、後からCanvaで文字を入れる');
-  }
+  L.push('・日本語のセリフはできるだけ正確に描く');
+  L.push('・吹き出しに収まらないセリフは短く言い換えてよい');
+  L.push('・日本語文字が崩れる場合は吹き出しを空欄にして、後からCanvaで文字を入れる');
   L.push('※キャラの四面図を参考画像として添付してください（顔ブレ防止）');
   showOut('s4out2', L.join('\n'));
 }
