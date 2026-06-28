@@ -523,11 +523,7 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオを章ごとに生成する</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">①で得たページ構成表を貼り付けて章番号を指定するだけで、その章まるごとのコマ割りシナリオを生成します。</p>
-    <div class="fg">
-      <label>①で得たページ構成表を貼り付ける</label>
-      <textarea id="p3_page_plan" placeholder="①のプロンプトをAIに貼り付けて得たページ構成表をここに貼ってください。" style="min-height:120px;" oninput="autoSave()"></textarea>
-    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">STEP1の設計から章まるごとのコマ割り＋セリフを一発生成します。章番号とコマ数を指定するだけでOKです。</p>
     <div class="grid2">
       <div class="fg">
         <label>章番号</label>
@@ -536,6 +532,10 @@ textarea{resize:vertical;min-height:72px;}
       <div class="fg">
         <label>1ページあたりのコマ数</label>
         <input type="number" id="p3_koma" min="1" max="6" value="3" placeholder="例：3" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>目標ページ数<span class="opt-badge">任意</span></label>
+        <input type="number" id="p3_page_to" min="1" value="" placeholder="例：20" oninput="autoSave()">
       </div>
     </div>
     <button class="gen-btn" onclick="genScenario()">🎬 この章のコマ割りシナリオプロンプトを生成</button>
@@ -1125,31 +1125,55 @@ function genPagePlan() {
   showOut('s3out1', L.join('\n'));
 }
 
-// STEP3: コマ割りシナリオ（章単位）
+// STEP3: コマ割りシナリオ（章単位・STEP1設計から直接生成）
 function genScenario() {
   var chapter = parseInt(v('p3_chapter') || gv('p3_chapter')) || 1;
-  var koma = parseInt(v('p3_koma') || gv('p3_koma')) || 3;
-  var pagePlan = v('p3_page_plan') || gv('p3_page_plan') || '';
-  var art = getArtStyle();
-  var voice = v('p2_voice') || gv('p2_voice') || '';
-  var ct = getCharaText();
-  var bt = getBgText();
+  var koma    = parseInt(v('p3_koma')    || gv('p3_koma'))    || 3;
+  var pageTo  = (v('p3_page_to') || gv('p3_page_to') || '').trim();
+  var art     = getArtStyle();
+  var voice   = v('p2_voice') || gv('p2_voice') || '';
+
+  // STEP1の設計
+  var theme     = v('p1_theme')   || gv('p1_theme')   || '';
+  var persona   = v('p1_persona') || gv('p1_persona') || '';
+  var s1        = v('p1_s1')      || gv('p1_s1')      || '';
+  var s2        = v('p1_s2')      || gv('p1_s2')      || '';
+  var s3        = v('p1_s3')      || gv('p1_s3')      || '';
+  var honne     = v('p1_honne')   || gv('p1_honne')   || '';
+  var wall      = v('p1_wall')    || gv('p1_wall')     || '';
+  var key       = v('p1_key')     || gv('p1_key')      || '';
+  var s4        = v('p1_s4')      || gv('p1_s4')       || '';
+  var s5        = v('p1_s5')      || gv('p1_s5')       || '';
+  var structure = getSelected('g-structure')[0] || '';
+
+  var pageLine = pageTo
+    ? 'この章は約' + pageTo + 'ページに収めてください（多少前後OK）。'
+    : 'ページ数はAIが内容に合わせて決めてください。';
 
   var L = [];
   L.push('# 第' + chapter + '章のコマ割りシナリオ作成をお願いします');
   L.push('');
-  L.push('以下のページ構成表をもとに、第' + chapter + '章のコマ割りシナリオを最初から最後まで、ページ単位でまとめて作成してください。');
+  L.push('以下のストーリー設計をもとに、第' + chapter + '章のコマ割りシナリオを最初から最後まで、ページ単位でまとめて作成してください。セリフ・モノローグ・ナレーション・オノマトペも必ず入れてください。');
   L.push('1ページあたりのコマ数：' + koma + 'コマ（クライマックスは1〜2コマ・テンポシーンは4〜5コマも可）');
+  L.push(pageLine);
   L.push('');
-  if(pagePlan) {
-    L.push('【ページ構成表】');
-    L.push(pagePlan);
-    L.push('');
-  }
-  if(ct) { L.push(ct); L.push(''); }
-  if(bt) { L.push(bt); L.push(''); }
-  if(art) { L.push('【画風・スタイル】'); L.push(art); L.push(''); }
-  if(voice) { L.push('【口調】'); L.push(voice); L.push(''); }
+  L.push('【ストーリー設計】');
+  if(theme)     L.push('題材・テーマ：' + theme);
+  if(structure) L.push('構成の型：' + structure);
+  if(persona)   L.push('ペルソナ：' + persona);
+  if(s1)        L.push('悩み（出発点）：' + s1);
+  if(s2)        L.push('事件（転換点）：' + s2);
+  if(s3)        L.push('転機：' + s3);
+  if(honne)     L.push('本音（心の声）：' + honne);
+  if(wall)      L.push('壁（挫折）：' + wall);
+  if(key)       L.push('カギ（気づき）：' + key);
+  if(s4)        L.push('成長：' + s4);
+  if(s5)        L.push('結末：' + s5);
+  L.push('');
+  var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
+  var bt = getBgText();    if(bt) { L.push(bt); L.push(''); }
+  if(art)   { L.push('【画風・スタイル】');  L.push(art);   L.push(''); }
+  if(voice) { L.push('【口調】');            L.push(voice); L.push(''); }
   L.push('【セリフのルール】');
   L.push('・句点（。）は絶対に使わない');
   L.push('・1コマのセリフは30文字以内');
@@ -1161,9 +1185,9 @@ function genScenario() {
   L.push('・構図を毎ページ変える（正面・俯瞰・煽り・クローズアップ・引きを混ぜる）');
   L.push('・最後のコマは「めくり」＝全部見せず次が読みたくなる所で止める');
   L.push('');
-  L.push('【出力形式（章の最初から最後まで続けること。最後に「第' + chapter + '章 完」）】');
+  L.push('【出力形式（章の最初から最後まで。最後に「第' + chapter + '章 完」）】');
   L.push('━━━━━━━━━━━━━━━━━━');
-  L.push('【ページX】　コマ数：3　レイアウト：（横割り／縦割り混在など）');
+  L.push('【ページX】　コマ数：3　レイアウト：横割り');
   L.push('　PX-コマ1（大・高さ50%・横100%）');
   L.push('　　キャラクター：（登場するキャラ名）');
   L.push('　　構図／演出：（場面・動作・表情・アングル）');
