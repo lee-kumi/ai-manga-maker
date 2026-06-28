@@ -501,11 +501,11 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">📊</span> ① ページ構成表を作る</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">全ページの役割・内容・感情の流れを一覧にします。</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">全体の流れを確認したいときに使う任意ステップです。②は①なしでも動きます。</p>
     <div class="info-box" style="margin-bottom:14px;">
-      <strong>なぜ作るか？</strong><br>
-      全体像を把握して制作の地図にするためです。出力をGoogleドキュメントに保存しておくと、どのページで何を伝えるかが一目でわかり、②のシナリオ生成・画像生成の指針になります。<br><br>
-      <strong>使い方：</strong>このプロンプトを <strong>Gemini / ChatGPT / Claude</strong> に貼り付けて出力をもらう → Googleドキュメントに保存 → ②へ進む
+      <strong>流れ：</strong><br>
+      ① プロンプトを生成 → コピーして <strong>Gemini / ChatGPT / Claude</strong> に貼り付ける → AIが各ページの役割・内容・感情の概要を返してくれる → 必要ならGoogleドキュメントに保存<br><br>
+      ⚠️ ここで出るのは<strong>概要のみ（セリフなし）</strong>です。セリフ付きのコマ割りは②で生成します。
     </div>
     <div class="fg">
       <label>1ページあたりのコマ数<span class="opt-badge">任意</span></label>
