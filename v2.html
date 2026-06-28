@@ -364,6 +364,11 @@ textarea{resize:vertical;min-height:72px;}
     <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">章ごとのタイトル・内容を登録しておくと、②のコマ割り生成プロンプトに自動で反映されます。</p>
     <div id="chapterList"></div>
     <button class="add-btn" onclick="addChapter()">＋ 章を追加</button>
+    <div style="margin-top:16px;">
+      <button class="btn" onclick="genChapterPlan()">📋 章立て提案プロンプトを生成</button>
+      <p style="font-size:12px;color:var(--muted);margin-top:6px;">STEP1のストーリー設計をもとに、AIに章立てを提案してもらうプロンプトを生成します。ChatGPTなどに貼り付けて章案をもらってください。</p>
+    </div>
+    <div id="chapterPlanOut" class="out-box" style="display:none;margin-top:10px;"></div>
   </div>
 
   <!-- タイトル案生成 -->
@@ -881,6 +886,44 @@ function renderChapters() {
       '<div class="fg"><label>目標ページ数<span class="opt-badge">任意</span></label><input type="number" value="' + esc(c.pages) + '" placeholder="例：20" onchange="updateChapter(' + i + ',\'pages\',this.value)" style="width:80px;"></div>';
     list.appendChild(div);
   });
+}
+function genChapterPlan() {
+  var theme     = v('p1_theme')   || gv('p1_theme')   || '';
+  var persona   = v('p1_persona') || gv('p1_persona') || '';
+  var s1        = v('p1_s1')      || gv('p1_s1')      || '';
+  var s2        = v('p1_s2')      || gv('p1_s2')      || '';
+  var s3        = v('p1_s3')      || gv('p1_s3')      || '';
+  var honne     = v('p1_honne')   || gv('p1_honne')   || '';
+  var wall      = v('p1_wall')    || gv('p1_wall')     || '';
+  var key       = v('p1_key')     || gv('p1_key')      || '';
+  var s4        = v('p1_s4')      || gv('p1_s4')       || '';
+  var s5        = v('p1_s5')      || gv('p1_s5')       || '';
+  var structure = getSelected('g-structure')[0] || '';
+  var L = [];
+  L.push('# 漫画の章立てを提案してください');
+  L.push('');
+  L.push('以下のストーリー設計をもとに、この漫画の章立て（全体の章構成）を提案してください。');
+  L.push('各章について「章タイトル」「この章の内容・役割（2〜3文）」「目安ページ数」を出力してください。');
+  L.push('');
+  L.push('【ストーリー設計】');
+  if(theme)     L.push('題材・テーマ：' + theme);
+  if(structure) L.push('構成の型：' + structure);
+  if(persona)   L.push('ペルソナ（主人公）：' + persona);
+  if(s1)        L.push('悩み（出発点）：' + s1);
+  if(s2)        L.push('事件（転換点）：' + s2);
+  if(s3)        L.push('転機：' + s3);
+  if(honne)     L.push('本音（心の声）：' + honne);
+  if(wall)      L.push('壁（挫折）：' + wall);
+  if(key)       L.push('カギ（気づき）：' + key);
+  if(s4)        L.push('成長：' + s4);
+  if(s5)        L.push('結末：' + s5);
+  L.push('');
+  L.push('【出力形式】');
+  L.push('第1章　タイトル：〇〇');
+  L.push('　内容・役割：〇〇〇〇〇〇〇〇');
+  L.push('　目安ページ数：約〇〇ページ');
+  L.push('（以降同様）');
+  showOut('chapterPlanOut', L.join('\n'));
 }
 function getChapterText(chNum) {
   var c = chapters[chNum - 1];
