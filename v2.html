@@ -488,6 +488,15 @@ textarea{resize:vertical;min-height:72px;}
   </div>
 
   <div class="card">
+    <div class="card-title"><span class="icon">📄</span> 作業用ドキュメント</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">プロンプトの出力結果を貼り付けておくドキュメントのURLを登録。コピー後にワンクリックで開けます。</p>
+    <div class="fg">
+      <label>ドキュメントURL<span class="opt-badge">任意</span></label>
+      <input type="url" id="doc_url" placeholder="例：https://docs.google.com/document/d/..." oninput="sv('doc_url',this.value);showSave()">
+    </div>
+  </div>
+
+  <div class="card">
     <div class="card-title"><span class="icon">📊</span> ① ページ構成表を作る</div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">全体の流れを確認したいときに使う任意ステップです。②は①なしでも動きます。</p>
     <div class="info-box" style="margin-bottom:14px;">
@@ -504,6 +513,7 @@ textarea{resize:vertical;min-height:72px;}
     <div id="s3out1" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s3text1',this)">コピー</button>
+        <button class="copy-btn" onclick="openDoc()" style="margin-left:6px;">📄 開く</button>
         <pre id="s3text1"></pre>
       </div>
       <div class="info-box">💡 AIの出力をGoogleドキュメントに貼り付けて保存しておくと、制作全体の目次になります。確認できたら②へ進んでください。</div>
@@ -531,6 +541,7 @@ textarea{resize:vertical;min-height:72px;}
     <div id="s3out2" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s3text2',this)">コピー</button>
+        <button class="copy-btn" onclick="openDoc()" style="margin-left:6px;">📄 開く</button>
         <pre id="s3text2"></pre>
       </div>
       <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>章ごとに繰り返してください（章番号を2→3と変えるだけ）。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。</div>
@@ -686,7 +697,7 @@ function autoSave() {
   var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
              'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages',
-             'p2_voice','p3_koma','p4_scenario','p4_fix_detail'];
+             'p2_voice','p3_koma','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
   showSave();
 }
@@ -695,13 +706,18 @@ function loadData() {
   var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
              'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages',
-             'p2_voice','p3_koma','p4_scenario','p4_fix_detail'];
+             'p2_voice','p3_koma','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) {
     var el = document.getElementById(id);
     if(el) { var val = gv(id); if(val) el.value = val; }
   });
 }
 
+function openDoc() {
+  var url = gv('doc_url') || '';
+  if (!url) { alert('STEP3の「作業用ドキュメント」にURLを登録してください。'); return; }
+  window.open(url, '_blank');
+}
 function showSave() {
   var ind = document.getElementById('saveInd');
   ind.classList.add('show');
