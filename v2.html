@@ -446,10 +446,16 @@ textarea{resize:vertical;min-height:72px;}
   <!-- キャラシート -->
   <div class="card">
     <div class="card-title"><span class="icon">🧑‍🎨</span> キャラクターシート生成プロンプト</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">上のキャラクター設定をもとに、キャラシートを画像AIに作らせるためのプロンプトです。</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">上のキャラクター設定をもとに、全身図・表情集・小物・カラーパレットを含む本格的なキャラクターシートプロンプトを生成します。</p>
     <div class="info-box" style="margin-bottom:14px;">
-      生成した画像を画像AIに<strong>参照画像として添付</strong>すると、コマごとの顔ブレを防げます。<br>
-      STEP3・4に進む前にここで作っておきましょう。
+      📌 <strong>生成の流れ：</strong><br>
+      プロンプトをコピー → 画像AI（ChatGPT / Gemini / Nano Banana）に貼り付けて送信 → キャラシート画像が完成<br>
+      完成した画像をSTEP4の画像生成時に<strong>参照画像として添付</strong>すると、コマごとの顔ブレを防げます。<br>
+      💡 外見をもっと細かく指定したいときは <a href="charsheet.html" target="_blank" style="color:var(--primary);font-weight:700;">🎭 キャラシート専用ツール</a> をお使いください。
+    </div>
+    <div id="charaSelectorArea" style="margin-bottom:14px;display:none;">
+      <label>対象キャラクター</label>
+      <select id="charaSheetSel" style="width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-size:14px;outline:none;background:#FAFAFA;font-family:inherit;"></select>
     </div>
     <button class="gen-btn" onclick="genCharaSheet()">🧑‍🎨 キャラシートプロンプトを生成</button>
     <div id="s4out1" style="display:none;">
@@ -457,6 +463,7 @@ textarea{resize:vertical;min-height:72px;}
         <button class="copy-btn" onclick="copyEl('s4text1',this)">コピー</button>
         <pre id="s4text1"></pre>
       </div>
+      <div class="info-box" style="margin-top:10px;">✅ 生成できたら画像AIに貼り付けてキャラシート画像を作成 → その画像をSTEP4に添付。</div>
     </div>
   </div>
 
@@ -956,6 +963,21 @@ function renderChara() {
       '<div class="fg"><label>その他の外見・性格メモ</label><input type="text" value="' + esc(c.other) + '" placeholder="例：目が大きく笑顔が印象的、お調子者" onchange="updateChara(' + i + ',\'other\',this.value)"></div>';
     list.appendChild(div);
   });
+  refreshCharaSheetSel();
+}
+
+function refreshCharaSheetSel() {
+  var sel = document.getElementById('charaSheetSel');
+  var wrap = document.getElementById('charaSelectorArea');
+  if (!sel) return;
+  sel.innerHTML = '';
+  charas.forEach(function(c, i) {
+    var opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = 'キャラ' + (i + 1) + (c.name ? '：' + c.name : '（名前未入力）');
+    sel.appendChild(opt);
+  });
+  wrap.style.display = charas.length > 1 ? 'block' : 'none';
 }
 
 // ===== BACKGROUNDS =====
@@ -1279,44 +1301,78 @@ function genScenario() {
   showOut('s3out2', L.join('\n'));
 }
 
-// STEP4: キャラシート
+// STEP4: キャラシート（フルテンプレート）
 function genCharaSheet() {
+  if (!charas.length) {
+    alert('上の「登場人物のビジュアル設定」でキャラクターを追加してください。');
+    return;
+  }
+  var sel = document.getElementById('charaSheetSel');
+  var idx = charas.length > 1 && sel ? parseInt(sel.value) : 0;
+  var c = charas[idx] || charas[0];
   var art = getArtStyle();
-  var ct = getCharaText();
   var L = [];
-  L.push('# キャラクターシートを作成してください');
+
+  L.push('以下のキャラクター情報をもとに、漫画・イラスト制作で使用できる本格的なキャラクターシート（Character Design Sheet）を1枚の画像で作成してください。');
   L.push('');
-  L.push('以下のキャラクター情報をもとに、漫画制作用の本格的なキャラクターシート（character design sheet）を1枚の画像で生成してください。');
-  L.push('アニメ・漫画業界でキャラクターデザイン時に使われる公式キャラクターシートのフォーマットで作成してください。');
+  L.push('【キャラクター情報】');
+  L.push('名前：' + (c.name || '（未設定）'));
+  if(c.age)     L.push('年齢・性別：' + c.age);
   L.push('');
-  if(art) { L.push('【画風】'); L.push(art); L.push(''); }
-  if(ct) { L.push(ct); L.push(''); }
-  else { L.push('※ STEP2でキャラクターを登録すると、ここに自動で反映されます。'); L.push(''); }
-  L.push('【1枚の画像に含める内容】');
+  if(c.hair || c.clothes || c.other) {
+    L.push('【外見・スタイル】');
+    if(c.hair)    L.push('髪型・髪色：' + c.hair);
+    if(c.clothes) L.push('服装・特徴：' + c.clothes);
+    if(c.other)   L.push('その他（外見・性格メモ）：' + c.other);
+    L.push('');
+  }
+  L.push('【キャラクターシート構成】');
   L.push('');
-  L.push('① 全身四面図（左から：正面・横・後ろ）');
-  L.push('　・立ち姿・全身・自然なポーズ');
-  L.push('　・身長の目安となるスケールバー（0cm〜身長cm）を左端に入れる');
-  L.push('　・背景は白');
+  L.push('① 全身正面（Front View）');
   L.push('');
-  L.push('② 顔アップ（右上エリアに配置）');
-  L.push('　・正面・バストアップ');
-  L.push('　・髪・目・顔立ちの特徴がわかるよう大きめに');
+  L.push('② 全身側面（Side View）');
   L.push('');
-  L.push('③ 表情バリエーション（下段に横並び）');
-  L.push('　笑顔 ／ 驚き ／ 不安 ／ 絶望・悲しみ ／ 決意 ／ 安堵');
-  L.push('　・各表情にラベルを付ける');
-  L.push('　・バストアップ・同じ画風で統一');
+  L.push('③ 全身背面（Back View）');
   L.push('');
-  L.push('④ 服装・小物詳細（右下エリアに配置）');
-  L.push('　・上着（前）・上着（後ろ）・ボトムス・帯や小物・足元');
-  L.push('　・各パーツを単品で描いてラベルを付ける');
+  L.push('④ 顔アップ（Face Close-up）');
   L.push('');
-  L.push('【注意事項】');
-  L.push('・全パーツを同一の画風・線の太さ・色調で統一する');
-  L.push('・文字ラベルは日本語で記載（正面・横・後ろ・笑顔・驚き…等）');
-  L.push('・背景は白、余白は最小限に');
-  L.push('・この画像をコマ割り画像生成の参照画像として添付することで、顔ブレ・画風ズレを防ぐ');
+  L.push('⑤ 表情集（Expressions）');
+  L.push('・通常');
+  L.push('・笑顔');
+  L.push('・怒り');
+  L.push('・悲しみ');
+  L.push('・驚き');
+  L.push('・困り顔');
+  L.push('');
+  L.push('⑥ 小物設定（Props）');
+  L.push((c.name || 'キャラクター') + 'がよく使用する持ち物を描く');
+  L.push('');
+  L.push('⑦ カラーパレット（Color Palette）');
+  L.push('・髪色');
+  L.push('・肌色');
+  L.push('・服装');
+  L.push('・アクセントカラー');
+  L.push('');
+  L.push('【レイアウト】');
+  L.push('・白背景');
+  L.push('・キャラクターデザイン資料集形式');
+  L.push('・見やすく整理された構成');
+  L.push('・全身が切れないように配置');
+  L.push('・高解像度');
+  L.push('');
+  L.push('【ラベル】');
+  L.push('Character Design Sheet');
+  L.push('Front View');
+  L.push('Side View');
+  L.push('Back View');
+  L.push('Face Close-up');
+  L.push('Expressions');
+  L.push('Props');
+  L.push('Color Palette');
+  L.push('');
+  L.push('【画風】');
+  L.push(art || 'キャラクターの特徴が最も伝わる自然な画風で描写する');
+
   showOut('s4out1', L.join('\n'));
 }
 
