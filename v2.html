@@ -471,40 +471,17 @@ textarea{resize:vertical;min-height:72px;}
   <div class="card">
     <div class="card-title"><span class="icon">✂️</span> 背景なし素材画像プロンプト</div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">背景なし（白背景）でキャラクターだけを描いた素材画像を作るプロンプトです。Canvaなどで背景と合成したり、コマごとに自由に配置したいときに使います。</p>
-    <div class="info-box" style="margin-bottom:14px;">
-      💡 <strong>使い方：</strong>プロンプトをコピー → 画像AIで生成 → 背景除去ツール（remove.bg / Canva等）で透過PNGに → コマに自由に配置<br>
-      🖼️ コマの構図に合わせてポーズを変えながら複数枚作っておくと、コマ割り制作がスムーズになります。
-    </div>
     <div id="bglessSelectorArea" style="margin-bottom:14px;display:none;">
       <label>対象キャラクター</label>
       <select id="bglessCharaSel" style="width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-size:14px;outline:none;background:#FAFAFA;font-family:inherit;"></select>
     </div>
-    <span class="tog-label">ポーズ・アングル（複数選択可・未選択なら正面立ちで生成）</span>
-    <div class="tog-group" id="g-bgnone-pose">
-      <button class="tog" onclick="multi(this)">立ち（正面）</button>
-      <button class="tog" onclick="multi(this)">立ち（斜め）</button>
-      <button class="tog" onclick="multi(this)">立ち（横向き）</button>
-      <button class="tog" onclick="multi(this)">座り</button>
-      <button class="tog" onclick="multi(this)">歩き</button>
-      <button class="tog" onclick="multi(this)">走り</button>
-      <button class="tog" onclick="multi(this)">手を振る</button>
-      <button class="tog" onclick="multi(this)">考えている</button>
-      <button class="tog" onclick="multi(this)">驚いている</button>
-      <button class="tog" onclick="multi(this)">泣いている</button>
-    </div>
-    <span class="tog-label">ショットサイズ（1つ選択）</span>
-    <div class="tog-group" id="g-bgnone-shot">
-      <button class="tog" onclick="pick(this,'g-bgnone-shot')">全身</button>
-      <button class="tog" onclick="pick(this,'g-bgnone-shot')">バストアップ</button>
-      <button class="tog" onclick="pick(this,'g-bgnone-shot')">全身＆バストアップ両方</button>
-    </div>
-    <button class="gen-btn" onclick="genBglessPrompt()" style="margin-top:14px;">✂️ 背景なし素材画像プロンプトを生成</button>
+    <button class="gen-btn" onclick="genBglessPrompt()">✂️ 背景なし素材画像プロンプトを生成</button>
     <div id="bglessOut" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('bglessText',this)">コピー</button>
         <pre id="bglessText"></pre>
       </div>
-      <div class="info-box" style="margin-top:10px;">✅ 画像AIに貼り付けて生成 → 背景除去ツールで透過PNG化 → Canvaやコマ割りで自由に使えます。<br>⚠️ 白背景で生成されます。透過にしたい場合は <strong>remove.bg / Canvaの背景除去</strong> で処理してください。</div>
+      <div class="info-box" style="margin-top:10px;">✅ 画像AIに貼り付けて生成。透過にしたい場合は <strong>remove.bg / Canvaの背景除去</strong> で処理してください。</div>
     </div>
   </div>
 
@@ -1045,9 +1022,6 @@ function genBglessPrompt() {
   var idx = charas.length > 1 && sel ? parseInt(sel.value) : 0;
   var c = charas[idx] || charas[0];
   var art = getArtStyle();
-  var poses = getSelected('g-bgnone-pose');
-  var shots = getSelected('g-bgnone-shot');
-  var shot = shots.length ? shots[0] : '全身';
   var L = [];
 
   L.push('以下のキャラクターを「背景なし・白背景」の素材画像として描いてください。');
@@ -1065,21 +1039,7 @@ function genBglessPrompt() {
   L.push('【描写ルール（必ず守ること）】');
   L.push('・背景：真っ白（#FFFFFF）のみ。背景要素・影・グラデーション・床・地面を一切描かない');
   L.push('・キャラクターの輪郭をはっきりと描く');
-  L.push('・ショットサイズ：' + shot);
-  L.push('・キャラクター全体が画像内に収まるように配置する');
-  L.push('');
-  if(poses.length > 0) {
-    L.push('【ポーズバリエーション（1枚に横並びで描く）】');
-    poses.forEach(function(p) { L.push('・' + p); });
-    L.push('');
-    L.push('※ 各ポーズの下にラベル（日本語）を付けること');
-  } else {
-    L.push('【ポーズ】');
-    L.push('・自然な立ちポーズ（正面）');
-    L.push('');
-  }
-  L.push('【注意事項】');
-  L.push('・すべてのポーズで同じ顔・同じ服装・同じ画風を維持すること');
+  L.push('・全身が画像内に収まるように配置する');
   L.push('・背景に色・影・テクスチャを一切入れないこと');
   L.push('・高解像度で出力すること');
 
