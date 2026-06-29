@@ -662,8 +662,12 @@ function setProject(name) {
   localStorage.setItem('v2_curProj', name);
   renderProjBar();
   loadData();
+  loadCharas();
   renderChara();
+  loadBgs();
   renderBg();
+  loadChapters();
+  renderChapters();
   restoreToggles();
 }
 function addProject() {
