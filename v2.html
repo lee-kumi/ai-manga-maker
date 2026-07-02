@@ -235,6 +235,16 @@ textarea{resize:vertical;min-height:72px;}
     </div>
   </div>
 
+  <!-- 作業用ドキュメント -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📄</span> 作業用ドキュメント</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">この作品専用のGoogleドキュメントを1つ作り、URLを登録しておきましょう。<strong>STEP1〜4すべての出力をここに貼り付けて保存</strong>していくと、制作全体の記録＝設計図になります。各出力ボックスの<strong>「📄 ドキュメントへ」ボタン</strong>を押すと、STEP名・日付の見出し付きでコピーされ、ドキュメントが自動で開きます。あとは貼り付けるだけです。</p>
+    <div class="fg">
+      <label>ドキュメントURL<span class="opt-badge">任意</span></label>
+      <input type="url" id="doc_url" placeholder="例：https://docs.google.com/document/d/..." oninput="sv('doc_url',this.value);showSave()">
+    </div>
+  </div>
+
   <!-- 企画概要 -->
   <div class="card">
     <div class="card-title"><span class="icon">🎯</span> 企画概要</div>
@@ -342,6 +352,7 @@ textarea{resize:vertical;min-height:72px;}
     <div id="chapterPlanOut" style="display:none;margin-top:10px;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('chapterPlanText',this)">コピー</button>
+        <button class="copy-btn" onclick="copyDoc('chapterPlanText','STEP1｜章立て提案プロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
         <pre id="chapterPlanText"></pre>
       </div>
     </div>
@@ -352,6 +363,7 @@ textarea{resize:vertical;min-height:72px;}
   <div id="s1out" style="display:none;">
     <div class="prompt-box">
       <button class="copy-btn" onclick="copyEl('s1text',this)">コピー</button>
+      <button class="copy-btn" onclick="copyDoc('s1text','STEP1｜タイトル案プロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
       <pre id="s1text"></pre>
     </div>
     <div class="info-box">💡 このプロンプトをGemini / Claude / ChatGPTに貼り付けてください。気に入ったタイトルを上の「作品タイトル」欄にコピーしてください。</div>
@@ -462,6 +474,7 @@ textarea{resize:vertical;min-height:72px;}
     <div id="s4out1" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s4text1',this)">コピー</button>
+        <button class="copy-btn" onclick="copyDoc('s4text1','STEP2｜キャラシート生成プロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
         <pre id="s4text1"></pre>
       </div>
       <div class="info-box" style="margin-top:10px;">✅ 生成できたら画像AIに貼り付けてキャラシート画像を作成 → その画像をSTEP4に添付。</div>
@@ -514,15 +527,6 @@ textarea{resize:vertical;min-height:72px;}
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">📄</span> 作業用ドキュメント</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">プロンプトの出力結果を貼り付けておくドキュメントのURLを登録。コピー後にワンクリックで開けます。</p>
-    <div class="fg">
-      <label>ドキュメントURL<span class="opt-badge">任意</span></label>
-      <input type="url" id="doc_url" placeholder="例：https://docs.google.com/document/d/..." oninput="sv('doc_url',this.value);showSave()">
-    </div>
-  </div>
-
-  <div class="card">
     <div class="card-title"><span class="icon">📊</span> ① ページ構成表を作る</div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">ストーリーの全体像を把握するためのステップです。先に構成表を作ることで、②のシナリオ生成の精度が上がります。</p>
     <div class="info-box" style="margin-bottom:14px;">
@@ -539,7 +543,7 @@ textarea{resize:vertical;min-height:72px;}
     <div id="s3out1" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s3text1',this)">コピー</button>
-        <button class="copy-btn" onclick="openDoc()" style="right:80px;">📄 開く</button>
+        <button class="copy-btn" onclick="copyDoc('s3text1','STEP3｜ページ構成表プロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
         <pre id="s3text1"></pre>
       </div>
       <div class="info-box">💡 AIの出力をGoogleドキュメントに貼り付けて保存しておくと、制作全体の目次になります。確認できたら②へ進んでください。</div>
@@ -567,7 +571,7 @@ textarea{resize:vertical;min-height:72px;}
     <div id="s3out2" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s3text2',this)">コピー</button>
-        <button class="copy-btn" onclick="openDoc()" style="right:80px;">📄 開く</button>
+        <button class="copy-btn" onclick="copyDoc('s3text2','STEP3｜コマ割りシナリオプロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
         <pre id="s3text2"></pre>
       </div>
       <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>章ごとに繰り返してください（章番号を2→3と変えるだけ）。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。</div>
@@ -599,6 +603,7 @@ textarea{resize:vertical;min-height:72px;}
     <div id="s4out2" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s4text2',this)">コピー</button>
+        <button class="copy-btn" onclick="copyDoc('s4text2','STEP4｜画像生成プロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
         <pre id="s4text2"></pre>
       </div>
     </div>
@@ -633,6 +638,7 @@ textarea{resize:vertical;min-height:72px;}
     <div id="s4out3" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s4text3',this)">コピー</button>
+        <button class="copy-btn" onclick="copyDoc('s4text3','STEP4｜修正プロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
         <pre id="s4text3"></pre>
       </div>
     </div>
@@ -743,11 +749,6 @@ function loadData() {
   });
 }
 
-function openDoc() {
-  var url = gv('doc_url') || '';
-  if (!url) { alert('STEP3の「作業用ドキュメント」にURLを登録してください。'); return; }
-  window.open(url, '_blank');
-}
 function showSave() {
   var ind = document.getElementById('saveInd');
   ind.classList.add('show');
@@ -1088,6 +1089,26 @@ function copyEl(id, btn) {
   navigator.clipboard.writeText(text).then(function() {
     btn.classList.add('ok'); btn.textContent = '✅ コピー完了';
     setTimeout(function() { btn.classList.remove('ok'); btn.textContent = 'コピー'; }, 2000);
+  });
+}
+function copyDoc(id, label, btn) {
+  var text = document.getElementById(id).textContent;
+  var d = new Date();
+  var dateStr = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+  var block = '━━━━━━━━━━━━━━━━━━━━\n'
+            + '■ ' + label + '（' + dateStr + '）\n'
+            + '━━━━━━━━━━━━━━━━━━━━\n'
+            + text + '\n';
+  navigator.clipboard.writeText(block).then(function() {
+    btn.classList.add('ok'); btn.textContent = '✅ コピー完了';
+    setTimeout(function() { btn.classList.remove('ok'); btn.textContent = '📄 ドキュメントへ'; }, 2000);
+    var url = gv('doc_url') || '';
+    if (url) {
+      showToast('見出し付きでコピーしました。ドキュメントに貼り付けてください');
+      window.open(url, '_blank');
+    } else {
+      alert('見出し付きでコピーしました。\nSTEP1の「作業用ドキュメント」にURLを登録すると、コピーと同時にドキュメントが開くようになります。');
+    }
   });
 }
 function showOut(id, text) {
