@@ -560,7 +560,7 @@ textarea{resize:vertical;min-height:72px;}
       </div>
       <div class="fg">
         <label>1ページあたりのコマ数</label>
-        <input type="number" id="p3_koma" min="1" max="6" value="3" placeholder="例：3" oninput="autoSave()">
+        <input type="number" id="p3_koma2" min="1" max="6" value="3" placeholder="例：3" oninput="autoSave()">
       </div>
       <div class="fg">
         <label>目標ページ数<span class="opt-badge">任意</span></label>
@@ -733,7 +733,7 @@ function autoSave() {
   var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
              'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p3_koma','p4_scenario','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
   showSave();
 }
@@ -742,10 +742,10 @@ function loadData() {
   var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
              'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p3_koma','p4_scenario','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) {
     var el = document.getElementById(id);
-    if(el) { var val = gv(id); if(val) el.value = val; }
+    if(el) { var val = gv(id); el.value = val !== '' ? val : el.defaultValue; }
   });
 }
 
@@ -761,8 +761,12 @@ function resetProject() {
   var keys = Object.keys(localStorage).filter(function(k) { return k.startsWith('v2_' + curProj + '_'); });
   keys.forEach(function(k) { localStorage.removeItem(k); });
   loadData();
+  loadCharas();
   renderChara();
+  loadBgs();
   renderBg();
+  loadChapters();
+  renderChapters();
   restoreToggles();
   showToast('リセットしました');
 }
@@ -861,12 +865,18 @@ function saveToggles() {
   showSave();
 }
 function restoreToggles() {
-  ['g-style','g-line','g-tone','g-bg','g-fix'].forEach(function(g) {
+  ['g-style','g-line','g-tone','g-bg','g-fix','g-structure'].forEach(function(g) {
     var saved = JSON.parse(gv(g) || '[]');
     document.querySelectorAll('#' + g + ' .tog').forEach(function(b) {
       b.classList.toggle('on', saved.indexOf(b.textContent.trim()) > -1);
     });
   });
+  // 構成の型の説明文を復元
+  var sd = document.getElementById('structure-desc');
+  if (sd) {
+    var selStruct = getSelected('g-structure')[0] || '';
+    sd.textContent = selStruct ? (structureDescs[selStruct] || '') : '';
+  }
   // キャンバスサイズの選択状態を復元
   var savedSize = gv('p2_size') || '';
   var savedCustom = gv('p2_size_custom') || '';
@@ -879,7 +889,7 @@ function restoreToggles() {
         b.classList.toggle('on', isMatch || isCustom);
       }
     });
-    if(savedCustom) document.getElementById('size-custom').style.display = 'block';
+    if(savedCustom) { var scEl = document.getElementById('size-custom'); if(scEl) scEl.style.display = 'block'; }
   }
 }
 
@@ -1321,7 +1331,7 @@ function genPagePlan() {
 // STEP3: コマ割りシナリオ（章単位・STEP1設計から直接生成）
 function genScenario() {
   var chapter = parseInt(v('p3_chapter') || gv('p3_chapter')) || 1;
-  var koma    = parseInt(v('p3_koma')    || gv('p3_koma'))    || 3;
+  var koma    = parseInt(v('p3_koma2')   || gv('p3_koma2'))   || 3;
   var pageTo  = (v('p3_page_to') || gv('p3_page_to') || '').trim();
   var art     = getArtStyle();
   var voice   = v('p2_voice') || gv('p2_voice') || '';
