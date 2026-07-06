@@ -101,6 +101,8 @@ textarea{resize:vertical;min-height:72px;}
 .proj-btn.active{background:var(--primary);color:white;border-color:var(--primary);font-weight:700;}
 .proj-add{font-family:inherit;font-size:12px;padding:5px 10px;border-radius:20px;border:1.5px dashed var(--border);background:#fff;color:var(--muted);cursor:pointer;}
 .proj-add:hover{border-color:var(--primary);color:var(--primary);}
+.proj-edit{font-family:inherit;font-size:12px;padding:5px 9px;border-radius:20px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all 0.2s;margin-left:-4px;}
+.proj-edit:hover{border-color:var(--primary);background:var(--primary-light);}
 
 /* Flow cards */
 .flow-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0;}
@@ -166,7 +168,7 @@ textarea{resize:vertical;min-height:72px;}
   <div class="card hl">
     <div class="card-title"><span class="icon">📁</span> 作品を選ぶ</div>
     <div class="proj-bar" id="projBar"></div>
-    <div class="info-box" style="margin-bottom:10px;">💡 作品ごとに独立して保存されます。複数の漫画を同時進行できます。作品名は✏️<strong>ダブルクリックで変更</strong>できます。</div>
+    <div class="info-box" style="margin-bottom:10px;">💡 作品ごとに独立して保存されます。複数の漫画を同時進行できます。作品名は<strong>✏️マーク</strong>で変更できます。漫画のタイトルが決まったら作品名にしましょう。</div>
     <div class="warn-box" style="margin-bottom:10px;">⚠️ <strong>データはこのブラウザにのみ保存されます。</strong>別のブラウザ・別の端末・ブラウザのキャッシュ削除では消えます。定期的に「バックアップを保存」でファイルに書き出してください。</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button onclick="backupData()" style="font-family:inherit;font-size:12px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;">💾 バックアップを保存</button>
@@ -731,10 +733,18 @@ function renderProjBar() {
     var btn = document.createElement('button');
     btn.className = 'proj-btn' + (p === curProj ? ' active' : '');
     btn.textContent = p;
-    btn.title = 'ダブルクリックで名前変更';
+    btn.title = '✏️マークまたはダブルクリックで名前変更';
     btn.onclick = function() { setProject(p); };
     btn.ondblclick = function(e) { e.stopPropagation(); renameProject(p); };
     bar.appendChild(btn);
+    if (p === curProj) {
+      var edit = document.createElement('button');
+      edit.className = 'proj-edit';
+      edit.textContent = '✏️';
+      edit.title = '作品名を変更';
+      edit.onclick = function() { renameProject(p); };
+      bar.appendChild(edit);
+    }
   });
   var add = document.createElement('button');
   add.className = 'proj-add';
