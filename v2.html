@@ -940,6 +940,7 @@ function renderChapters() {
   });
 }
 function genChapterPlan() {
+  if (!confirmReqFields()) return;
   var theme     = v('p1_theme')   || gv('p1_theme')   || '';
   var persona   = v('p1_persona') || gv('p1_persona') || '';
   var s1        = v('p1_s1')      || gv('p1_s1')      || '';
@@ -1188,8 +1189,28 @@ function getBgText() {
   return L.join('\n');
 }
 
+// 必須項目の未入力チェック（未入力があれば確認ダイアログを出す）
+var REQ_FIELDS = [
+  ['p1_theme',   '題材・テーマ'],
+  ['p1_persona', 'ペルソナ（読者の原型）'],
+  ['p1_s1',      '悩み（出発点）'],
+  ['p1_honne',   '本音（心の声）'],
+  ['p1_wall',    '壁（挫折）'],
+  ['p1_key',     'カギ（気づき）'],
+  ['p1_s5',      '結末']
+];
+function confirmReqFields() {
+  var missing = [];
+  REQ_FIELDS.forEach(function(f) {
+    if (!(v(f[0]) || gv(f[0]))) missing.push('・' + f[1]);
+  });
+  if (!missing.length) return true;
+  return confirm('STEP1に未入力の必須項目があります：\n' + missing.join('\n') + '\n\nこのまま生成すると内容の薄いプロンプトになります。\nこのまま生成しますか？');
+}
+
 // STEP1: タイトル案生成
 function genStep1() {
+  if (!confirmReqFields()) return;
   var L = [];
   L.push('以下の漫画のストーリーをもとに、タイトル案とキャッチコピーを考えてください。');
   L.push('');
@@ -1300,6 +1321,7 @@ function copyKabeuchi() {
 
 // STEP3: ページ構成表
 function genPagePlan() {
+  if (!confirmReqFields()) return;
   var pages = v('p1_pages') || gv('p1_pages') || '20';
   var koma = v('p3_koma') || gv('p3_koma') || '3〜4コマ';
   var L = [];
@@ -1350,6 +1372,7 @@ function genPagePlan() {
 
 // STEP3: コマ割りシナリオ（章単位・STEP1設計から直接生成）
 function genScenario() {
+  if (!confirmReqFields()) return;
   var chapter = parseInt(v('p3_chapter') || gv('p3_chapter')) || 1;
   var koma    = parseInt(v('p3_koma2')   || gv('p3_koma2'))   || 3;
   var pageTo  = (v('p3_page_to') || gv('p3_page_to') || '').trim();
@@ -1570,6 +1593,10 @@ function genImagePrompt() {
 function genFixPrompt() {
   var fixes = getSelected('g-fix');
   var detail = v('p4_fix_detail') || gv('p4_fix_detail') || '';
+  if (!fixes.length && !detail) {
+    alert('修正したい項目をボタンで選ぶか、「その他・詳細」に修正内容を入力してください。');
+    return;
+  }
   var art = getArtStyle();
   var L = [];
   L.push('# 画像の修正をお願いします');
