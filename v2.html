@@ -211,9 +211,12 @@ textarea{resize:vertical;min-height:72px;}
   <div class="warn-box">⚠️ <strong>よくある失敗：</strong> STEP1を雑にして、いきなり画像生成から始めてしまう。テーマとキャラが固まっていないと画像がバラバラになります。必ずSTEP1から順番に進めましょう。</div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">🗑️</span> この作品をリセット</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;"><strong>今開いている作品だけ</strong>を最初の状態に戻します。他の作品には影響しません。</p>
-    <button class="gen-btn" style="background:#EF4444;margin-top:0;" onclick="resetProject()">🗑️ この作品をリセット</button>
+    <div class="card-title"><span class="icon">🗑️</span> この作品をリセット・削除</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;"><strong>リセット</strong>＝今開いている作品の中身を最初の状態に戻します（作品は残ります）。<br><strong>削除</strong>＝今開いている作品を一覧ごと取り除きます。<br>どちらも他の作品には影響しません。</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="gen-btn" style="background:#EF4444;margin-top:0;" onclick="resetProject()">🗑️ この作品をリセット</button>
+      <button class="gen-btn" style="background:#991B1B;margin-top:0;" onclick="deleteProject()">❌ この作品を削除</button>
+    </div>
   </div>
 
   <div class="nav-buttons">
@@ -678,10 +681,26 @@ function setProject(name) {
   restoreToggles();
 }
 function addProject() {
-  var n = '作品' + (projects.length + 1);
+  var i = projects.length + 1;
+  var n = '作品' + i;
+  while (projects.indexOf(n) >= 0) { i++; n = '作品' + i; }
   projects.push(n);
   saveProjects();
   setProject(n);
+}
+function deleteProject() {
+  if (projects.length <= 1) {
+    alert('最後の作品は削除できません。\n中身を空にしたい場合は「この作品をリセット」を使ってください。');
+    return;
+  }
+  if (!confirm('「' + curProj + '」を削除しますか？\nこの作品のデータはすべて消え、元に戻せません。\n（心配な場合は先に「バックアップを保存」してください）')) return;
+  var keys = Object.keys(localStorage).filter(function(k) { return k.indexOf('v2_' + curProj + '_') === 0; });
+  keys.forEach(function(k) { localStorage.removeItem(k); });
+  var idx = projects.indexOf(curProj);
+  projects.splice(idx, 1);
+  saveProjects();
+  setProject(projects[Math.min(idx, projects.length - 1)]);
+  showToast('削除しました');
 }
 function renameProject(oldName) {
   var newName = prompt('作品名を入力してください', oldName);
