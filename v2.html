@@ -706,6 +706,7 @@ function renameProject(oldName) {
   var newName = prompt('作品名を入力してください', oldName);
   if (!newName || newName.trim() === '' || newName === oldName) return;
   newName = newName.trim();
+  if (newName.indexOf('_') >= 0) { alert('作品名に半角アンダースコア（_）は使えません。\n全角の「＿」やハイフン（-）をお使いください。'); return; }
   if (projects.indexOf(newName) >= 0) { alert('その名前はすでに使われています'); return; }
   var idx = projects.indexOf(oldName);
   projects[idx] = newName;
