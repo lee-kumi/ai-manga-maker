@@ -750,8 +750,7 @@ function gv(id) { return localStorage.getItem(key(id)) || ''; }
 function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
 
 function autoSave() {
-  var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
-             'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
+  var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
              'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
@@ -759,8 +758,7 @@ function autoSave() {
 }
 
 function loadData() {
-  var ids = ['p1_theme','p1_target','p1_bg','p1_media','p1_cta',
-             'p1_q1','p1_q2','p1_q3','p1_q4','p1_concept',
+  var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
              'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) {
@@ -822,21 +820,6 @@ function goTo(n) {
 }
 
 // ===== TOGGLES =====
-function pickSize(btn, val) {
-  document.querySelectorAll('#g-size .tog').forEach(function(b) { b.classList.remove('on'); });
-  btn.classList.add('on');
-  var custom = document.getElementById('size-custom');
-  if(val === '') {
-    custom.style.display = 'block';
-    document.getElementById('p2_size').value = '';
-  } else {
-    custom.style.display = 'none';
-    document.getElementById('p2_size').value = val;
-  }
-  sv('p2_size', document.getElementById('p2_size').value);
-  sv('p2_size_sel', btn.textContent.trim().split('\n')[0]);
-  saveToggles();
-}
 function getSize() {
   return '1000×1414px（A4縦）';
 }
@@ -896,20 +879,6 @@ function restoreToggles() {
   if (sd) {
     var selStruct = getSelected('g-structure')[0] || '';
     sd.textContent = selStruct ? (structureDescs[selStruct] || '') : '';
-  }
-  // キャンバスサイズの選択状態を復元
-  var savedSize = gv('p2_size') || '';
-  var savedCustom = gv('p2_size_custom') || '';
-  if(savedSize || savedCustom) {
-    document.querySelectorAll('#g-size .tog').forEach(function(b) {
-      var val = b.getAttribute('onclick').match(/'([^']*)'\)/);
-      if(val) {
-        var isCustom = val[1] === '' && savedCustom;
-        var isMatch = val[1] === savedSize;
-        b.classList.toggle('on', isMatch || isCustom);
-      }
-    });
-    if(savedCustom) { var scEl = document.getElementById('size-custom'); if(scEl) scEl.style.display = 'block'; }
   }
 }
 
@@ -1115,9 +1084,29 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(function() { t.classList.remove('show'); }, 2000);
 }
+function copyText(text, onOk) {
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    if (ok) onOk();
+    else alert('コピーできませんでした。\nお手数ですが、プロンプトの文章を指やマウスで選択して手動でコピーしてください。');
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onOk, fallback);
+  } else {
+    fallback();
+  }
+}
 function copyEl(id, btn) {
   var text = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(text).then(function() {
+  copyText(text, function() {
     btn.classList.add('ok'); btn.textContent = '✅ コピー完了';
     setTimeout(function() { btn.classList.remove('ok'); btn.textContent = 'コピー'; }, 2000);
   });
@@ -1130,7 +1119,7 @@ function copyDoc(id, label, btn) {
             + '■ ' + label + '（' + dateStr + '）\n'
             + '━━━━━━━━━━━━━━━━━━━━\n'
             + text + '\n';
-  navigator.clipboard.writeText(block).then(function() {
+  copyText(block, function() {
     btn.classList.add('ok'); btn.textContent = '✅ コピー完了';
     setTimeout(function() { btn.classList.remove('ok'); btn.textContent = '📄 ドキュメントへ'; }, 2000);
     var url = gv('doc_url') || '';
@@ -1215,7 +1204,7 @@ function genStep1() {
   L.push('以下の漫画のストーリーをもとに、タイトル案とキャッチコピーを考えてください。');
   L.push('');
   if(v('p1_theme')) L.push('テーマ：' + v('p1_theme'));
-  if(v('p1_target')) L.push('対象読者：' + v('p1_target'));
+  if(v('p1_persona')) L.push('ペルソナ（読者の原型）：' + v('p1_persona'));
   if(v('p1_s1')) L.push('悩み（出発点）：' + v('p1_s1'));
   if(v('p1_honne')) L.push('本音：' + v('p1_honne'));
   if(v('p1_wall')) L.push('壁：' + v('p1_wall'));
@@ -1250,73 +1239,6 @@ function toggleKabeuchi() {
   var open = sec.style.display === 'none';
   sec.style.display = open ? 'block' : 'none';
   arrow.textContent = open ? '▲' : '▼';
-}
-
-// コピー＋AIで開く
-function exportStory() {
-  var lines = [];
-  lines.push('【ストーリー設計】');
-  lines.push('');
-  if (v('p1_title')) lines.push('■ タイトル：' + v('p1_title'));
-  if (v('p1_theme')) lines.push('■ テーマ：' + v('p1_theme'));
-  if (v('p1_persona')) lines.push('■ ペルソナ（読者の原型）：' + v('p1_persona'));
-  lines.push('');
-  lines.push('■ 悩み（出発点）：' + (v('p1_s1') || '未入力'));
-  if (v('p1_honne')) lines.push('■ 本音（心の声）：' + v('p1_honne'));
-  if (v('p1_wall')) lines.push('■ 壁（挫折）：' + v('p1_wall'));
-  if (v('p1_key')) lines.push('■ カギ（気づき）：' + v('p1_key'));
-  lines.push('■ 結末：' + (v('p1_s5') || '未入力'));
-  if (v('p1_s2')) lines.push('■ 事件（転換点）：' + v('p1_s2'));
-  if (v('p1_s3')) lines.push('■ 転機：' + v('p1_s3'));
-  if (v('p1_s4')) lines.push('■ 成長：' + v('p1_s4'));
-  lines.push('');
-  lines.push('■ 全体のページ数：' + (v('p1_pages') || '20') + 'ページ');
-  var text = lines.join('\n');
-  showOut('story-export-out', text);
-}
-
-function copyAndOpenAI() {
-  var L = [];
-  L.push('漫画のストーリー設計を一緒に考えてください。');
-  L.push('以下の5つの質問への回答をもとに、ストーリーのヒントを提案してください。');
-  L.push('');
-  L.push('Q1. この漫画は何のために作りますか？'); L.push(v('p1_q1') || '（未入力）'); L.push('');
-  L.push('Q2. 誰に読んでほしいですか？'); L.push(v('p1_q2') || '（未入力）'); L.push('');
-  L.push('Q3. 主人公はどんな悩みを持っていますか？'); L.push(v('p1_q3') || '（未入力）'); L.push('');
-  L.push('Q4. 何と出会って変わりますか？'); L.push(v('p1_q4') || '（未入力）'); L.push('');
-  L.push('Q5. 読後にどう感じてほしいですか？'); L.push(v('p1_q5') || '（未入力）'); L.push('');
-  L.push('以下の形式でストーリーのヒントを提案してください：');
-  L.push('① 悩み（主人公の出発点・状況）');
-  L.push('② 事件（転換点）');
-  L.push('③ 転機（何と出会って変わるか）');
-  L.push('④ 本音（主人公の心の奥にある言葉）');
-  L.push('⑤ 壁（途中でつまずくこと）');
-  L.push('⑥ カギ（前に進む気づき・きっかけ）');
-  L.push('⑦ 成長（主人公がどう変わるか）');
-  L.push('⑧ 結末（最後にどうなるか）');
-  navigator.clipboard.writeText(L.join('\n')).then(function() {
-    showToast('コピーしました！AIのチャットに貼り付けてください');
-  });
-}
-
-// 壁打ちコピー（旧・互換用）
-function copyKabeuchi() {
-  var L = [];
-  L.push('漫画のコンセプトを一緒に考えてください。');
-  L.push('以下の4つの質問への回答をもとに、コンセプトをまとめてください。');
-  L.push('');
-  L.push('Q1. 主人公はどんな人ですか？'); L.push(v('p1_q1') || '（未入力）'); L.push('');
-  L.push('Q2. その人の「一番つらかったこと」は何ですか？'); L.push(v('p1_q2') || '（未入力）'); L.push('');
-  L.push('Q3. 最後にどうなりましたか？'); L.push(v('p1_q3') || '（未入力）'); L.push('');
-  L.push('Q4. 読んだ人に何をしてほしいですか？'); L.push(v('p1_q4') || '（未入力）'); L.push('');
-  L.push('上記をもとに以下の4つをまとめてください：');
-  L.push('① キャッチコピー（1行）');
-  L.push('② 感情の入口（読者が最初に共感するポイント）');
-  L.push('③ 物語の到達点（主人公が最終的に何を成し遂げるか）');
-  L.push('④ 読者にどう行動してほしいか');
-  navigator.clipboard.writeText(L.join('\n')).then(function() {
-    showToast('壁打ちプロンプトをコピーしました');
-  });
 }
 
 // STEP3: ページ構成表
