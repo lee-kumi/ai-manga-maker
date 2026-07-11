@@ -931,14 +931,17 @@ function genChapterPlan() {
   var s4        = v('p1_s4')      || gv('p1_s4')       || '';
   var s5        = v('p1_s5')      || gv('p1_s5')       || '';
   var structure = getSelected('g-structure')[0] || '';
+  var pages     = v('p1_pages')   || gv('p1_pages')    || '';
   var L = [];
   L.push('# 漫画の章立てを提案してください');
   L.push('');
   L.push('以下のストーリー設計をもとに、この漫画の章立て（全体の章構成）を提案してください。');
   L.push('各章について「章タイトル」「この章の内容・役割（2〜3文）」「目安ページ数」を出力してください。');
+  if(pages)     L.push('各章の目安ページ数の合計が、必ず全体のページ数（' + pages + 'ページ）に収まるように配分してください。');
   L.push('');
   L.push('【ストーリー設計】');
   if(theme)     L.push('題材・テーマ：' + theme);
+  if(pages)     L.push('全体のページ数：' + pages + 'ページ');
   if(structure) L.push('構成の型：' + structure);
   if(persona)   L.push('ペルソナ（主人公）：' + persona);
   if(s1)        L.push('悩み（出発点）：' + s1);
