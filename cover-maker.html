@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kindle表紙メーカー | クリックされる表紙案とプロンプト</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#E8612A;--primary-light:#FCEDE6;--accent:#43B89C;--warning:#FFB74D;--bg:#FAF7F3;--card:#FFFFFF;--text:#1F1B18;--muted:#7A7069;--border:#EAE3DB;--r:12px;--shadow:0 4px 20px rgba(232,97,42,0.08);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+input,textarea,select,button,option{font-family:'Noto Sans JP',-apple-system,sans-serif;}
+
+/* Header */
+.header{background:var(--card);border-bottom:2px solid var(--primary-light);padding:12px 20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(232,97,42,0.06);}
+.header-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.logo{font-size:17px;font-weight:900;color:var(--primary);white-space:nowrap;}
+.logo a{color:inherit;text-decoration:none;}
+.home-link{font-size:12px;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:20px;border:1.5px solid var(--border);}
+.home-link:hover{border-color:var(--primary);color:var(--primary);}
+.save-ind{font-size:12px;color:var(--accent);white-space:nowrap;opacity:0;transition:opacity 0.3s;margin-left:auto;}
+.save-ind.show{opacity:1;}
+
+/* Layout */
+.main{max-width:860px;margin:28px auto;padding:0 20px;}
+
+/* Intro */
+.intro-badge{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:white;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:10px;}
+.intro h1{font-size:24px;font-weight:900;margin-bottom:6px;line-height:1.3;}
+.intro p{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:22px;}
+
+/* Cards */
+.card{background:var(--card);border-radius:var(--r);padding:22px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--border);}
+.card.hl{border:2px solid var(--primary);}
+.card-title{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title .icon{width:26px;height:26px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+
+/* Forms */
+.fg{margin-bottom:14px;}
+.fg:last-child{margin-bottom:0;}
+label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+input[type=text],textarea,select{width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;color:var(--text);background:#FBFAF8;transition:border-color 0.2s;outline:none;}
+input[type=text]:focus,textarea:focus{border-color:var(--primary);background:white;}
+textarea{resize:vertical;min-height:64px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* Badges */
+.req-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;background:#FAECE7;color:#993C1D;margin-left:5px;text-transform:none;letter-spacing:0;}
+.opt-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;background:#f0f0ec;color:#666;margin-left:5px;text-transform:none;letter-spacing:0;}
+
+/* Toggle buttons */
+.tog-group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;}
+.tog{font-family:inherit;font-size:12px;padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.tog:hover{background:var(--primary-light);}
+.tog.on{background:var(--primary-light);border-color:#F0B79B;color:#9A3C17;font-weight:700;}
+
+/* Profile switch */
+.profile-switch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px;}
+.profile-card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all 0.2s;text-align:left;}
+.profile-card:hover{border-color:#F0B79B;}
+.profile-card.on{border-color:var(--primary);background:var(--primary-light);box-shadow:var(--shadow);}
+.profile-card .pc-icon{font-size:22px;line-height:1;}
+.profile-card .pc-name{font-size:14px;font-weight:900;margin-top:6px;color:var(--text);}
+.profile-card .pc-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;}
+
+/* Boxes */
+.info-box{border-left:4px solid var(--primary);background:var(--primary-light);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13px;line-height:1.7;}
+.warn-box{border-left:4px solid var(--warning);background:#FFF8E1;padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13px;line-height:1.7;}
+
+/* Know-how list */
+.know-list{list-style:none;}
+.know-list li{font-size:13px;line-height:1.7;padding:6px 0 6px 24px;position:relative;border-bottom:1px dashed var(--border);}
+.know-list li:last-child{border-bottom:none;}
+.know-list li::before{content:'✓';position:absolute;left:0;top:6px;color:var(--primary);font-weight:900;}
+
+/* Prompt output */
+.prompt-box{background:#20130C;border-radius:10px;padding:18px;margin-top:14px;position:relative;}
+.prompt-box pre{color:#F3E9E2;font-family:'Consolas','Courier New',monospace;font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-word;margin-top:28px;}
+.copy-btn{position:absolute;top:10px;right:10px;background:var(--primary);color:white;border:none;padding:5px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;z-index:1;}
+.copy-btn:hover{background:#cf5321;}
+.copy-btn.ok{background:var(--accent);}
+
+/* Buttons */
+.gen-btn{display:inline-flex;align-items:center;gap:7px;background:var(--primary);color:white;border:none;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.gen-btn:hover{background:#cf5321;transform:translateY(-1px);}
+.gen-btn.full{width:100%;justify-content:center;font-size:15px;padding:13px;}
+.small-btn{font-family:inherit;font-size:12px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;}
+.small-btn:hover{border-color:var(--primary);color:var(--primary);}
+
+/* Project bar */
+.proj-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.proj-btn{font-family:inherit;font-size:12px;padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.proj-btn:hover{background:var(--primary-light);}
+.proj-btn.active{background:var(--primary);color:white;border-color:var(--primary);font-weight:700;}
+.proj-add{font-family:inherit;font-size:12px;padding:5px 10px;border-radius:20px;border:1.5px dashed var(--border);background:#fff;color:var(--muted);cursor:pointer;}
+.proj-add:hover{border-color:var(--primary);color:var(--primary);}
+.proj-edit{font-family:inherit;font-size:12px;padding:5px 9px;border-radius:20px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all 0.2s;margin-left:-4px;}
+.proj-edit:hover{border-color:var(--primary);background:var(--primary-light);}
+
+/* Divider */
+.divider{height:1px;background:var(--border);margin:18px 0;}
+.hide{display:none;}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:#20130C;color:white;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;z-index:9999;transform:translateY(70px);opacity:0;transition:all 0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.25);}
+.toast.show{transform:translateY(0);opacity:1;}
+
+@media(max-width:600px){.grid2{grid-template-columns:1fr;}.profile-switch{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo"><a href="index.html">📕 Kindle表紙メーカー</a></div>
+    <a class="home-link" href="index.html">← ツール集</a>
+    <span class="save-ind" id="saveInd">✓ 保存済み</span>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- INTRO -->
+  <div class="intro">
+    <span class="intro-badge">📕 Cover Compass</span>
+    <h1>クリックされる表紙を、プロンプトから設計する</h1>
+    <p>本の情報を入れると、<strong>クリックされやすい表紙案</strong>と<strong>画像生成プロンプト</strong>を作ります。
+       AI漫画の表紙／Kindleテキスト本の表紙、2つのプロファイルに対応しています。</p>
+  </div>
+
+  <!-- BOOK SELECTOR -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📁</span> 本を選ぶ</div>
+    <div class="info-box" style="margin-bottom:10px;">💡 本ごとに独立して保存されます。複数の本を同時進行できます。名前は<strong>✏️マーク</strong>で変更できます。</div>
+    <div class="warn-box" style="margin-bottom:10px;">⚠️ <strong>データはこのブラウザにのみ保存されます。</strong>別の端末・キャッシュ削除では消えます。定期的に「バックアップを保存」でファイルに書き出してください。</div>
+    <div class="proj-bar" id="projBar"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="small-btn" onclick="backupData()">💾 バックアップを保存</button>
+      <label class="small-btn" style="display:inline-block;">📂 バックアップから復元<input type="file" accept=".json" onchange="restoreData(event)" style="display:none;"></label>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="card hl">
+    <div class="card-title"><span class="icon">🎯</span> どちらの表紙を作りますか？</div>
+    <div class="profile-switch">
+      <div class="profile-card" id="pcard-manga" onclick="setProfile('manga')">
+        <div class="pc-icon">🎨</div>
+        <div class="pc-name">AI漫画の表紙</div>
+        <div class="pc-desc">イラストとキャラで世界観・感情を一瞬で伝える表紙</div>
+      </div>
+      <div class="profile-card" id="pcard-text" onclick="setProfile('text')">
+        <div class="pc-icon">📖</div>
+        <div class="pc-name">Kindleテキスト本の表紙</div>
+        <div class="pc-desc">タイトル＋キャッチコピーと配色で伝える広告型の表紙</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMON INPUT -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📝</span> 本の情報（共通）</div>
+    <div class="fg">
+      <label>本のタイトル<span class="req-badge">必須</span></label>
+      <input type="text" id="cf_title" placeholder="例：ダメ営業マンが最強AIと出会った日" oninput="autoSave()">
+    </div>
+    <div class="fg">
+      <label>キャッチコピー・帯の言葉の案<span class="opt-badge">任意</span></label>
+      <input type="text" id="cf_subtitle" placeholder="例：もう、ひとりで抱え込まなくていい" oninput="autoSave()">
+    </div>
+    <div class="grid2">
+      <div class="fg">
+        <label>ジャンル<span class="req-badge">必須</span></label>
+        <input type="text" id="cf_genre" placeholder="例：ビジネス自己啓発 / 恋愛 / ホラー" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>著者名<span class="opt-badge">任意</span></label>
+        <input type="text" id="cf_author" placeholder="例：リークミ" oninput="autoSave()">
+      </div>
+    </div>
+    <div class="fg">
+      <label>ターゲット読者<span class="req-badge">必須</span></label>
+      <input type="text" id="cf_target" placeholder="例：成果が出ず悩んでいる20〜30代の会社員" oninput="autoSave()">
+    </div>
+    <div class="fg">
+      <label>この本で一番伝えたいこと・フック<span class="req-badge">必須</span></label>
+      <textarea id="cf_hook" placeholder="例：がんばり方を変えれば、才能がなくても結果は出せる、という希望" oninput="autoSave()"></textarea>
+    </div>
+  </div>
+
+  <!-- MANGA PROFILE INPUT -->
+  <div class="card" id="fields-manga">
+    <div class="card-title"><span class="icon">🎨</span> 漫画表紙の要素</div>
+    <div class="fg">
+      <label>主人公の見た目</label>
+      <input type="text" id="mf_hero" placeholder="例：スーツ姿の20代男性、少し疲れた表情、黒髪短髪" oninput="autoSave()">
+    </div>
+    <div class="fg">
+      <label>画風（1つ選ぶ）</label>
+      <div class="tog-group" id="g-style"></div>
+      <input type="text" id="mf_style_note" placeholder="補足・その他の画風があれば自由に" oninput="autoSave()" style="margin-top:4px;">
+    </div>
+    <div class="fg">
+      <label>表紙にしたい象徴的なシーン・構図</label>
+      <input type="text" id="mf_scene" placeholder="例：主人公とAIキャラが並んで前を見ている、朝日を背に" oninput="autoSave()">
+    </div>
+    <div class="fg">
+      <label>雰囲気・感情（1つ選ぶ）</label>
+      <div class="tog-group" id="g-mood"></div>
+    </div>
+  </div>
+
+  <!-- TEXT PROFILE INPUT -->
+  <div class="card" id="fields-text">
+    <div class="card-title"><span class="icon">📖</span> テキスト本表紙の要素</div>
+    <div class="fg">
+      <label>ビジュアルの方向性（1つ選ぶ）</label>
+      <div class="tog-group" id="g-visual"></div>
+      <input type="text" id="tf_visual_note" placeholder="補足・具体的なモチーフがあれば自由に（例：山を登る人のシルエット）" oninput="autoSave()" style="margin-top:4px;">
+    </div>
+    <div class="fg">
+      <label>配色イメージ（1つ選ぶ）</label>
+      <div class="tog-group" id="g-color"></div>
+    </div>
+    <div class="fg">
+      <label>参考にしたい本・売れ筋の定番<span class="opt-badge">任意</span></label>
+      <input type="text" id="tf_ref" placeholder="例：同ジャンルのベストセラーは白背景＋大きな明朝タイトルが多い" oninput="autoSave()">
+    </div>
+  </div>
+
+  <!-- GENERATE -->
+  <div class="card hl">
+    <div class="card-title"><span class="icon">✨</span> 表紙案とプロンプトを作る</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">2種類の出力を作ります。①は<strong>Claude / ChatGPT</strong>に貼って表紙案を出してもらう用、②は<strong>画像生成AI（ナノバナナ・ChatGPT）</strong>に貼って絵を作る用です。</p>
+    <button class="gen-btn full" onclick="generate()">✨ この内容で作る</button>
+
+    <div id="out-concept" class="hide">
+      <div class="divider"></div>
+      <div class="card-title" style="margin-top:6px;"><span class="icon">①</span> 表紙コンセプト生成プロンプト（→ Claude / ChatGPT）</div>
+      <div class="info-box">これを貼り付けると、クリックされやすい表紙案を複数出してくれます。気に入った案を選び、②の入力に反映してからもう一度作ると精度が上がります。</div>
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyEl('concept-text', this)">コピー</button>
+        <pre id="concept-text"></pre>
+      </div>
+    </div>
+
+    <div id="out-image" class="hide">
+      <div class="divider"></div>
+      <div class="card-title" style="margin-top:6px;"><span class="icon">②</span> 画像生成プロンプト（→ ナノバナナ / ChatGPT）</div>
+      <div class="info-box">表紙の<strong>ビジュアルだけ</strong>を作るプロンプトです。日本語の文字は生成に含めず、<strong>後からCanvaでタイトルを載せる</strong>前提です（日本語崩れ防止）。</div>
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyEl('image-text', this)">コピー</button>
+        <pre id="image-text"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- KNOW-HOW -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📐</span> 表紙の鉄則（クリックされる表紙の条件）</div>
+    <ul class="know-list" id="know-common"></ul>
+    <div class="divider"></div>
+    <div class="card-title" id="know-profile-title" style="font-size:14px;"></div>
+    <ul class="know-list" id="know-profile"></ul>
+  </div>
+
+  <!-- DANGER -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🗑️</span> この本をリセット・削除</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;"><strong>リセット</strong>＝今開いている本の中身を空に戻します（本は残ります）。<br><strong>削除</strong>＝今開いている本を一覧ごと取り除きます。どちらも他の本には影響しません。</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="gen-btn" style="background:#EF4444;" onclick="resetProject()">🗑️ この本をリセット</button>
+      <button class="gen-btn" style="background:#991B1B;" onclick="deleteProject()">❌ この本を削除</button>
+    </div>
+  </div>
+
+  <p style="text-align:center;color:#bbb;font-size:12px;margin:20px 0;">© lee-kumi</p>
+
+</main>
+
+<script>
+// ===== KNOW-HOW =====
+var COVER_KNOWHOW = {
+  common: [
+    '表紙はアートではなく広告。「うまい絵」ではなく「クリックされること」を最優先にする',
+    'スマホの小さなサムネイルで成立するかが最重要。縮小してタイトルが読めなければ失敗',
+    'タイトルに句点（。）を付けない',
+    '色数は3色以内に抑える（背景・文字・差し色）。色を絞るほど強く見える',
+    '「誰の・どんな悩みが・どうなる本か」が1秒で伝わるか',
+    '1秒で内容が伝わり、2秒目でクリックしたくなる情報設計にする',
+    '同ジャンルの売れ筋を並べて、埋もれず・浮きすぎない位置を狙う'
+  ],
+  manga: {
+    title: '🎨 漫画表紙のコツ',
+    items: [
+      'キャラの表情とポーズで感情を伝える。目線・視線誘導を意識する',
+      '主人公が一目で分かる大きさ・配置にする（顔が小さすぎると弱い）',
+      '画風は全ページと統一する。表紙だけ浮かないようにキャラシートを参照する',
+      '文字は絵に埋もれさせない。タイトルの背後に帯や余白・縁取りを作る',
+      'ジャンルが伝わる象徴（バトルなら効果線、恋愛なら柔らかい光 等）を1つ入れる'
+    ]
+  },
+  text: {
+    title: '📖 テキスト本表紙のコツ',
+    items: [
+      'タイトルが主役。画面の30〜50%をタイトルが占めるくらい大きく',
+      '書体で印象が決まる。明朝＝知的・信頼、ゴシック太＝力強い・断言、丸ゴシック＝やさしい',
+      'ベネフィット（読むとどうなるか）が伝わるキャッチコピーを短く添える',
+      '写真や抽象ビジュアルは主張しすぎない。文字の可読性を最優先にする',
+      '余白を怖がらない。詰め込むほどサムネイルで潰れて読めなくなる'
+    ]
+  }
+};
+
+var TOGGLES = {
+  'g-style': ['少年漫画風','少女漫画風','青年劇画','ほのぼの4コマ','アニメ塗り','水彩やわらか','劇画シリアス'],
+  'g-mood': ['前向き・希望','熱血・パワフル','切ない・エモい','コミカル','ミステリアス','あたたかい'],
+  'g-visual': ['文字主体・ミニマル','象徴モチーフ1つ','抽象グラフィック','写真風','手描きイラスト','図形・幾何学'],
+  'g-color': ['あたたかい（オレンジ/黄）','クール・知的（青/紺）','高級感（黒/金）','ポップ・元気（赤/黄）','ダーク・緊張（黒/赤）','ナチュラル（白/緑）']
+};
+
+var FIELDS = ['cf_title','cf_subtitle','cf_genre','cf_author','cf_target','cf_hook',
+              'mf_hero','mf_style_note','mf_scene','tf_visual_note','tf_ref'];
+
+var COVER_SIZE = '1600×2560px（縦長・縦横比1.6:1／Kindle電子書籍の推奨サイズ）';
+
+// ===== PROJECTS (BOOKS) =====
+var projects = JSON.parse(localStorage.getItem('cm_projects') || '["表紙1"]');
+var curProj = localStorage.getItem('cm_curProj') || projects[0];
+
+function saveProjects() { localStorage.setItem('cm_projects', JSON.stringify(projects)); }
+function setProject(name) {
+  curProj = name;
+  localStorage.setItem('cm_curProj', name);
+  renderProjBar();
+  loadData();
+  restoreProfile();
+  restoreToggles();
+}
+function addProject() {
+  var i = projects.length + 1;
+  var n = '表紙' + i;
+  while (projects.indexOf(n) >= 0) { i++; n = '表紙' + i; }
+  projects.push(n);
+  saveProjects();
+  setProject(n);
+}
+function deleteProject() {
+  if (projects.length <= 1) {
+    alert('最後の本は削除できません。\n中身を空にしたい場合は「この本をリセット」を使ってください。');
+    return;
+  }
+  if (!confirm('「' + curProj + '」を削除しますか？\nこの本のデータはすべて消え、元に戻せません。\n（心配な場合は先に「バックアップを保存」してください）')) return;
+  var keys = Object.keys(localStorage).filter(function(k) { return k.indexOf('cm_' + curProj + '_') === 0; });
+  keys.forEach(function(k) { localStorage.removeItem(k); });
+  var idx = projects.indexOf(curProj);
+  projects.splice(idx, 1);
+  saveProjects();
+  setProject(projects[Math.min(idx, projects.length - 1)]);
+  showToast('削除しました');
+}
+function renameProject(oldName) {
+  var newName = prompt('本の名前を入力してください', oldName);
+  if (!newName || newName.trim() === '' || newName === oldName) return;
+  newName = newName.trim();
+  if (newName.indexOf('_') >= 0) { alert('名前に半角アンダースコア（_）は使えません。\n全角の「＿」やハイフン（-）をお使いください。'); return; }
+  if (projects.indexOf(newName) >= 0) { alert('その名前はすでに使われています'); return; }
+  var idx = projects.indexOf(oldName);
+  projects[idx] = newName;
+  var prefix = 'cm_' + oldName + '_';
+  var newPrefix = 'cm_' + newName + '_';
+  Object.keys(localStorage).forEach(function(k) {
+    if (k.indexOf(prefix) === 0) {
+      localStorage.setItem(newPrefix + k.slice(prefix.length), localStorage.getItem(k));
+      localStorage.removeItem(k);
+    }
+  });
+  if (curProj === oldName) curProj = newName;
+  localStorage.setItem('cm_curProj', curProj);
+  saveProjects();
+  renderProjBar();
+}
+function renderProjBar() {
+  var bar = document.getElementById('projBar');
+  bar.innerHTML = '';
+  projects.forEach(function(p) {
+    var btn = document.createElement('button');
+    btn.className = 'proj-btn' + (p === curProj ? ' active' : '');
+    btn.textContent = p;
+    btn.title = '✏️マークまたはダブルクリックで名前変更';
+    btn.onclick = function() { setProject(p); };
+    btn.ondblclick = function(e) { e.stopPropagation(); renameProject(p); };
+    bar.appendChild(btn);
+    if (p === curProj) {
+      var edit = document.createElement('button');
+      edit.className = 'proj-edit';
+      edit.textContent = '✏️';
+      edit.title = '名前を変更';
+      edit.onclick = function() { renameProject(p); };
+      bar.appendChild(edit);
+    }
+  });
+  var add = document.createElement('button');
+  add.className = 'proj-add';
+  add.textContent = '＋ 追加';
+  add.onclick = addProject;
+  bar.appendChild(add);
+}
+
+// ===== STORAGE =====
+function key(id) { return 'cm_' + curProj + '_' + id; }
+function sv(id, val) { localStorage.setItem(key(id), val); }
+function gv(id) { return localStorage.getItem(key(id)) || ''; }
+function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+function autoSave() {
+  FIELDS.forEach(function(id) { var el = document.getElementById(id); if (el) sv(id, el.value); });
+  showSave();
+}
+function loadData() {
+  FIELDS.forEach(function(id) { var el = document.getElementById(id); if (el) el.value = gv(id); });
+}
+function showSave() {
+  var ind = document.getElementById('saveInd');
+  ind.classList.add('show');
+  clearTimeout(ind._t);
+  ind._t = setTimeout(function() { ind.classList.remove('show'); }, 1500);
+}
+function resetProject() {
+  if (!confirm('「' + curProj + '」のデータをすべて消しますか？')) return;
+  var keys = Object.keys(localStorage).filter(function(k) { return k.indexOf('cm_' + curProj + '_') === 0; });
+  keys.forEach(function(k) { localStorage.removeItem(k); });
+  loadData();
+  restoreProfile();
+  restoreToggles();
+  document.getElementById('out-concept').classList.add('hide');
+  document.getElementById('out-image').classList.add('hide');
+  showToast('リセットしました');
+}
+
+// ===== PROFILE =====
+var curProfile = 'manga';
+function setProfile(p) {
+  curProfile = p;
+  sv('profile', p);
+  applyProfile();
+  showSave();
+}
+function restoreProfile() {
+  curProfile = gv('profile') || 'manga';
+  applyProfile();
+}
+function applyProfile() {
+  document.getElementById('pcard-manga').classList.toggle('on', curProfile === 'manga');
+  document.getElementById('pcard-text').classList.toggle('on', curProfile === 'text');
+  document.getElementById('fields-manga').classList.toggle('hide', curProfile !== 'manga');
+  document.getElementById('fields-text').classList.toggle('hide', curProfile !== 'text');
+  renderKnowHow();
+}
+
+// ===== TOGGLES (single select each group) =====
+function renderToggleGroups() {
+  Object.keys(TOGGLES).forEach(function(g) {
+    var box = document.getElementById(g);
+    box.innerHTML = '';
+    TOGGLES[g].forEach(function(txt) {
+      var b = document.createElement('button');
+      b.className = 'tog';
+      b.textContent = txt;
+      b.onclick = function() { pickTog(g, txt); };
+      box.appendChild(b);
+    });
+  });
+}
+function pickTog(g, txt) {
+  var cur = gv(g);
+  var next = (cur === txt) ? '' : txt; // クリックで選択/解除トグル
+  sv(g, next);
+  highlightTog(g);
+  showSave();
+}
+function highlightTog(g) {
+  var sel = gv(g);
+  document.querySelectorAll('#' + g + ' .tog').forEach(function(b) {
+    b.classList.toggle('on', b.textContent === sel);
+  });
+}
+function restoreToggles() {
+  Object.keys(TOGGLES).forEach(function(g) { highlightTog(g); });
+}
+
+// ===== KNOW-HOW RENDER =====
+function renderKnowHow() {
+  var c = document.getElementById('know-common');
+  c.innerHTML = '';
+  COVER_KNOWHOW.common.forEach(function(t) { var li = document.createElement('li'); li.textContent = t; c.appendChild(li); });
+  var prof = COVER_KNOWHOW[curProfile];
+  document.getElementById('know-profile-title').textContent = prof.title;
+  var p = document.getElementById('know-profile');
+  p.innerHTML = '';
+  prof.items.forEach(function(t) { var li = document.createElement('li'); li.textContent = t; p.appendChild(li); });
+}
+
+// ===== GENERATE =====
+function line(label, val) { return val ? (label + '：' + val + '\n') : ''; }
+
+function checkRequired() {
+  var miss = [];
+  if (!v('cf_title')) miss.push('本のタイトル');
+  if (!v('cf_genre')) miss.push('ジャンル');
+  if (!v('cf_target')) miss.push('ターゲット読者');
+  if (!v('cf_hook')) miss.push('一番伝えたいこと・フック');
+  return miss;
+}
+
+function knowText() {
+  var t = '【表紙の鉄則】\n';
+  COVER_KNOWHOW.common.forEach(function(x) { t += '- ' + x + '\n'; });
+  var prof = COVER_KNOWHOW[curProfile];
+  t += '\n' + prof.title.replace(/^[^ ]+ /, '') + '\n';
+  prof.items.forEach(function(x) { t += '- ' + x + '\n'; });
+  return t;
+}
+
+function bookInfoText() {
+  var t = '【本の情報】\n';
+  t += line('タイトル', v('cf_title'));
+  t += line('キャッチコピー案', v('cf_subtitle'));
+  t += line('ジャンル', v('cf_genre'));
+  t += line('著者名', v('cf_author'));
+  t += line('ターゲット読者', v('cf_target'));
+  t += line('一番伝えたいこと・フック', v('cf_hook'));
+  return t;
+}
+
+function generate() {
+  var miss = checkRequired();
+  if (miss.length) { alert('次の必須項目を入力してください：\n・' + miss.join('\n・')); return; }
+
+  var kindTitle = curProfile === 'manga' ? 'AI漫画' : 'Kindleテキスト本';
+  var extra = '';
+  if (curProfile === 'manga') {
+    extra = '【漫画表紙の要素】\n'
+          + line('主人公の見た目', v('mf_hero'))
+          + line('画風', [gv('g-style'), v('mf_style_note')].filter(Boolean).join(' / '))
+          + line('象徴的なシーン・構図', v('mf_scene'))
+          + line('雰囲気・感情', gv('g-mood'));
+  } else {
+    extra = '【テキスト本表紙の要素】\n'
+          + line('ビジュアルの方向性', [gv('g-visual'), v('tf_visual_note')].filter(Boolean).join(' / '))
+          + line('配色イメージ', gv('g-color'))
+          + line('参考にしたい定番', v('tf_ref'));
+  }
+
+  // ① コンセプト生成プロンプト（→ テキストAI）
+  var concept =
+    'あなたはKindleの表紙デザインとセールスコピーのプロです。\n' +
+    '以下の「' + kindTitle + 'の表紙」について、Amazon/Kindleの一覧でクリックされやすい表紙案を3案、考えてください。\n\n' +
+    bookInfoText() + '\n' +
+    extra + '\n' +
+    knowText() + '\n' +
+    '【各案に必ず含めること】\n' +
+    '1. コンセプト（ひとことで）\n' +
+    '2. メインビジュアル（何を、どう配置して描くか）\n' +
+    '3. タイトルの見せ方（配置・書体の方向性・あしらい）\n' +
+    '4. キャッチコピー（句点なし・短く・ベネフィットが伝わる言葉）\n' +
+    '5. 配色（3色以内。具体的な色で）\n' +
+    '6. なぜこの案がクリックされやすいのか（ターゲットの心理から説明）\n\n' +
+    '最後に、3案のうち最も勝率が高いと思うものと、その理由を書いてください。';
+
+  // ② 画像生成プロンプト（→ 画像AI）
+  var image;
+  if (curProfile === 'manga') {
+    image =
+      'Kindle漫画の表紙イラストを生成してください。\n' +
+      'キャンバス：' + COVER_SIZE + '\n\n' +
+      '【描くもの】\n' +
+      line('主人公', v('mf_hero')) +
+      line('シーン・構図', v('mf_scene')) +
+      line('画風', [gv('g-style'), v('mf_style_note')].filter(Boolean).join(' / ')) +
+      line('雰囲気・感情', gv('g-mood')) +
+      line('ジャンル', v('cf_genre')) +
+      line('伝えたい印象', v('cf_hook')) +
+      '\n【表紙としての条件】\n' +
+      '- サムネイルに縮小しても主人公と世界観が一目で伝わる、はっきりした構図にする\n' +
+      '- 主役を大きく、視線を引く配置にする\n' +
+      '- 色数は3色以内でまとめ、主役が背景に埋もれないようにする\n' +
+      '- タイトル文字を載せる余白（上部または下部の帯）を空けておく\n\n' +
+      '【重要】画像に日本語の文字は入れないでください。タイトルは後からCanvaで載せます。\n' +
+      '同じキャラを別ページでも使う場合は、キャラクターシート（charsheet.html）を参照画像として添付してください。\n\n' +
+      'ネガティブプロンプト：lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, 文字化けした日本語, ごちゃついた背景';
+  } else {
+    image =
+      'Kindle書籍（テキスト本）の表紙用ビジュアルを生成してください。\n' +
+      'キャンバス：' + COVER_SIZE + '\n\n' +
+      '【作るもの】\n' +
+      line('ビジュアルの方向性', [gv('g-visual'), v('tf_visual_note')].filter(Boolean).join(' / ')) +
+      line('配色イメージ', gv('g-color')) +
+      line('ジャンル', v('cf_genre')) +
+      line('ターゲット読者', v('cf_target')) +
+      line('伝えたい印象', v('cf_hook')) +
+      (v('tf_ref') ? line('参考にしたい定番', v('tf_ref')) : '') +
+      '\n【表紙としての条件】\n' +
+      '- タイトルを大きく載せる前提で、画面の中央〜上部を主張の少ない背景／余白にする\n' +
+      '- 色数は3色以内。ジャンルの雰囲気が一瞬で伝わる配色にする\n' +
+      '- 象徴的なモチーフは1つに絞り、大きくシンプルに\n' +
+      '- サムネイルに縮小しても成立する、コントラストの強い構図にする\n\n' +
+      '【重要】画像に文字（タイトル・帯コピー）は入れないでください。文字は後からCanvaで載せます。\n' +
+      '装飾は最小限にし、文字を置いても読みやすい落ち着いた背景にしてください。\n\n' +
+      'ネガティブプロンプト：lowres, blurry, watermark, 文字化けした日本語, ごちゃついた背景, 過剰な装飾';
+  }
+
+  document.getElementById('concept-text').textContent = concept;
+  document.getElementById('image-text').textContent = image;
+  document.getElementById('out-concept').classList.remove('hide');
+  document.getElementById('out-image').classList.remove('hide');
+  document.getElementById('out-concept').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== COPY / TOAST / BACKUP =====
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2000);
+}
+function copyText(text, onOk) {
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    if (ok) onOk();
+    else alert('コピーできませんでした。\nお手数ですが、プロンプトの文章を手動で選択してコピーしてください。');
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onOk, fallback);
+  } else { fallback(); }
+}
+function copyEl(id, btn) {
+  var text = document.getElementById(id).textContent;
+  copyText(text, function() {
+    btn.classList.add('ok'); btn.textContent = '✅ コピー完了';
+    setTimeout(function() { btn.classList.remove('ok'); btn.textContent = 'コピー'; }, 2000);
+  });
+}
+function backupData() {
+  var data = {};
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    if (k.indexOf('cm_') === 0) data[k] = localStorage.getItem(k);
+  }
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'kindle-cover-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('バックアップを保存しました');
+}
+function restoreData(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      Object.keys(data).forEach(function(k) { if (k.indexOf('cm_') === 0) localStorage.setItem(k, data[k]); });
+      if (data['cm_projects']) projects = JSON.parse(data['cm_projects']);
+      if (data['cm_curProj']) curProj = data['cm_curProj'];
+      renderProjBar();
+      loadData();
+      restoreProfile();
+      restoreToggles();
+      showToast('復元しました！');
+    } catch(err) {
+      alert('ファイルの読み込みに失敗しました。正しいバックアップファイルか確認してください。');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ===== INIT =====
+renderToggleGroups();
+renderProjBar();
+loadData();
+restoreProfile();
+restoreToggles();
+</script>
+</body>
+</html>
