@@ -488,24 +488,6 @@ textarea{resize:vertical;min-height:72px;}
     </div>
   </div>
 
-  <!-- 背景なし素材画像 -->
-  <div class="card">
-    <div class="card-title"><span class="icon">✂️</span> 背景なし素材画像プロンプト</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">背景なし（白背景）でキャラクターだけを描いた素材画像を作るプロンプトです。Canvaなどで背景と合成したり、コマごとに自由に配置したいときに使います。</p>
-    <div id="bglessSelectorArea" style="margin-bottom:14px;display:none;">
-      <label>対象キャラクター</label>
-      <select id="bglessCharaSel" style="width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-size:14px;outline:none;background:#FAFAFA;font-family:inherit;"></select>
-    </div>
-    <button class="gen-btn" onclick="genBglessPrompt()">✂️ 背景なし素材画像プロンプトを生成</button>
-    <div id="bglessOut" style="display:none;">
-      <div class="prompt-box">
-        <button class="copy-btn" onclick="copyEl('bglessText',this)">コピー</button>
-        <pre id="bglessText"></pre>
-      </div>
-      <div class="info-box" style="margin-top:10px;">✅ 画像AIに貼り付けて生成。透過にしたい場合は <strong>remove.bg / Canvaの背景除去</strong> で処理してください。</div>
-    </div>
-  </div>
-
   <!-- 背景 -->
   <div class="card">
     <div class="card-title"><span class="icon">🏠</span> 背景・世界観設定</div>
@@ -613,6 +595,24 @@ textarea{resize:vertical;min-height:72px;}
         <button class="copy-btn" onclick="copyDoc('s4text2','STEP4｜画像生成プロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
         <pre id="s4text2"></pre>
       </div>
+    </div>
+  </div>
+
+  <!-- 背景なし素材画像 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">✂️</span> 背景なし素材画像プロンプト</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">背景なし（白背景）でキャラクターだけを描いた素材画像を作るプロンプトです。生成したコマにCanvaなどで背景と合成したり、キャラクターだけを自由に配置したいときに使います。キャラクター情報はSTEP2の設定が使われます。</p>
+    <div id="bglessSelectorArea" style="margin-bottom:14px;display:none;">
+      <label>対象キャラクター</label>
+      <select id="bglessCharaSel" style="width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-size:14px;outline:none;background:#FAFAFA;font-family:inherit;"></select>
+    </div>
+    <button class="gen-btn" onclick="genBglessPrompt()">✂️ 背景なし素材画像プロンプトを生成</button>
+    <div id="bglessOut" style="display:none;">
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyEl('bglessText',this)">コピー</button>
+        <pre id="bglessText"></pre>
+      </div>
+      <div class="info-box" style="margin-top:10px;">✅ 画像AIに貼り付けて生成。透過にしたい場合は <strong>remove.bg / Canvaの背景除去</strong> で処理してください。</div>
     </div>
   </div>
 
@@ -1068,7 +1068,7 @@ function refreshBglessSel() {
 
 function genBglessPrompt() {
   if (!charas.length) {
-    alert('上の「登場人物のビジュアル設定」でキャラクターを追加してください。');
+    alert('STEP2の「登場人物のビジュアル設定」でキャラクターを追加してください。');
     return;
   }
   var sel = document.getElementById('bglessCharaSel');
