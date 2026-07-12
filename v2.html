@@ -517,11 +517,11 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">📊</span> ① ページ構成表を章ごとに作る</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">ストーリーの全体像を把握するためのステップです。<strong>章番号を入れるだけでOK</strong>。第2章以降は番号を変えて繰り返すだけです。章ごとに出すことで、長い漫画でも途中で切れずに確実に出力できます。先に構成表を作ることで、②のシナリオ生成の精度が上がります。</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong>この工程は任意です。</strong>短い作品なら②から直接始めてもOK。長編や、ページ配分・見せ場を自分で設計したいときに使ってください。<strong>章番号を入れるだけでOK</strong>。第2章以降は番号を変えて繰り返すだけです。章ごとに出すことで、長い漫画でも途中で切れずに確実に出力できます。</p>
     <div class="info-box" style="margin-bottom:14px;">
       <strong>流れ：</strong><br>
       プロンプトを生成 → コピーして <strong>Gemini / ChatGPT / Claude</strong> に貼り付ける → AIが各ページの役割・内容・感情の概要を返してくれる → <strong>Googleドキュメントに保存する</strong> → 章番号を変えて次の章へ<br><br>
-      💡 保存した構成表は今後の修正で必ず使います。章を膨らませたい・短くしたい・順番を変えたいときの設計図になります。<br><br>
+      💡 AIが出した構成表は自由に手直しできます。手直しした構成表を②の「ページ構成表」欄に貼り付けると、その設計どおりにシナリオが作られます。章を膨らませたい・短くしたい・順番を変えたいときの設計図として役立ちます。<br><br>
       ⚠️ ここで出るのは<strong>概要のみ（セリフなし）</strong>です。セリフ付きのコマ割りは②で生成します。<br>
       💡 STEP1で章立てを登録していない場合は、全体をまとめて生成します。
     </div>
@@ -548,7 +548,7 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオを章ごとに生成する</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">STEP1の設計から章まるごとのコマ割り＋セリフを一発生成します。<strong>章番号を入れるだけでOK</strong>。第2章以降は番号を変えて繰り返すだけです。</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">STEP1の設計から章まるごとのコマ割り＋セリフを一発生成します。<strong>章番号を入れるだけでOK</strong>。第2章以降は番号を変えて繰り返すだけです。①で構成表を作った場合は、下の欄に貼り付けるとその設計どおりに生成されます。</p>
     <div class="grid2">
       <div class="fg">
         <label>章番号</label>
@@ -562,6 +562,10 @@ textarea{resize:vertical;min-height:72px;}
         <label>目標ページ数<span class="opt-badge">任意</span></label>
         <input type="number" id="p3_page_to" min="1" value="" placeholder="例：20" oninput="autoSave()">
       </div>
+    </div>
+    <div class="fg">
+      <label>ページ構成表（この章の分）<span class="opt-badge">任意</span></label>
+      <textarea id="p3_pageplan" placeholder="①でAIが出した構成表（手直しOK）を貼り付けると、ページ配分・レイアウト指定どおりにシナリオが作られます。空欄ならAIにお任せ。" style="min-height:100px;" oninput="autoSave()"></textarea>
     </div>
     <button class="gen-btn" onclick="genScenario()">🎬 この章のコマ割りシナリオプロンプトを生成</button>
     <div id="s3out2" style="display:none;">
@@ -803,7 +807,7 @@ function v(id) { var el = document.getElementById(id); return el ? el.value.trim
 function autoSave() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
   showSave();
 }
@@ -811,7 +815,7 @@ function autoSave() {
 function loadData() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) {
     var el = document.getElementById(id);
     if(el) { var val = gv(id); el.value = val !== '' ? val : el.defaultValue; }
@@ -1404,6 +1408,7 @@ function genScenario() {
   var chapter = parseInt(v('p3_chapter') || gv('p3_chapter')) || 1;
   var koma    = parseInt(v('p3_koma2')   || gv('p3_koma2'))   || 3;
   var pageTo  = (v('p3_page_to') || gv('p3_page_to') || '').trim();
+  var plan    = (v('p3_pageplan') || gv('p3_pageplan') || '').trim();
   var art     = getArtStyle();
   var voice   = v('p2_voice') || gv('p2_voice') || '';
 
@@ -1420,9 +1425,11 @@ function genScenario() {
   var s5        = v('p1_s5')      || gv('p1_s5')       || '';
   var structure = getSelected('g-structure')[0] || '';
 
-  var pageLine = pageTo
-    ? 'この章は約' + pageTo + 'ページに収めてください（多少前後OK）。'
-    : 'ページ数はAIが内容に合わせて決めてください。';
+  var pageLine = plan
+    ? 'ページ数・ページ配分は、下の【ページ構成表】に従ってください。'
+    : (pageTo
+      ? 'この章は約' + pageTo + 'ページに収めてください（多少前後OK）。'
+      : 'ページ数はAIが内容に合わせて決めてください。');
 
   var L = [];
   L.push('# 第' + chapter + '章のコマ割りシナリオ作成をお願いします');
@@ -1445,6 +1452,12 @@ function genScenario() {
   if(s5)        L.push('結末：' + s5);
   L.push('');
   var chapterInfo = getChapterText(chapter); if(chapterInfo) { L.push(chapterInfo); L.push(''); }
+  if (plan) {
+    L.push('【ページ構成表（この章の設計図）】');
+    L.push('以下の構成表に従って作成してください。各ページの役割・内容・レイアウト指定を必ず守り、出力の各ページの「レイアウト」欄にも反映すること。');
+    L.push(plan);
+    L.push('');
+  }
   var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
   var bt = getBgText();    if(bt) { L.push(bt); L.push(''); }
   if(art)   { L.push('【画風・スタイル】');  L.push(art);   L.push(''); }
@@ -1583,6 +1596,7 @@ function genImagePrompt() {
   L.push('・吹き出しの背景は必ず純白（#FFFFFF）にする。色をつけない・グラデーションなし・半透明禁止');
   L.push('');
   L.push('【コマ割りのルール】');
+  L.push('・⚠️ シナリオに「コマ数」「レイアウト」の指定があるページは、必ずその指定どおりに描くこと（例：コマ数：1・大ゴマ → そのページはコマ1つだけ）。以下の一般ルールより優先する');
   L.push('・コマ枠をはっきり描く。読む順は右上→左下（右→左の日本式）');
   L.push('・コマの大小を必ず混ぜる（均一な並びは禁止）');
   L.push('・1ページで伝えることは1つに絞る');
