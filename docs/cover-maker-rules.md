@@ -99,6 +99,7 @@
 |---|---|
 | AI漫画メーカー（本文・コマ） | `docs/manga-maker-rules.md`、`v2.html` |
 | キャラの顔ブレ防止（表紙にも使う） | `charsheet.html`（キャラクターシート） |
+| 表紙案スキル | `/cover-concept`（Claude用。`.claude/skills/` に収録。本文書を原本として参照する） |
 
 ---
 

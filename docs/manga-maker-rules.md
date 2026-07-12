@@ -192,7 +192,7 @@ lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, mode
 | Cover Compass（表紙） | `cover-maker.html` 内の `COVER_KNOWHOW` 定数（基本思想：表紙はアートではなく広告／句点を付けない／色数3色以内 等） |
 | 紙の本（KDPペーパーバック） | スキル `kdp-paperback-reference`（寸法・ノンブル・裁ち落とし） |
 | 印刷用の明るさ補正 | スキル `manga-print-brightness`（色を変えずVだけガンマ補正。Kindleには使わない） |
-| コマ割り・プロンプト生成スキル | `/manga-scenario` → `/manga-prompt`（Claude用。本文書と同じルールを内蔵） |
+| コマ割り・プロンプト生成スキル | `/manga-scenario` → `/manga-prompt`（Claude用。`.claude/skills/` に収録。本文書を原本として参照する） |
 
 ---
 
