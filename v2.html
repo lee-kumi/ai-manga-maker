@@ -516,26 +516,33 @@ textarea{resize:vertical;min-height:72px;}
   </div>
 
   <div class="card">
-    <div class="card-title"><span class="icon">📊</span> ① ページ構成表を作る</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">ストーリーの全体像を把握するためのステップです。先に構成表を作ることで、②のシナリオ生成の精度が上がります。</p>
+    <div class="card-title"><span class="icon">📊</span> ① ページ構成表を章ごとに作る</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">ストーリーの全体像を把握するためのステップです。<strong>章番号を入れるだけでOK</strong>。第2章以降は番号を変えて繰り返すだけです。章ごとに出すことで、長い漫画でも途中で切れずに確実に出力できます。先に構成表を作ることで、②のシナリオ生成の精度が上がります。</p>
     <div class="info-box" style="margin-bottom:14px;">
       <strong>流れ：</strong><br>
-      プロンプトを生成 → コピーして <strong>Gemini / ChatGPT / Claude</strong> に貼り付ける → AIが各ページの役割・内容・感情の概要を返してくれる → <strong>Googleドキュメントに保存する</strong><br><br>
+      プロンプトを生成 → コピーして <strong>Gemini / ChatGPT / Claude</strong> に貼り付ける → AIが各ページの役割・内容・感情の概要を返してくれる → <strong>Googleドキュメントに保存する</strong> → 章番号を変えて次の章へ<br><br>
       💡 保存した構成表は今後の修正で必ず使います。章を膨らませたい・短くしたい・順番を変えたいときの設計図になります。<br><br>
-      ⚠️ ここで出るのは<strong>概要のみ（セリフなし）</strong>です。セリフ付きのコマ割りは②で生成します。
+      ⚠️ ここで出るのは<strong>概要のみ（セリフなし）</strong>です。セリフ付きのコマ割りは②で生成します。<br>
+      💡 STEP1で章立てを登録していない場合は、全体をまとめて生成します。
     </div>
-    <div class="fg">
-      <label>1ページあたりのコマ数<span class="opt-badge">任意</span></label>
-      <input type="text" id="p3_koma" placeholder="例：3〜4コマ（迷ったらこれでOK）" oninput="autoSave()">
+    <div class="grid2">
+      <div class="fg">
+        <label>章番号</label>
+        <input type="number" id="p3_plan_chapter" min="1" value="1" placeholder="例：1" oninput="autoSave()">
+      </div>
+      <div class="fg">
+        <label>1ページあたりのコマ数<span class="opt-badge">任意</span></label>
+        <input type="text" id="p3_koma" placeholder="例：3〜4コマ（迷ったらこれでOK）" oninput="autoSave()">
+      </div>
     </div>
-    <button class="gen-btn" onclick="genPagePlan()">📊 ページ構成表プロンプトを生成</button>
+    <button class="gen-btn" onclick="genPagePlan()">📊 この章のページ構成表プロンプトを生成</button>
     <div id="s3out1" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s3text1',this)">コピー</button>
         <button class="copy-btn" onclick="copyDoc('s3text1','STEP3｜ページ構成表プロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
         <pre id="s3text1"></pre>
       </div>
-      <div class="info-box">💡 AIの出力をGoogleドキュメントに貼り付けて保存しておくと、制作全体の目次になります。確認できたら②へ進んでください。</div>
+      <div class="info-box">💡 AIの出力をGoogleドキュメントに貼り付けて保存しておくと、制作全体の目次になります。<br>章ごとに繰り返してください（章番号を2→3と変えるだけ）。全章そろったら②へ進んでください。</div>
     </div>
   </div>
 
@@ -796,7 +803,7 @@ function v(id) { var el = document.getElementById(id); return el ? el.value.trim
 function autoSave() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
   showSave();
 }
@@ -804,7 +811,7 @@ function autoSave() {
 function loadData() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p4_scenario','p4_fix_detail','doc_url'];
   ids.forEach(function(id) {
     var el = document.getElementById(id);
     if(el) { var val = gv(id); el.value = val !== '' ? val : el.defaultValue; }
@@ -1001,6 +1008,18 @@ function getChapterText(chNum) {
   if (c.title) L.push('タイトル：' + c.title);
   if (c.role)  L.push('内容・役割：' + c.role);
   if (c.pages) L.push('目標ページ数：約' + c.pages + 'ページ');
+  return L.join('\n');
+}
+function getAllChaptersText() {
+  if (!chapters.length) return '';
+  var L = ['【全体の章立て】'];
+  chapters.forEach(function(c, i) {
+    var line = '第' + (i + 1) + '章';
+    if (c.title) line += '　' + c.title;
+    if (c.pages) line += '（約' + c.pages + 'ページ）';
+    L.push(line);
+    if (c.role) L.push('　' + c.role);
+  });
   return L.join('\n');
 }
 
@@ -1288,13 +1307,33 @@ function toggleKabeuchi() {
   arrow.textContent = open ? '▲' : '▼';
 }
 
-// STEP3: ページ構成表
+// STEP3: ページ構成表（章ごと・章立て未登録時は全体一括）
 function genPagePlan() {
   if (!confirmReqFields()) return;
-  var pages = v('p1_pages') || gv('p1_pages') || '20';
   var koma = v('p3_koma') || gv('p3_koma') || '3〜4コマ';
+  var chapter = 0, c = null;
+  if (chapters.length) {
+    chapter = parseInt(v('p3_plan_chapter') || gv('p3_plan_chapter')) || 1;
+    c = chapters[chapter - 1] || null;
+  }
+  // 前の章の目安ページ数がすべて分かる場合は通しページ番号を計算
+  var startPage = 1, startKnown = true;
+  for (var i = 0; i < chapter - 1; i++) {
+    var pp = chapters[i] ? parseInt(chapters[i].pages) : 0;
+    if (pp > 0) { startPage += pp; } else { startKnown = false; break; }
+  }
+  var p1 = startKnown ? 'P' + startPage : 'P1';
+  var p2 = startKnown ? 'P' + (startPage + 1) : 'P2';
+
   var L = [];
-  L.push('# ページ構成表の作成をお願いします');
+  if (chapter) {
+    L.push('# 第' + chapter + '章のページ構成表の作成をお願いします');
+    L.push('');
+    L.push('以下のストーリー設計と章立てをもとに、第' + chapter + '章のページ構成表を作成してください。');
+    L.push('出力するのは第' + chapter + '章の分だけです。他の章は出力しないでください。');
+  } else {
+    L.push('# ページ構成表の作成をお願いします');
+  }
   L.push('');
   if(v('p1_theme') || gv('p1_theme')) L.push('題材・テーマ：' + (v('p1_theme') || gv('p1_theme')));
   if(v('p1_persona') || gv('p1_persona')) L.push('ペルソナ（読者の原型）：' + (v('p1_persona') || gv('p1_persona')));
@@ -1307,9 +1346,22 @@ function genPagePlan() {
   if(v('p1_s4') || gv('p1_s4')) L.push('成長：' + (v('p1_s4') || gv('p1_s4')));
   if(v('p1_s5') || gv('p1_s5')) L.push('結末：' + (v('p1_s5') || gv('p1_s5')));
   L.push('');
+  if (chapter) {
+    var act = getAllChaptersText(); if(act) { L.push(act); L.push(''); }
+    var chInfo = getChapterText(chapter); if(chInfo) { L.push(chInfo); L.push(''); }
+  }
   var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
   L.push('## 出力してほしいもの');
-  L.push('全体（' + pages + 'ページ）のページ構成を以下の形式で作ってください。');
+  if (chapter) {
+    var chPages = c && c.pages ? '約' + c.pages + 'ページ' : 'この章の内容に合ったページ数（AIが決めてOK）';
+    L.push('第' + chapter + '章（' + chPages + '）のページ構成を以下の形式で作ってください。');
+    L.push(startKnown
+      ? 'ページ番号は作品全体の通し番号で、' + p1 + 'から始めてください。'
+      : 'ページ番号はこの章の1ページ目をP1として振ってください。');
+  } else {
+    var pages = v('p1_pages') || gv('p1_pages') || '20';
+    L.push('全体（' + pages + 'ページ）のページ構成を以下の形式で作ってください。');
+  }
   L.push('1ページあたりのコマ数：' + koma);
   L.push('');
   L.push('【出力形式】');
@@ -1325,17 +1377,24 @@ function genPagePlan() {
   L.push('F：小コマ4〜5コマ（テンポ重視）');
   L.push('');
   L.push('━━━━━━━━━━━━━━━━━━');
-  L.push('P1　役割：導入　感情：穏やか　レイアウト：A');
+  L.push(p1 + '　役割：導入　感情：穏やか　レイアウト：A');
   L.push('　内容：（このページで何が起きるか1〜2文で）');
   L.push('　ポイント：（演出・構図・見せ方のメモ）');
   L.push('━━━━━━━━━━━━━━━━━━');
-  L.push('P2　役割：…　感情：…　レイアウト：（A〜Fから選ぶ）');
+  L.push(p2 + '　役割：…　感情：…　レイアウト：（A〜Fから選ぶ）');
   L.push('　内容：…');
   L.push('　ポイント：…');
   L.push('━━━━━━━━━━━━━━━━━━');
-  L.push('（' + pages + 'ページ分、この形式で続けてください）');
-  L.push('');
-  L.push('それでは、P1から最後のページまで、上記の形式でページ構成表を出力してください。');
+  if (chapter) {
+    L.push('（第' + chapter + '章の全ページ分、この形式で続けてください）');
+    L.push('');
+    L.push('それでは、第' + chapter + '章の最初のページから最後のページまで、上記の形式でページ構成表を出力してください。');
+  } else {
+    var pages2 = v('p1_pages') || gv('p1_pages') || '20';
+    L.push('（' + pages2 + 'ページ分、この形式で続けてください）');
+    L.push('');
+    L.push('それでは、P1から最後のページまで、上記の形式でページ構成表を出力してください。');
+  }
   showOut('s3out1', L.join('\n'));
 }
 
