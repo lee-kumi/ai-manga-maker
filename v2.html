@@ -641,12 +641,16 @@ textarea{resize:vertical;min-height:72px;}
         <button class="tog" onclick="multi(this)">主人公をもっと大きく</button>
         <button class="tog" onclick="multi(this)">フォントが違う</button>
         <button class="tog" onclick="multi(this)">画像サイズが変わった</button>
-        <button class="tog" onclick="multi(this)">キャンバスサイズを1000×1414pxに戻して</button>
         <button class="tog" onclick="multi(this)">斜めコマにしたい</button>
         <button class="tog" onclick="multi(this)">ぶち抜きにしたい</button>
         <button class="tog" onclick="multi(this)">断ち切りにしたい</button>
         <button class="tog" onclick="multi(this)">縦割りにしたい</button>
       </div>
+    </div>
+    <div class="fg">
+      <label>出力サイズ<span class="opt-badge">任意</span></label>
+      <input type="text" id="p4_fix_size" placeholder="例：1000×1414px（空欄なら 1000×1414px・A4縦）" oninput="autoSave()">
+      <p style="font-size:12px;color:var(--muted);margin:4px 0 0;">修正後もこのサイズのまま出力するよう、プロンプトに毎回自動で入ります。</p>
     </div>
     <div class="fg">
       <label>その他・詳細<span class="opt-badge">任意</span></label>
@@ -807,7 +811,7 @@ function v(id) { var el = document.getElementById(id); return el ? el.value.trim
 function autoSave() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_fix_size','p4_fix_detail','doc_url'];
   ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
   showSave();
 }
@@ -815,7 +819,7 @@ function autoSave() {
 function loadData() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_fix_size','p4_fix_detail','doc_url'];
   ids.forEach(function(id) {
     var el = document.getElementById(id);
     if(el) { var val = gv(id); el.value = val !== '' ? val : el.defaultValue; }
@@ -1655,8 +1659,9 @@ function genFixPrompt() {
   L.push('');
   if(art) { L.push('【画風・スタイルは変えないでください】'); L.push(art); L.push(''); }
   var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
+  var fixSize = v('p4_fix_size') || gv('p4_fix_size') || getSize();
   L.push('【出力サイズは変えないでください】');
-  L.push('・キャンバスサイズは ' + getSize() + ' のまま出力してください');
+  L.push('・キャンバスサイズは ' + fixSize + ' のまま出力してください');
   L.push('・縦横比・解像度を変更しない／トリミング・拡大縮小・余白の追加もしないでください');
   L.push('');
   L.push('それ以外の部分（コマ割り・構図・他のキャラ）は変えないでください。');
