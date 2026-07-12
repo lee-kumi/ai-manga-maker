@@ -649,8 +649,8 @@ textarea{resize:vertical;min-height:72px;}
     </div>
     <div class="fg">
       <label>出力サイズ<span class="opt-badge">任意</span></label>
-      <input type="text" id="p4_fix_size" placeholder="例：1000×1414px（空欄なら 1000×1414px・A4縦）" oninput="autoSave()">
-      <p style="font-size:12px;color:var(--muted);margin:4px 0 0;">修正後もこのサイズのまま出力するよう、プロンプトに毎回自動で入ります。</p>
+      <input type="text" id="p4_fix_size" placeholder="例：1080×1350px（インスタ縦）／空欄なら 1000×1414px のまま" oninput="autoSave()">
+      <p style="font-size:12px;color:var(--muted);margin:4px 0 0;">空欄なら元のサイズ（1000×1414px・A4縦）を維持。インスタ用など別サイズにしたいときはここに入力（正方形 1080×1080px／縦 1080×1350px／ストーリーズ 1080×1920px）。</p>
     </div>
     <div class="fg">
       <label>その他・詳細<span class="opt-badge">任意</span></label>
@@ -1659,10 +1659,16 @@ function genFixPrompt() {
   L.push('');
   if(art) { L.push('【画風・スタイルは変えないでください】'); L.push(art); L.push(''); }
   var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
-  var fixSize = v('p4_fix_size') || gv('p4_fix_size') || getSize();
-  L.push('【出力サイズは変えないでください】');
-  L.push('・キャンバスサイズは ' + fixSize + ' のまま出力してください');
-  L.push('・縦横比・解像度を変更しない／トリミング・拡大縮小・余白の追加もしないでください');
+  var fixSize = v('p4_fix_size') || gv('p4_fix_size') || '';
+  if (fixSize) {
+    L.push('【出力サイズ（必ず守ること）】');
+    L.push('・キャンバスサイズは必ず ' + fixSize + ' で出力してください');
+    L.push('・指定したサイズ以外での出力・勝手な余白の追加は禁止');
+  } else {
+    L.push('【出力サイズは変えないでください】');
+    L.push('・キャンバスサイズは ' + getSize() + ' のまま出力してください');
+    L.push('・縦横比・解像度を変更しない／トリミング・拡大縮小・余白の追加もしないでください');
+  }
   L.push('');
   L.push('それ以外の部分（コマ割り・構図・他のキャラ）は変えないでください。');
   showOut('s4out3', L.join('\n'));
