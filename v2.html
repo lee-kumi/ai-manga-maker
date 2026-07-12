@@ -103,6 +103,8 @@ textarea{resize:vertical;min-height:72px;}
 .proj-add:hover{border-color:var(--primary);color:var(--primary);}
 .proj-edit{font-family:inherit;font-size:12px;padding:5px 9px;border-radius:20px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all 0.2s;margin-left:-4px;}
 .proj-edit:hover{border-color:var(--primary);background:var(--primary-light);}
+.proj-btn.dragging{opacity:0.4;}
+.proj-btn.drag-over{border-style:dashed;border-color:var(--primary);}
 
 /* Flow cards */
 .flow-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0;}
@@ -726,6 +728,7 @@ function renameProject(oldName) {
   saveProjects();
   renderProjBar();
 }
+var dragProj = null;
 function renderProjBar() {
   var bar = document.getElementById('projBar');
   bar.innerHTML = '';
@@ -733,9 +736,40 @@ function renderProjBar() {
     var btn = document.createElement('button');
     btn.className = 'proj-btn' + (p === curProj ? ' active' : '');
     btn.textContent = p;
-    btn.title = '✏️マークまたはダブルクリックで名前変更';
+    btn.title = '✏️マークまたはダブルクリックで名前変更／ドラッグで並べ替え';
     btn.onclick = function() { setProject(p); };
     btn.ondblclick = function(e) { e.stopPropagation(); renameProject(p); };
+    btn.draggable = true;
+    btn.ondragstart = function(e) {
+      dragProj = p;
+      btn.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    };
+    btn.ondragend = function() {
+      dragProj = null;
+      renderProjBar();
+    };
+    btn.ondragover = function(e) {
+      if (dragProj && dragProj !== p) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        btn.classList.add('drag-over');
+      }
+    };
+    btn.ondragleave = function() { btn.classList.remove('drag-over'); };
+    btn.ondrop = function(e) {
+      e.preventDefault();
+      if (!dragProj || dragProj === p) return;
+      var from = projects.indexOf(dragProj);
+      projects.splice(from, 1);
+      var to = projects.indexOf(p);
+      if (from <= to) to++;
+      projects.splice(to, 0, dragProj);
+      dragProj = null;
+      saveProjects();
+      renderProjBar();
+      showToast('並び順を変更しました');
+    };
     bar.appendChild(btn);
     if (p === curProj) {
       var edit = document.createElement('button');
