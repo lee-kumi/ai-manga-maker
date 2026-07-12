@@ -21,6 +21,8 @@ GitHub Pagesで公開されている：https://lee-kumi.github.io/ai-manga-maker
 | `story-design.html` | ストーリー設計アプリ（企画の補助） |
 | `docs/manga-maker-rules.md` | 漫画メーカーの思想・ルール文書 |
 | `docs/cover-maker-rules.md` | 表紙メーカーの思想・ルール文書 |
+| `README.md` | GitHub用のプロジェクト説明（公開URL・ツール一覧） |
+| `.claude/skills/` | Claude用スキル：`/manga-scenario`・`/manga-prompt`・`/cover-concept`。**docs/ の文書を原本として参照する薄い作り**にしてあり、ルール本文はスキル側に複製しない |
 
 ## 作りの約束事（変えないこと）
 
