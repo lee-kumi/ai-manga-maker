@@ -1655,6 +1655,10 @@ function genFixPrompt() {
   L.push('');
   if(art) { L.push('【画風・スタイルは変えないでください】'); L.push(art); L.push(''); }
   var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
+  L.push('【出力サイズは変えないでください】');
+  L.push('・キャンバスサイズは ' + getSize() + ' のまま出力してください');
+  L.push('・縦横比・解像度を変更しない／トリミング・拡大縮小・余白の追加もしないでください');
+  L.push('');
   L.push('それ以外の部分（コマ割り・構図・他のキャラ）は変えないでください。');
   showOut('s4out3', L.join('\n'));
 }
