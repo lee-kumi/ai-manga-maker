@@ -249,7 +249,7 @@ textarea{resize:vertical;min-height:64px;}
     <div id="out-image" class="hide">
       <div class="divider"></div>
       <div class="card-title" style="margin-top:6px;"><span class="icon">②</span> 画像生成プロンプト（→ ナノバナナ / ChatGPT）</div>
-      <div class="info-box">表紙の<strong>ビジュアルだけ</strong>を作るプロンプトです。日本語の文字は生成に含めず、<strong>後からCanvaでタイトルを載せる</strong>前提です（日本語崩れ防止）。</div>
+      <div class="info-box">表紙の<strong>ビジュアル＋タイトル</strong>を一気に作るプロンプトです。基本はタイトルも画像に入れて生成し、<strong>日本語が崩れたときだけ空欄にして後からCanvaで載せます</strong>。</div>
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('image-text', this)">コピー</button>
         <pre id="image-text"></pre>
@@ -587,8 +587,9 @@ function generate() {
       '- サムネイルに縮小しても主人公と世界観が一目で伝わる、はっきりした構図にする\n' +
       '- 主役を大きく、視線を引く配置にする\n' +
       '- 色数は3色以内でまとめ、主役が背景に埋もれないようにする\n' +
-      '- タイトル文字を載せる余白（上部または下部の帯）を空けておく\n\n' +
-      '【重要】画像に日本語の文字は入れないでください。タイトルは後からCanvaで載せます。\n' +
+      '- タイトルを載せる帯や余白（上部または下部）をはっきり作る\n\n' +
+      '【文字について】タイトル「' + (v('cf_title') || '（タイトル未入力）') + '」を、読みやすいゴシック体で大きく画像内に入れてください（句点。は付けない）。' + (v('cf_subtitle') ? 'キャッチコピー「' + v('cf_subtitle') + '」も小さめに添えてください。' : '') + '\n' +
+      '日本語の文字が崩れる場合は、その部分だけ空欄のままにして、後からCanvaで載せられるよう余白を残してください。\n' +
       '同じキャラを別ページでも使う場合は、キャラクターシート（charsheet.html）を参照画像として添付してください。\n\n' +
       'ネガティブプロンプト：lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, 文字化けした日本語, ごちゃついた背景';
   } else {
@@ -607,8 +608,8 @@ function generate() {
       '- 色数は3色以内。ジャンルの雰囲気が一瞬で伝わる配色にする\n' +
       '- 象徴的なモチーフは1つに絞り、大きくシンプルに\n' +
       '- サムネイルに縮小しても成立する、コントラストの強い構図にする\n\n' +
-      '【重要】画像に文字（タイトル・帯コピー）は入れないでください。文字は後からCanvaで載せます。\n' +
-      '装飾は最小限にし、文字を置いても読みやすい落ち着いた背景にしてください。\n\n' +
+      '【文字について】タイトル「' + (v('cf_title') || '（タイトル未入力）') + '」を主役として大きく画像内に入れてください（句点。は付けない）。' + (v('cf_subtitle') ? 'キャッチコピー「' + v('cf_subtitle') + '」も短く添えてください。' : '') + '書体は読みやすいものにし、装飾は最小限にする。\n' +
+      '日本語の文字が崩れる場合は、その部分だけ空欄のままにして、後からCanvaで載せられるよう余白を残してください。\n\n' +
       'ネガティブプロンプト：lowres, blurry, watermark, 文字化けした日本語, ごちゃついた背景, 過剰な装飾';
   }
 
