@@ -24,6 +24,8 @@ GitHub Pagesで公開されている：https://lee-kumi.github.io/ai-manga-maker
 | `docs/knowledge-base.md` | **ナレッジ総まとめ**。全ツール（story-design・charsheet含む）の思想・ノウハウを1か所に集約した地図。漫画本文・表紙は上2文書が原本で、こちらは要約＋全体像 |
 | `README.md` | GitHub用のプロジェクト説明（公開URL・ツール一覧） |
 | `.claude/skills/` | Claude用スキル：`/manga-scenario`・`/manga-prompt`・`/cover-concept`。**docs/ の文書を原本として参照する薄い作り**にしてあり、ルール本文はスキル側に複製しない |
+| `MEMORY.md` | 事業情報・判断基準の「記憶」。AIと作業を始めるとき最初に読ませる前提ファイル |
+| `Skills/_RULE.md`・`ナレッジ/_RULE.md`・`Output/_RULE.md` | 作業フォルダの案内板（構成＋ルール）。実体の原本は `.claude/skills/`・`docs/` 側で、この案内板はそこへの入口 |
 
 ## 作りの約束事（変えないこと）
 
