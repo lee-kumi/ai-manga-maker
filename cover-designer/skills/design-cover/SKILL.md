@@ -24,6 +24,8 @@
 
 ## 成果物の形と保存先
 - STEP0〜5 が縦に並んだ設計書 Markdown 1枚。保存先＝`output/日付_本タイトル_cover.md`
+- 依頼があれば同じ内容を **PDF でも出す**（保存先＝`output/日付_本タイトル_cover.pdf`）。
+  作り方：設計書をA4のHTMLに整形 → Chromium(headless)で `--print-to-pdf`。日本語フォントは IPAGothic。
 
 ## 合格条件（数えられる形）
 1. STEP0〜STEP5 の**6項目すべて**が埋まっている。
