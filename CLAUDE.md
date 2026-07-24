@@ -16,13 +16,15 @@ GitHub Pagesで公開されている：https://lee-kumi.github.io/ai-manga-maker
 | `index.html` | ポータル（ツール集トップ）。新ツールを追加したらここにカードを足す |
 | `v2.html` | **AI漫画メーカー v2**（メイン）。企画→キャラ・画風→コマ割り→画像生成の4STEP |
 | `maker.html` | AI漫画メーカー旧版（6STEP）。基本的に触らない |
-| `cover-maker.html` | **Kindle表紙メーカー（Cover Compass）**。AI漫画の表紙／テキスト本の表紙の2プロファイル |
+| `cover-maker.html` | **Kindle表紙メーカー（Cover Compass）**。おまかせ／詳細／画像から真似るの3モード。売れる要素分析→最適解1案方式 |
 | `charsheet.html` | キャラクターシート生成（顔ブレ防止用） |
 | `story-design.html` | ストーリー設計アプリ（企画の補助） |
 | `docs/manga-maker-rules.md` | 漫画メーカーの思想・ルール文書 |
 | `docs/cover-maker-rules.md` | 表紙メーカーの思想・ルール文書 |
+| `docs/kindle-cover-design-rules.md` | **表紙設計の汎用ルール（思想の原本）**。アプリ・スキル・Agent.mdはこれを基準にする |
+| `Agent.md` | Kindle表紙設計AIの自己完結版指示書。他のAI（ChatGPT等）にそのまま貼って使う |
 | `README.md` | GitHub用のプロジェクト説明（公開URL・ツール一覧） |
-| `.claude/skills/` | Claude用スキル：`/manga-scenario`・`/manga-prompt`・`/cover-concept`。**docs/ の文書を原本として参照する薄い作り**にしてあり、ルール本文はスキル側に複製しない |
+| `.claude/skills/` | Claude用スキル：`/manga-scenario`・`/manga-prompt`・`/cover-design`（STEP0〜5・1案方式）・`/cover-concept`（旧3案方式・レガシー）。**docs/ の文書を原本として参照する薄い作り**にしてあり、ルール本文はスキル側に複製しない |
 
 ## 作りの約束事（変えないこと）
 
