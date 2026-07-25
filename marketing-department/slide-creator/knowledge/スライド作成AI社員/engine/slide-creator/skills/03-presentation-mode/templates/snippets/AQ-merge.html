@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>AQ merge</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--c-grad:linear-gradient(145deg,#7b6ce0 0%,#9b8cff 24%,#c87941 49%,#e8b88a 74%,#f7f0f6 100%)}
+  html,body{margin:0;padding:0;height:100%;background:#000;font-family:"Noto Sans JP",sans-serif}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));container-type:inline-size;overflow:hidden;background:#fff;padding:2cqw 2.5cqw;display:flex;flex-direction:column}
+  .title{font-size:3.2cqw;font-weight:800;color:#1a1a2e;margin:0 0 .4cqw 0;line-height:1.25}
+  .lead{font-size:1.3cqw;color:#6c6c8a;margin:0 0 1.2cqw 0}
+  .row{flex:1;display:flex;align-items:stretch;gap:1.2cqw}
+  .col{flex:1;display:flex;flex-direction:column;gap:.6cqw}
+  .col-head{background:var(--c-grad);color:#fff;border-radius:.6cqw;padding:1.1cqw 1.2cqw;font-size:1.55cqw;font-weight:800;text-align:center;letter-spacing:.02em}
+  .col-list{display:flex;flex-direction:column;gap:.5cqw;flex:1}
+  .col-item{background:#fff;border:1px solid #e0ddf0;border-radius:.5cqw;padding:1cqw 1.2cqw;font-size:1.3cqw;color:#1a1a2e;line-height:1.4}
+  .col-item--alt{background:#f4f2fb;font-weight:700}
+  .connector{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1cqw;flex-shrink:0}
+  .arrow{font-size:2.5cqw;color:#9b8cff}
+  .hub{background:linear-gradient(145deg,#1a1a2e 0%,#7b6ce0 60%,#c87941 100%);color:#fff;padding:1.6cqw 1.8cqw;border-radius:1cqw;text-align:center;font-size:1.6cqw;font-weight:800;box-shadow:0 .4cqw 1.5cqw rgba(155,140,255,.4);min-width:12cqw}
+</style></head><body><div class="stage"><div class="slide">
+  <h2 class="title">2列 + 中央ハブで「合流ロジック」を見せる</h2>
+  <p class="lead">A社×B社の合弁、入力→処理→出力の一気通貫、複数チームの統合 等</p>
+  <div class="row">
+    <div class="col"><div class="col-head">入力側</div>
+      <div class="col-list">
+        <div class="col-item">A 専門知識</div>
+        <div class="col-item">B 業界経験</div>
+        <div class="col-item col-item--alt">C 信頼関係</div>
+      </div>
+    </div>
+    <div class="connector"><div class="arrow">▶</div><div class="hub">統合<br>ハブ</div><div class="arrow">▶</div></div>
+    <div class="col"><div class="col-head">出力側</div>
+      <div class="col-list">
+        <div class="col-item">α 新規プロジェクト</div>
+        <div class="col-item">β 既存改善</div>
+        <div class="col-item col-item--alt">γ 業界初の取り組み</div>
+      </div>
+    </div>
+  </div>
+</div></div></body></html>

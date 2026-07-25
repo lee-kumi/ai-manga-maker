@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>§AD tpl-xgrid</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="../_shared/style.css?v=4">
+<style>
+html,body{background:#000;margin:0;padding:0;height:100%}
+.stage{position:fixed;inset:0;width:100vw;height:100vh;background:#000;overflow:hidden}
+.slide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));
+  container-type:inline-size;background:#fff;color:var(--c-dark);
+  overflow:hidden;display:flex;font-family:var(--font-sans);
+  opacity:1;visibility:visible;}
+.hint{position:fixed;top:14px;left:14px;font-family:var(--font-num);font-size:11px;
+  letter-spacing:.18em;color:#fff;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:999px;z-index:99;max-width:80vw}
+</style></head><body>
+<div class="hint">§AD .tpl-xgrid — Xアカウント8グリッド + 合計フォロワー(実画像差し込み)</div>
+<div class="stage"><section class="slide tpl-xgrid"><div class="tpl-xgrid__head"><p class="tpl-xgrid__eyebrow">X ACCOUNTS WE OPERATE</p><h2 class="tpl-xgrid__h2">運営する<span class="grad">8 アカウント</span>の合計</h2><p class="tpl-xgrid__total">合計 <b>（フォロワー数）</b> ／ AI 社員が自動運営</p></div><div class="tpl-xgrid__grid"><div class="xacc"><div class="xacc__photo"><img src="../_shared/people/studio_logo.jpg" alt=""></div><p class="xacc__name">サンプルスタジオ</p><p class="xacc__handle">@your_main</p><p class="xacc__n">（フォロワー数）<small>人</small></p></div><div class="xacc"><div class="xacc__photo" style="background:linear-gradient(135deg,#7b6ce0,#9b8cff)"></div><p class="xacc__name">Acc 02</p><p class="xacc__handle">@example2</p><p class="xacc__n">（フォロワー数）<small>人</small></p></div><div class="xacc"><div class="xacc__photo" style="background:linear-gradient(135deg,#9b8cff,#c87941)"></div><p class="xacc__name">Acc 03</p><p class="xacc__handle">@example3</p><p class="xacc__n">（フォロワー数）<small>人</small></p></div><div class="xacc"><div class="xacc__photo" style="background:linear-gradient(135deg,#c87941,#e8b88a)"></div><p class="xacc__name">Acc 04</p><p class="xacc__handle">@example4</p><p class="xacc__n">（フォロワー数）<small>人</small></p></div><div class="xacc"><div class="xacc__photo" style="background:linear-gradient(135deg,#7b6ce0,#c87941)"></div><p class="xacc__name">Acc 05</p><p class="xacc__handle">@example5</p><p class="xacc__n">（フォロワー数）<small>人</small></p></div><div class="xacc"><div class="xacc__photo" style="background:linear-gradient(135deg,#9b8cff,#7b6ce0)"></div><p class="xacc__name">Acc 06</p><p class="xacc__handle">@example6</p><p class="xacc__n">（フォロワー数）<small>人</small></p></div><div class="xacc"><div class="xacc__photo" style="background:linear-gradient(135deg,#c87941,#9b8cff)"></div><p class="xacc__name">Acc 07</p><p class="xacc__handle">@example7</p><p class="xacc__n">（フォロワー数）<small>人</small></p></div><div class="xacc"><div class="xacc__photo" style="background:linear-gradient(135deg,#e8b88a,#7b6ce0)"></div><p class="xacc__name">Acc 08</p><p class="xacc__handle">@example8</p><p class="xacc__n">（フォロワー数）<small>人</small></p></div></div></section></div>
+</body></html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>AO bigword-3d</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#000;font-family:"Noto Sans JP",sans-serif}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));container-type:inline-size;overflow:hidden;position:relative;
+    background:linear-gradient(110deg,#f4f2fb 0%,#e6e0fa 50%,#d2c9f5 100%);padding:3cqw 3.5cqw;display:flex;flex-direction:column;justify-content:space-between}
+  .decor{position:absolute;top:-15%;right:-5%;width:50%;height:80%;
+    background:linear-gradient(135deg,#7b6ce0 0%,#9b8cff 30%,#c4baff 70%,transparent 100%);
+    clip-path:polygon(20% 0%,100% 0%,80% 100%,0% 100%);filter:blur(6px);opacity:.85;z-index:0}
+  .decor2{position:absolute;top:10%;right:5%;width:28%;height:55%;
+    background:linear-gradient(145deg,#b4abff 0%,#7b6ce0 70%,#1a1a2e 100%);
+    clip-path:polygon(30% 0%,100% 20%,70% 100%,0% 80%);opacity:.9;border-radius:3cqw;z-index:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:6cqw;font-weight:800}
+  .brand{position:relative;z-index:3;font-size:1.2cqw;font-weight:700;color:#1a1a2e}
+  .title{position:relative;z-index:3;font-size:4.4cqw;font-weight:800;color:#1a1a2e;line-height:1.15;max-width:60%;margin:1cqw 0 0 0;word-break:keep-all}
+  .body{position:relative;z-index:3;font-size:1.45cqw;color:#1a1a2e;line-height:1.8;max-width:60%;margin:0}
+  .footer{position:relative;z-index:3;font-size:1cqw;color:#6c6c8a;margin-top:1cqw}
+</style></head><body><div class="stage"><div class="slide">
+  <div class="decor"></div>
+  <div class="decor2">X</div>
+  <div class="brand">ブランド × X Operations</div>
+  <h1 class="title">8アカウント運用は<br>専任スペシャリストが<br>1人で回す</h1>
+  <p class="body">機密の都合で具体は伏せます。運用の<strong>パイプラインだけ</strong>見せます。皆さんの事業にも応用できる構造です。</p>
+  <div class="footer">tpl-bigword-3d</div>
+</div></div></body></html>

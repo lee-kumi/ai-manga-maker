@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>§AH tpl-qr</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="../_shared/style.css?v=6">
+<style>
+html,body{background:#000;margin:0;padding:0;height:100%}
+.stage{position:fixed;inset:0;width:100vw;height:100vh;background:#000;overflow:hidden}
+.slide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));
+  container-type:inline-size;background:#fff;color:#1a1a2e;
+  overflow:hidden;display:flex;font-family:var(--font-sans);
+  opacity:1;visibility:visible;}
+.hint{position:fixed;top:14px;left:14px;font-family:var(--font-num);font-size:11px;
+  letter-spacing:.18em;color:#fff;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:999px;z-index:99;max-width:80vw}
+</style></head><body>
+<div class="hint">§AH .tpl-qr — 公式LINE QR + 案内 画像: assets/gifts/line_qr.png 等のQR画像</div>
+<div class="stage"><section class="slide tpl-qr"><div class="tpl-qr__txt"><p class="tpl-qr__eyebrow">RECEIVE YOUR GIFTS</p><h1 class="tpl-qr__h1">プレゼントは<br><span class="grad">公式 LINE</span> で<br><span class="gold">今すぐ</span>受け取る。</h1><p class="tpl-qr__sub">スマホで右の QR を読み取って、友達追加するだけ。</p><ul class="tpl-qr__list"><li>セミナーアーカイブ動画</li><li>AI 社員 PDF</li><li>Obsidian Vault PDF</li><li>3 日間限定の専用 LP / 決済リンク</li></ul></div><div class="tpl-qr__img"><img src="../_shared/gifts/line_qr.png" alt="公式LINE QR"><p class="tpl-qr__id">@your_line</p><p class="tpl-qr__name">サンプルスタジオ公式</p></div></section></div>
+</body></html>

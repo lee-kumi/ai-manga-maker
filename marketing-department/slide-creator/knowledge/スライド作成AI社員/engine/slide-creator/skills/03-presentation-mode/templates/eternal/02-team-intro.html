@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>E2: サンプルスタジオ チーム自己紹介 — 永久テンプレ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700;800;900&family=Shippori+Mincho:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --c-dark:#1a1a2e;--c-accent:#9b8cff;--c-accent-dark:#7b6ce0;
+    --c-orange:#c87941;--c-orange-light:#e8b88a;--c-surface:#f4f2fb;
+    --c-muted:#6c6c8a;--c-border:#e0ddf0;
+    --font-sans:"Noto Sans JP","Helvetica Neue","Hiragino Kaku Gothic ProN",system-ui,sans-serif;
+    --font-num:"Helvetica Neue",Helvetica,sans-serif;
+  }
+  html,body{margin:0;padding:0;height:100%;background:#000;font-family:var(--font-sans)}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));container-type:inline-size;overflow:hidden;display:flex;background:#f7f6f1;position:relative}
+  .tpl-bio-team{flex-direction:row;align-items:stretch;background:#f7f6f1;padding:0;position:relative;overflow:hidden;width:100%;height:100%}
+  .tpl-bio-team__head{position:absolute;top:1.8cqw;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 3cqw;z-index:5;font-family:var(--font-num);font-size:1.05cqw;letter-spacing:.16em;color:var(--c-muted);font-weight:700;text-transform:uppercase}
+  .tpl-bio-team__head b{color:var(--c-dark)}
+  .tpl-bio-team__head__page{font-weight:800;color:var(--c-dark);background:#fff;border:1px solid var(--c-border);border-radius:999px;padding:.4cqw 1cqw}
+  .tpl-bio-team__left{flex:0 0 36%;position:relative;display:flex;align-items:center;justify-content:center;background:#fff}
+  .tpl-bio-team__left::before{content:"";position:absolute;left:0;top:14%;bottom:14%;width:80%;background:var(--c-accent-dark);border-top-right-radius:6cqw;border-bottom-right-radius:6cqw;z-index:1}
+  .tpl-bio-team__logo{position:relative;z-index:2;width:54%;height:auto;background:#fff;padding:2.2cqw;border-radius:50%;box-shadow:0 1cqw 2.4cqw rgba(0,0,0,.16)}
+  .tpl-bio-team__right{flex:1;padding:8cqw 5cqw 5cqw;display:flex;flex-direction:column;gap:1.2cqw}
+  .tpl-bio-team__name-row{display:flex;align-items:baseline;gap:1.4cqw;flex-wrap:wrap}
+  .tpl-bio-team__name{font-family:"游ゴシック体","Yu Gothic",YuGothic,sans-serif;font-size:3.6cqw;font-weight:900;color:var(--c-dark);letter-spacing:.02em;line-height:1.05;margin:0}
+  .tpl-bio-team__handle{font-family:var(--font-num);font-size:1.6cqw;font-weight:800;color:var(--c-accent-dark);letter-spacing:.04em}
+  .tpl-bio-team__lead{font-size:1.5cqw;color:var(--c-muted);line-height:1.85;margin:.4cqw 0 0 0;max-width:48cqw}
+  .tpl-bio-team__list{display:flex;flex-direction:column;gap:.8cqw;margin:.6cqw 0 0 0;max-width:48cqw;padding:0;list-style:none}
+  .tpl-bio-team__list li{list-style:none;font-size:1.3cqw;color:var(--c-dark);font-weight:600;line-height:1.6;padding-left:1.6cqw;position:relative}
+  .tpl-bio-team__list li::before{content:"";position:absolute;left:0;top:.7cqw;width:.7cqw;height:.7cqw;background:var(--c-orange);border-radius:50%}
+  .tpl-bio-team__list li b{color:var(--c-orange);font-weight:800}
+  .tpl-bio-team__metrics{display:flex;gap:2cqw;margin-top:.8cqw;flex-wrap:wrap}
+  .tpl-bio-team__metric{display:flex;flex-direction:column;align-items:flex-start;gap:.2cqw;background:#fff;border:1px solid var(--c-border);border-radius:1cqw;padding:1cqw 1.4cqw}
+  .tpl-bio-team__metric b{font-family:"Shippori Mincho",var(--font-sans);font-size:2.6cqw;font-weight:800;color:var(--c-accent-dark);line-height:1}
+  .tpl-bio-team__metric span{font-family:var(--font-num);font-size:.95cqw;letter-spacing:.18em;color:var(--c-muted);font-weight:700;text-transform:uppercase}
+</style></head><body><div class="stage"><div class="slide">
+<div class="tpl-bio-team">
+  <div class="tpl-bio-team__head">
+    <span><b>サンプルスタジオ</b> ／ Host Channel</span>
+    <span class="tpl-bio-team__head__page">E2 / Eternal</span>
+  </div>
+  <div class="tpl-bio-team__left"><img class="tpl-bio-team__logo" src="assets/people/studio_logo.jpg" alt="サンプルスタジオ"></div>
+  <div class="tpl-bio-team__right">
+    <div class="tpl-bio-team__name-row">
+      <h2 class="tpl-bio-team__name">サンプルスタジオ</h2>
+      <span class="tpl-bio-team__handle">@your_main</span>
+    </div>
+    <p class="tpl-bio-team__lead">Claude Code ガチ勢 3 人で運営する、実務レベルの CLI 活用と自動化を毎日発信するチーム。</p>
+    <ul class="tpl-bio-team__list">
+      <li>毎日 Claude Code の <b>実務 CLI 活用と自動化</b> を発信</li>
+      <li><b>（取引実績）</b> を進行中</li>
+      <li>株式会社 <b>ブランド</b> が運営</li>
+    </ul>
+    <div class="tpl-bio-team__metrics">
+      <div class="tpl-bio-team__metric"><b>（フォロワー数）</b><span>X FOLLOWERS</span></div>
+      <div class="tpl-bio-team__metric"><b>3</b><span>MEMBERS</span></div>
+      <div class="tpl-bio-team__metric"><b>DAILY</b><span>CONTENT</span></div>
+    </div>
+  </div>
+</div>
+</div></div></body></html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>tpl-speakers</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="../_shared/style.css?v=6">
+<style>
+html,body{background:#000;margin:0;padding:0;height:100%}
+.stage{position:fixed;inset:0;width:100vw;height:100vh;background:#000;overflow:hidden}
+.slide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));
+  container-type:inline-size;background:#fff;color:#1a1a2e;
+  overflow:hidden;display:flex;font-family:var(--font-sans);
+  opacity:1;visibility:visible;}
+.hint{position:fixed;top:14px;left:14px;font-family:var(--font-num);font-size:11px;
+  letter-spacing:.18em;color:#fff;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:999px;z-index:99;max-width:80vw}
+</style></head><body>
+<div class="hint">.tpl-speakers — 登壇者2人(写真+名前+ハンドル+bio)</div>
+<div class="stage"><section class="slide tpl-speakers"><p class="eyebrow">SPEAKERS</p><h2 class="tpl-speakers__h2">2 チームで<span class="txt-grad">対等に</span>話します</h2><div class="tpl-speakers__grid"><div class="sp"><div class="sp__photo"><img src="../_shared/people/studio_logo.jpg" alt="サンプルスタジオ"></div><p class="sp__role">HOST CHANNEL</p><p class="sp__name">サンプルスタジオ</p><p class="sp__handle">@your_main</p><p class="sp__bio">X <strong>（フォロワー数） フォロワー</strong>／実務 CLI 活用と自動化を毎日発信。</p></div><div class="sp"><div class="sp__photo"><img src="../_shared/people/guest.png" alt="パートナー"></div><p class="sp__role">SPECIAL GUEST</p><p class="sp__name">パートナー</p><p class="sp__handle">@guest_speaker</p><p class="sp__bio">X <strong>（フォロワー数） フォロワー</strong>／累計セミナー （参加人数）。</p></div></div></section></div>
+</body></html>

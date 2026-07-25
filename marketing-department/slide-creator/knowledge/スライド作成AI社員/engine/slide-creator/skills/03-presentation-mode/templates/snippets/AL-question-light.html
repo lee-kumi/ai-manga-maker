@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>§AL tpl-question-light</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="../_shared/style.css?v=8">
+<style>
+html,body{background:#000;margin:0;padding:0;height:100%}
+.stage{position:fixed;inset:0;width:100vw;height:100vh;background:#000;overflow:hidden}
+.slide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));
+  container-type:inline-size;background:#fff;color:#1a1a2e;
+  overflow:hidden;display:flex;font-family:var(--font-sans);
+  opacity:1;visibility:visible;}
+.hint{position:fixed;top:14px;left:14px;font-family:var(--font-num);font-size:11px;
+  letter-spacing:.18em;color:#fff;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:999px;z-index:99;max-width:80vw}
+</style></head><body>
+<div class="hint">§AL .tpl-question-light — 写真背景+白オーバーレイ+黒文字 大型呼びかけ質問。画像: opts.bg='../assets/bg/<name>.jpg'</div>
+<div class="stage"><section class="slide tpl-question-light" style="background-image:url(../_shared/bg/q_workspace2.jpg)"><p class="tpl-question-light__eyebrow">QUESTION 02 — 教えてください</p><h2 class="tpl-question-light__h1"><span class="grad">Obsidian</span>、<br>使っていますか？</h2><p class="tpl-question-light__sub">「使ってる」「気になってる」「初めて聞いた」 のどれかで、コメント欄に投げてください。</p></section></div>
+</body></html>

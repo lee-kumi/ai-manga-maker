@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI社員を1人雇うと、なぜ作業が消えて売上が残るのか｜株式会社アイウエオ（登壇セミナーデッキ）</title>
+<link rel="stylesheet" href="css07/deck07.css">
+</head>
+<body>
+<div class="deck-nav">
+  <button type="button" data-prev>◀</button>
+  <button type="button" data-next>▶</button>
+  <select data-jump aria-label="jump"></select>
+</div>
+<div class="deck-stage">
+
+<!-- 01 表紙ヒーロー（V02 / EVENT-COVER 型・tone-dark・右に実カバー画像） -->
+<section class="xop-slide tone-dark" data-template-id="EVENT-COVER" data-notes="本日はお集まりいただきありがとうございます。株式会社アイウエオの登壇です。テーマは『AI社員を1人雇うと、なぜ作業が消えて売上が残るのか』。90分、無料でお届けします。今日のゴールは、明日から自社の作業を1つでもAIに渡せる状態で帰っていただくことです。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:5.6%;top:7%;bottom:7%;width:38%;display:flex;flex-direction:column;justify-content:center">
+        <div style="font-size:24px;font-weight:900;letter-spacing:.12em;color:#f5d020;margin-bottom:30px">AIUEO INC. / FREE ONLINE SEMINAR</div>
+        <div style="font-size:60px;font-weight:950;line-height:1.12">AI社員を1人雇うと、<br>なぜ作業が消えて<br><span style="color:#f5d020">売上が残るのか</span></div>
+        <div style="width:210px;height:10px;background:#f5d020;margin:30px 0 26px"></div>
+        <div style="font-size:25px;font-weight:850;line-height:1.5;color:rgba(255,255,255,.78)">AIO Marketing OS で集客・営業・制作を<br>仕組み化する90分</div>
+        <div style="font-size:22px;font-weight:850;color:rgba(255,255,255,.62);margin-top:26px">90分 / 無料 / ONLINE LIVE</div>
+      </div>
+      <div style="position:absolute;left:46%;right:5%;top:50%;aspect-ratio:16/9;transform:translateY(-50%);border:1px solid rgba(255,255,255,.26);box-shadow:0 36px 92px rgba(0,0,0,.46);overflow:hidden">
+        <img src="img/seminar-cover.png" style="width:100%;height:100%;object-fit:cover" alt="セミナーカバー"></div>
+      <div style="position:absolute;right:5%;bottom:6%;font-size:18px;font-weight:850;color:rgba(255,255,255,.6)">SEMINAR PRESENTATION DECK</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 02 自己紹介転換（V07 黒背景ワンメッセージ） -->
+<section class="xop-slide tone-dark" data-template-id="INTRO-WALL" data-notes="本題に入る前に、まず私が何者かを簡単にお話しします。なぜこの話ができるのか、というところからです。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;right:6%;top:50%;transform:translateY(-50%)">
+        <div style="font-size:24px;font-weight:900;letter-spacing:.1em;color:#f5d020;margin-bottom:24px">INTRODUCTION</div>
+        <div style="font-size:88px;font-weight:950;line-height:1.1">まず、改めて<br><span style="color:#f5d020">自己紹介</span>します</div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 03 登壇者紹介（V03 / ICHI-PROFILE 型・tone-paper・左カラー帯＋右実績） -->
+<section class="xop-slide tone-paper" data-template-id="SPEAKER-PROFILE" data-notes="株式会社アイウエオ代表です。AI社員を使って、自分たちの集客・営業・制作を仕組み化してきました。導入企業は12社、平均で月40時間の作業を手放しています。今日はその中身を見せます。">
+  <div class="xop-canvas"><div class="corner-stripes"></div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:3%;right:3%;top:4%;display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:850;color:#6c6c8a;text-transform:uppercase">
+        <span><b style="color:#1a1a2e">株式会社アイウエオ</b> / Speaker Introduction</span>
+        <span style="background:#fff;border:1px solid #e0ddf0;border-radius:999px;padding:9px 20px;color:#1a1a2e">SPEAKER</span></div>
+      <div style="position:absolute;left:0;top:13%;bottom:0;width:30%;background:#c87941;border-top-right-radius:118px"></div>
+      <div style="position:absolute;left:5%;top:30%;width:20%;aspect-ratio:1/1;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 24px 60px rgba(26,26,46,.2);font-size:64px;font-weight:950;color:#c87941">A</div>
+      <div style="position:absolute;left:38%;right:5%;top:15%">
+        <div style="display:flex;align-items:baseline;gap:26px;flex-wrap:wrap">
+          <h2 style="font-size:80px;font-weight:950;line-height:1;margin:0">代表 / 登壇者</h2>
+          <span style="font-size:30px;font-weight:900;color:#c87941">AIUEO Inc.</span></div>
+        <div style="display:flex;gap:18px;margin-top:20px;flex-wrap:wrap">
+          <span style="background:#1a1a2e;color:#fff;border-radius:10px;padding:10px 16px;font-size:22px;font-weight:900">AIマーケティング支援</span>
+          <span style="background:#1a1a2e;color:#fff;border-radius:10px;padding:10px 16px;font-size:22px;font-weight:900">AIO Marketing OS 開発</span></div>
+        <p style="font-size:26px;font-weight:780;line-height:1.55;margin:24px 0 14px;color:#1a1a2e">AI社員を使って、自分たちの仕事を仕組み化してきました。</p>
+        <div style="display:grid;grid-template-columns:1fr 2.4fr;gap:18px 24px;margin-top:18px;max-width:980px">
+          <div style="font-size:24px;font-weight:950">事業</div>
+          <div style="font-size:23px;line-height:1.7;border-top:1px solid #e0ddf0;padding-top:11px">AIマーケティング支援。集客・営業・制作の<b style="color:#c87941">仕組み化</b>が専門。</div>
+          <div style="font-size:24px;font-weight:950">導入企業</div>
+          <div style="font-size:23px;line-height:1.7;border-top:1px solid #e0ddf0;padding-top:11px"><b style="color:#c87941">12社</b>へAI社員を導入（すべて架空前提）。</div>
+          <div style="font-size:24px;font-weight:950">平均効果</div>
+          <div style="font-size:23px;line-height:1.7;border-top:1px solid #e0ddf0;padding-top:11px">1社あたり<b style="color:#c87941">月40時間</b>の作業を手放した。</div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 04 今日の流れ（V04 / 本日の流れ 型・tone-paper・番号バッジ） -->
+<section class="xop-slide tone-paper" data-template-id="AGENDA" data-notes="今日の流れです。最初に結果から見ます。次に、なぜAI活用が単発で終わるのか。そして、AI社員を作る式と中身。最後に、明日から動かす手順までお渡しします。途中の質問は大歓迎です。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:0;right:0;top:8%;text-align:center;font-size:72px;font-weight:950">本日の流れ</div>
+      <div style="position:absolute;left:15%;right:15%;top:26%;bottom:8%;display:flex;flex-direction:column;justify-content:space-between">
+        <p style="display:flex;align-items:center;gap:24px;margin:0;font-size:42px;font-weight:900"><b style="background:#111;color:#fff;width:54px;height:54px;display:inline-flex;align-items:center;justify-content:center;font-size:30px">1</b><span>先に「結果」を見る</span></p>
+        <p style="display:flex;align-items:center;gap:24px;margin:0;font-size:42px;font-weight:900"><b style="background:#111;color:#fff;width:54px;height:54px;display:inline-flex;align-items:center;justify-content:center;font-size:30px">2</b><span>AI活用が単発で終わる理由</span></p>
+        <p style="display:flex;align-items:center;gap:24px;margin:0;font-size:42px;font-weight:900"><b style="background:#111;color:#fff;width:54px;height:54px;display:inline-flex;align-items:center;justify-content:center;font-size:30px">3</b><span>「AI社員」を作る式</span></p>
+        <p style="display:flex;align-items:center;gap:24px;margin:0;font-size:42px;font-weight:900"><b style="background:#111;color:#fff;width:54px;height:54px;display:inline-flex;align-items:center;justify-content:center;font-size:30px">4</b><span>AI社員の中身を分解する</span></p>
+        <p style="display:flex;align-items:center;gap:24px;margin:0;font-size:42px;font-weight:900"><b style="background:#111;color:#fff;width:54px;height:54px;display:inline-flex;align-items:center;justify-content:center;font-size:30px">5</b><span>明日から動かす手順</span></p>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 05 章扉1（V07/AGI-BRAND-SECTION 型・tone-brand・右上大番号） -->
+<section class="xop-slide tone-brand" data-template-id="CHAPTER-1" data-notes="まずは章の1つ目。結果から見ていきます。不安な方もいると思うので、方法より先に結果をお見せします。">
+  <div class="xop-canvas"><div class="corner-stripes"></div>
+    <div class="semantic-layer"><div class="sem-brand">
+      <div style="position:absolute;right:5.2%;top:7%;font-size:205px;line-height:.82;font-weight:950;color:#fff;opacity:.92;text-shadow:0 20px 52px rgba(0,0,0,.42)">1</div>
+      <div style="position:absolute;left:4.2%;right:24%;bottom:14%;font-size:96px;line-height:1.12;font-weight:950">まずは<br>結果で見てください</div>
+      <div style="position:absolute;left:4.2%;bottom:7%;font-size:27px;font-weight:850;color:rgba(255,255,255,.78)">PROOF BY RESULTS</div>
+      <div style="position:absolute;right:6.8%;bottom:6.8%;font-size:20px;font-weight:800;color:rgba(255,255,255,.72)">AIO Marketing OS / Free Seminar</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 06 黒ワンメッセージ（V07） -->
+<section class="xop-slide tone-dark" data-template-id="PROOF-WALL" data-notes="いきなり方法論を話されても、本当に効果があるのか不安だと思います。なので、先に結果からお見せします。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;right:6%;top:50%;transform:translateY(-50%)">
+        <div style="font-size:60px;font-weight:900;line-height:1.35;color:rgba(255,255,255,.9)">不安な方もいると思うので</div>
+        <div style="font-size:84px;font-weight:950;line-height:1.2;color:#f5d020">先に結果を見せます</div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 07 実績証拠グリッド（V05 / XOP-165 型・tone-paper・6カードハードシャドウ） -->
+<section class="xop-slide tone-paper" data-template-id="RESULTS-GRID6" data-notes="これが今のところの結果です。導入12社、平均で月40時間の作業を手放しました。受講後アンケートも好評です。そしてこのスライド自体も、AI社員が下書きを作っています。数字は架空前提ですが、出方の構造は本物です。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;right:6%;top:6.5%;display:flex;align-items:flex-end;justify-content:space-between">
+        <div><div style="font-size:24px;font-weight:950;color:#777;margin-bottom:16px">FIRST, SEE THE RESULTS</div>
+          <div style="font-size:62px;font-weight:950;line-height:1.1">数字より先に、<br><span class="hl">出ている結果</span>から</div></div>
+        <div style="font-size:22px;font-weight:950;color:#777;text-align:right;line-height:1.45">PROOF<br>BEFORE METHOD</div></div>
+      <div style="position:absolute;left:7%;right:7%;top:31%;bottom:9%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:24px">
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px;padding:22px"><div style="font-size:60px;font-weight:950;line-height:1">12社</div><div style="font-size:24px;font-weight:900;color:#555">AI社員 導入企業</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px;padding:22px"><div style="font-size:60px;font-weight:950;line-height:1">月40h</div><div style="font-size:24px;font-weight:900;color:#555">手放した作業時間／社</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px;padding:22px"><div style="font-size:60px;font-weight:950;line-height:1">8週間</div><div style="font-size:24px;font-weight:900;color:#555">仕組みが立ち上がる期間</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px;padding:22px"><div style="font-size:60px;font-weight:950;line-height:1">集客→制作</div><div style="font-size:24px;font-weight:900;color:#555">一気通貫の導線</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px;padding:22px"><div style="font-size:60px;font-weight:950;line-height:1">好評</div><div style="font-size:24px;font-weight:900;color:#555">受講後アンケート</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px;padding:22px"><div style="font-size:54px;font-weight:950;line-height:1">この資料</div><div style="font-size:24px;font-weight:900;color:#555">AI社員が下書き制作</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 08 証拠スクショ（V12 事例スクショ・実LP画像をハードシャドウ枠に） -->
+<section class="xop-slide tone-paper" data-template-id="PROOF-LP" data-notes="言葉だけでなく実物です。これは集客LPですが、ライティングもデザインの指示も、AI社員が作っています。人がやったのは方向性の確認だけ。次に、なぜこういう状態を作れるのかを話します。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-white">
+      <div style="position:absolute;left:5.8%;top:8%;bottom:8%;width:40%;display:flex;flex-direction:column;justify-content:center">
+        <div style="font-size:22px;font-weight:950;color:#777;margin-bottom:20px">OUTPUT SAMPLE / LANDING PAGE</div>
+        <div style="font-size:58px;font-weight:950;line-height:1.13">集客LPも、<br><span class="hl">AI社員の仕事</span>です</div>
+        <div style="font-size:27px;font-weight:850;line-height:1.55;color:#444;margin-top:28px">原稿・構成・デザイン指示まで一気通貫。人がやったのは方向性の確認だけ。これが「作業が消える」状態です。</div>
+      </div>
+      <div style="position:absolute;left:49%;right:5.5%;top:50%;aspect-ratio:1.32;transform:translateY(-50%);background:#111;border:3px solid #111;box-shadow:18px 18px 0 #111;overflow:hidden">
+        <img src="img/proof-lp.png" style="width:100%;height:100%;object-fit:cover;object-position:top" alt="AI社員が作ったLP"></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 09 章扉2 -->
+<section class="xop-slide tone-brand" data-template-id="CHAPTER-2" data-notes="2つ目の章です。ここからが本題。多くの人がAIを使っても、なぜか結果が積み上がりません。その理由を分解します。">
+  <div class="xop-canvas"><div class="corner-stripes"></div>
+    <div class="semantic-layer"><div class="sem-brand">
+      <div style="position:absolute;right:5.2%;top:7%;font-size:205px;line-height:.82;font-weight:950;color:#fff;opacity:.92;text-shadow:0 20px 52px rgba(0,0,0,.42)">2</div>
+      <div style="position:absolute;left:4.2%;right:24%;bottom:14%;font-size:90px;line-height:1.12;font-weight:950">AI活用が<br><span style="color:#f5d020">単発で終わる</span>理由</div>
+      <div style="position:absolute;left:4.2%;bottom:7%;font-size:27px;font-weight:850;color:rgba(255,255,255,.78)">WHY IT DOESN'T STACK</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 10 受講者の現状課題（V08 痛み4グリッド） -->
+<section class="xop-slide tone-paper" data-template-id="PAIN-GRID4" data-notes="心当たりはありませんか。毎回ゼロからプロンプトを書き直し、出力の品質はその日の気分次第。担当が辞めたらノウハウも消える。これはAIの問題ではなく、貯める場所がない、という問題です。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;right:6%;top:7%"><div style="font-size:24px;font-weight:950;color:#777;margin-bottom:14px">COMMON PAIN</div>
+        <div style="font-size:60px;font-weight:950;line-height:1.12">こんな状態、<span class="hl">心当たりありませんか</span></div></div>
+      <div style="position:absolute;left:6%;right:6%;top:33%;bottom:9%;display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div class="card-hard" style="padding:30px 36px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:36px;font-weight:950;line-height:1.2">毎回ゼロから書き直し</div><div style="font-size:23px;font-weight:850;color:#555;margin-top:12px">プロンプトを使い捨て。前の工夫が残らない。</div></div>
+        <div class="card-hard" style="padding:30px 36px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:36px;font-weight:950;line-height:1.2">品質がその日次第</div><div style="font-size:23px;font-weight:850;color:#555;margin-top:12px">同じ依頼でも出てくる物がバラバラ。</div></div>
+        <div class="card-hard" style="padding:30px 36px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:36px;font-weight:950;line-height:1.2">人が辞めると消える</div><div style="font-size:23px;font-weight:850;color:#555;margin-top:12px">ノウハウが個人の頭の中にしかない。</div></div>
+        <div class="card-hard" style="padding:30px 36px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:36px;font-weight:950;line-height:1.2">結局、自分でやる</div><div style="font-size:23px;font-weight:850;color:#555;margin-top:12px">教える手間のほうが大きく、AIを手放す。</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 11 常識の否定（V09 黄色ハイライト文・大きく1主張） -->
+<section class="xop-slide tone-minimal" data-template-id="MYTH-BREAK" data-notes="ここで覚えてほしいのはたった1つ。問題はAIの賢さではありません。賢いAIに、何度でも同じ前提を渡せる場所があるかどうか。ここが分かれ目です。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper" style="background:#f7f6f2">
+      <div style="position:absolute;left:10%;right:10%;top:50%;transform:translateY(-50%)">
+        <div style="font-size:26px;font-weight:950;color:#777;margin-bottom:22px">THE REAL PROBLEM</div>
+        <div style="font-size:74px;font-weight:950;line-height:1.28">問題は、AIの賢さではありません。<br><span class="ug">同じ前提を、何度でも渡せる場所</span>が<br>あるかどうかです。</div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 12 比喩（V07/METAPHOR・例え話を分かりやすく・tone-dark） -->
+<section class="xop-slide tone-dark" data-template-id="METAPHOR" data-notes="たとえるなら、優秀な新人を毎朝雇い直しているようなものです。賢いのに、昨日の仕事を覚えていない。だから毎回ゼロから説明する。必要なのは、新人を賢くすることではなく、引き継ぎノートを置いておくことです。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;right:6%;top:9%"><div style="font-size:22px;font-weight:950;color:#f5d020;letter-spacing:.08em">METAPHOR</div>
+        <div style="font-size:58px;font-weight:950;line-height:1.18;margin-top:14px">いまの多くのAI活用は、<br>優秀な新人を<span style="color:#f5d020">毎朝雇い直している</span></div></div>
+      <div style="position:absolute;left:7%;right:7%;top:45%;bottom:10%;display:grid;grid-template-columns:1fr 1fr;gap:28px">
+        <div style="background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.2);border-radius:18px;padding:34px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:34px;font-weight:950;color:#fff">毎朝、雇い直す</div><div style="font-size:23px;font-weight:800;line-height:1.5;color:rgba(255,255,255,.72);margin-top:14px">賢いのに昨日を覚えていない。毎回ゼロから説明し直す。</div></div>
+        <div style="background:#f5d020;border-radius:18px;padding:34px;display:flex;flex-direction:column;justify-content:center;color:#111"><div style="font-size:34px;font-weight:950">引き継ぎノートを置く</div><div style="font-size:23px;font-weight:850;line-height:1.5;margin-top:14px">前提・手順・成果物を1か所に残す。新人が一晩で戦力になる。</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 13 章扉3 -->
+<section class="xop-slide tone-brand" data-template-id="CHAPTER-3" data-notes="3つ目の章。では、その引き継ぎノートをどう作るのか。AI社員を作る式を1つの形にまとめました。">
+  <div class="xop-canvas"><div class="corner-stripes"></div>
+    <div class="semantic-layer"><div class="sem-brand">
+      <div style="position:absolute;right:5.2%;top:7%;font-size:205px;line-height:.82;font-weight:950;color:#fff;opacity:.92;text-shadow:0 20px 52px rgba(0,0,0,.42)">3</div>
+      <div style="position:absolute;left:4.2%;right:24%;bottom:14%;font-size:90px;line-height:1.12;font-weight:950"><span style="color:#f5d020">AI社員</span>を<br>作る式</div>
+      <div style="position:absolute;left:4.2%;bottom:7%;font-size:27px;font-weight:850;color:rgba(255,255,255,.78)">THE FORMULA</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 14 方程式（V11 方程式/フレームワーク） -->
+<section class="xop-slide tone-paper" data-template-id="FORMULA" data-notes="AI社員は、この3つの掛け算で決まります。ナレッジ。これは会社の前提や事例。スキル。これは仕事の手順。アウトプット。これは成果物の型。この3つを1か所に貯めると、AIは毎回同じ品質で仕事を返します。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;right:6%;top:8%;text-align:center"><div style="font-size:24px;font-weight:950;color:#777;margin-bottom:16px">THE FORMULA</div>
+        <div style="font-size:58px;font-weight:950;line-height:1.12">AI社員 = <span class="hl">ナレッジ × スキル × アウトプット</span></div></div>
+      <div style="position:absolute;left:6%;right:6%;top:36%;display:flex;align-items:stretch;justify-content:center;gap:26px">
+        <div class="card-hard" style="flex:1;padding:34px 28px;text-align:center"><div style="font-size:40px;font-weight:950;color:#c87941">ナレッジ</div><div style="font-size:24px;font-weight:850;line-height:1.4;color:#555;margin-top:16px">会社の前提・事例・判断基準</div></div>
+        <div style="display:flex;align-items:center;font-size:60px;font-weight:950">×</div>
+        <div class="card-hard" style="flex:1;padding:34px 28px;text-align:center"><div style="font-size:40px;font-weight:950;color:#c87941">スキル</div><div style="font-size:24px;font-weight:850;line-height:1.4;color:#555;margin-top:16px">仕事の手順・チェックリスト</div></div>
+        <div style="display:flex;align-items:center;font-size:60px;font-weight:950">×</div>
+        <div class="card-hard" style="flex:1;padding:34px 28px;text-align:center"><div style="font-size:40px;font-weight:950;color:#c87941">アウトプット</div><div style="font-size:24px;font-weight:850;line-height:1.4;color:#555;margin-top:16px">成果物の型・お手本</div></div>
+      </div>
+      <div style="position:absolute;left:10%;right:10%;bottom:9%;text-align:center;font-size:32px;font-weight:900;line-height:1.4">3つを1か所に貯めると、<span class="hl">毎回同じ品質</span>で仕事が返ってくる。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 15 章扉4 -->
+<section class="xop-slide tone-brand" data-template-id="CHAPTER-4" data-notes="4つ目の章。では実際のAI社員の中身を分解します。何が入っているのか、具体的に見ていきます。">
+  <div class="xop-canvas"><div class="corner-stripes"></div>
+    <div class="semantic-layer"><div class="sem-brand">
+      <div style="position:absolute;right:5.2%;top:7%;font-size:205px;line-height:.82;font-weight:950;color:#fff;opacity:.92;text-shadow:0 20px 52px rgba(0,0,0,.42)">4</div>
+      <div style="position:absolute;left:4.2%;right:24%;bottom:14%;font-size:90px;line-height:1.12;font-weight:950">AI社員の<br><span style="color:#f5d020">中身</span>を分解する</div>
+      <div style="position:absolute;left:4.2%;bottom:7%;font-size:27px;font-weight:850;color:rgba(255,255,255,.78)">INSIDE AN AI EMPLOYEE</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 16 AI社員の中身（ツールロゴを本文の隣に・V08系3カード） -->
+<section class="xop-slide tone-paper" data-template-id="INSIDE-TOOLS" data-notes="中身はシンプルです。文脈を貯める場所、考えて作るAI、成果物を出す道具。この3層を組み合わせるだけ。特別なツールは要りません。今あるものの並べ方の問題です。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;right:6%;top:7%"><div style="font-size:24px;font-weight:950;color:#777;margin-bottom:14px">INSIDE / 3 LAYERS</div>
+        <div style="font-size:58px;font-weight:950;line-height:1.12">中身は<span class="hl">3層</span>だけ。特別なツールは要りません</div></div>
+      <div style="position:absolute;left:6%;right:6%;top:35%;bottom:9%;display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+        <div class="card-hard" style="padding:30px 28px;display:flex;flex-direction:column"><div style="display:flex;gap:12px;margin-bottom:18px"><img src="img/logos/obsidian.png" style="width:52px;height:52px;object-fit:contain;border:1px solid #eee;border-radius:10px;background:#fff"><img src="img/logos/notion.png" style="width:52px;height:52px;object-fit:contain;border:1px solid #eee;border-radius:10px;background:#fff"></div><div style="font-size:34px;font-weight:950">① 文脈を貯める</div><div style="font-size:22px;font-weight:850;line-height:1.5;color:#555;margin-top:12px">前提・事例・手順を1か所に。ローカルでも、いつものメモアプリでもいい。</div></div>
+        <div class="card-hard" style="padding:30px 28px;display:flex;flex-direction:column"><div style="display:flex;gap:12px;margin-bottom:18px"><img src="img/logos/claude_code.png" style="width:52px;height:52px;object-fit:contain;border:1px solid #eee;border-radius:10px;background:#fff"><img src="img/logos/chatgpt.png" style="width:52px;height:52px;object-fit:contain;border:1px solid #eee;border-radius:10px;background:#fff"><img src="img/logos/gemini.png" style="width:52px;height:52px;object-fit:contain;border:1px solid #eee;border-radius:10px;background:#fff"></div><div style="font-size:34px;font-weight:950">② 考えて作る</div><div style="font-size:22px;font-weight:850;line-height:1.5;color:#555;margin-top:12px">貯めた文脈を渡して、AIに考えさせる。ここが「賢い新人」。</div></div>
+        <div class="card-hard" style="padding:30px 28px;display:flex;flex-direction:column"><div style="display:flex;gap:12px;margin-bottom:18px"><img src="img/logos/canva.png" style="width:52px;height:52px;object-fit:contain;border:1px solid #eee;border-radius:10px;background:#fff"><img src="img/logos/figma.png" style="width:52px;height:52px;object-fit:contain;border:1px solid #eee;border-radius:10px;background:#fff"></div><div style="font-size:34px;font-weight:950">③ 成果物を出す</div><div style="font-size:22px;font-weight:850;line-height:1.5;color:#555;margin-top:12px">LP・資料・メール・請求書まで。型に沿って出力する。</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 17 ビフォーアフター（V08比較） -->
+<section class="xop-slide tone-paper" data-template-id="BEFORE-AFTER" data-notes="この3層を入れる前と後で、何が変わるか。前は、依頼のたびに説明し、品質はバラつき、自分が抜けられない。後は、前提を一度渡せば品質が揃い、自分は確認だけ。作業が消えて、判断だけが残ります。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;right:6%;top:7%"><div style="font-size:24px;font-weight:950;color:#777;margin-bottom:14px">BEFORE / AFTER</div>
+        <div style="font-size:58px;font-weight:950;line-height:1.12">作業が消えて、<span class="hl">判断だけが残る</span></div></div>
+      <div style="position:absolute;left:6%;right:6%;top:34%;bottom:9%;display:grid;grid-template-columns:1fr 1fr;gap:28px">
+        <div style="background:#efeeea;border:3px solid #999;border-radius:14px;padding:34px 38px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:30px;font-weight:950;color:#777;margin-bottom:18px">BEFORE</div><div style="font-size:25px;font-weight:850;line-height:2;color:#555">・毎回ゼロから説明<br>・品質がバラつく<br>・自分が抜けられない</div></div>
+        <div class="card-hard" style="padding:34px 38px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:30px;font-weight:950;color:#c87941;margin-bottom:18px">AFTER</div><div style="font-size:25px;font-weight:850;line-height:2">・前提は一度渡すだけ<br>・<b>品質が毎回揃う</b><br>・自分は確認と判断だけ</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 18 証拠スクショ2（実成果物・deck/email/invoiceを並べる V12） -->
+<section class="xop-slide tone-paper" data-template-id="PROOF-OUTPUTS" data-notes="後の状態だと、こういう物が手を動かさずに出てきます。提案デッキ、案内メール、請求書。全部、貯めた文脈から型に沿って出したもの。人がやったのは確認です。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;right:6%;top:7%"><div style="font-size:24px;font-weight:950;color:#777;margin-bottom:14px">OUTPUT SAMPLES</div>
+        <div style="font-size:58px;font-weight:950;line-height:1.12">これ全部、<span class="hl">AI社員が出した成果物</span>です</div></div>
+      <div style="position:absolute;left:6%;right:6%;top:34%;bottom:13%;display:grid;grid-template-columns:repeat(3,1fr);gap:26px">
+        <div style="display:flex;flex-direction:column"><div style="flex:1;background:#fff;border:3px solid #111;box-shadow:12px 12px 0 #111;overflow:hidden"><img src="img/proof-deck.png" style="width:100%;height:100%;object-fit:cover;object-position:top" alt="提案デッキ"></div></div>
+        <div style="display:flex;flex-direction:column"><div style="flex:1;background:#fff;border:3px solid #111;box-shadow:12px 12px 0 #111;overflow:hidden"><img src="img/proof-email.png" style="width:100%;height:100%;object-fit:cover;object-position:top" alt="案内メール"></div></div>
+        <div style="display:flex;flex-direction:column"><div style="flex:1;background:#fff;border:3px solid #111;box-shadow:12px 12px 0 #111;overflow:hidden"><img src="img/proof-invoice.png" style="width:100%;height:100%;object-fit:cover;object-position:top" alt="請求書"></div></div>
+      </div>
+      <div style="position:absolute;left:6%;right:6%;bottom:6%;display:flex;justify-content:space-around;font-size:24px;font-weight:900;color:#555"><span>提案デッキ</span><span>案内メール</span><span>請求書</span></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 19 限界の提示（V07 黒ワンメッセージ・ここで止まる人がほとんど） -->
+<section class="xop-slide tone-dark" data-template-id="THE-LIMIT" data-notes="ここまでで、考え方は伝わったと思います。でも正直に言うと、ここで止まる人がほとんどです。理屈は分かった。でも、最初の貯める場所を自分で組み始められない。これが一番のつまずきです。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;right:6%;top:50%;transform:translateY(-50%)">
+        <div style="font-size:22px;font-weight:950;color:#f5d020;letter-spacing:.08em;margin-bottom:22px">HONESTLY...</div>
+        <div style="font-size:64px;font-weight:900;line-height:1.3;color:rgba(255,255,255,.92)">考え方は分かった。でも、</div>
+        <div style="font-size:80px;font-weight:950;line-height:1.2;color:#f5d020">最初の一歩で止まる人が、ほとんどです</div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 20 反論処理／よくある質問（V14 FAQ・3つ） -->
+<section class="xop-slide tone-paper" data-template-id="FAQ" data-notes="よく出る不安に先に答えます。専門知識は要りません。今あるメモから始めて大丈夫。完璧じゃなくていい。むしろ作りながら直すものです。そして一人でやらなくていい。最初の設計だけ伴走できます。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;right:6%;top:7%"><div style="font-size:24px;font-weight:950;color:#777;margin-bottom:14px">COMMON QUESTIONS</div>
+        <div style="font-size:58px;font-weight:950;line-height:1.12">先に、<span class="hl">よくある不安</span>に答えます</div></div>
+      <div style="position:absolute;left:9%;right:9%;top:34%;bottom:9%;display:flex;flex-direction:column;justify-content:space-between">
+        <div class="card-hard" style="padding:26px 34px"><div style="font-size:28px;font-weight:950;color:#c87941">Q. 専門知識が要るのでは？</div><div style="font-size:24px;font-weight:850;line-height:1.5;margin-top:8px">いいえ。今あるメモや議事録から始めて大丈夫です。</div></div>
+        <div class="card-hard" style="padding:26px 34px"><div style="font-size:28px;font-weight:950;color:#c87941">Q. 最初から完璧に作れない…</div><div style="font-size:24px;font-weight:850;line-height:1.5;margin-top:8px">完璧は不要。使いながら追記していく前提のものです。</div></div>
+        <div class="card-hard" style="padding:26px 34px"><div style="font-size:28px;font-weight:950;color:#c87941">Q. 一人で続けられる自信がない</div><div style="font-size:24px;font-weight:850;line-height:1.5;margin-top:8px">最初の設計だけ伴走できます。土台ができれば自走できます。</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 21 オファー導入（V13 価格・オファー前段・tone-dark） -->
+<section class="xop-slide tone-dark" data-template-id="OFFER-INTRO" data-notes="そこで、最初の土台づくりを一緒にやる場を用意しました。AIO Marketing OS です。8週間で、AI社員と集客から制作までの導線を作り切ります。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;right:-6%;bottom:-15%;width:55%;height:80%;opacity:.06;display:flex;align-items:center;justify-content:center;font-size:280px;font-weight:950;color:#fff">OS</div>
+      <div style="position:absolute;left:6%;right:6%;top:50%;transform:translateY(-50%)">
+        <div style="font-size:22px;font-weight:950;color:#f5d020;letter-spacing:.08em;margin-bottom:20px">YOUR FOUNDATION</div>
+        <div style="font-size:74px;font-weight:950;line-height:1.18">だから、土台を一緒に作る場を<br>用意しました。<span style="color:#f5d020">AIO Marketing OS</span></div>
+        <div style="font-size:30px;font-weight:850;line-height:1.5;color:rgba(255,255,255,.82);margin-top:28px">8週間で、AI社員と「集客→営業→制作」の導線を作り切る。</div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 22 中身グリッド（V13 オファー内容・8週間で作るもの） -->
+<section class="xop-slide tone-paper" data-template-id="OFFER-GRID" data-notes="8週間で作るのはこの4つです。文脈を貯める基盤、部署ごとのAI社員、成果物の型、そして集客から制作までの導線。渡して終わりではなく、自走できる状態まで持っていきます。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;right:6%;top:7%"><div style="font-size:24px;font-weight:950;color:#777;margin-bottom:14px">WHAT WE BUILD / 8 WEEKS</div>
+        <div style="font-size:58px;font-weight:950;line-height:1.12">8週間で<span class="hl">作り切るもの</span></div></div>
+      <div style="position:absolute;left:6%;right:6%;top:34%;bottom:9%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:24px">
+        <div class="card-hard" style="padding:28px 34px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:34px;font-weight:950">① 文脈基盤</div><div style="font-size:23px;font-weight:850;color:#555;line-height:1.4;margin-top:10px">前提・事例・判断基準を貯める受け皿を構築</div></div>
+        <div class="card-hard" style="padding:28px 34px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:34px;font-weight:950">② AI社員チーム</div><div style="font-size:23px;font-weight:850;color:#555;line-height:1.4;margin-top:10px">集客・営業・制作の担当を部署として作る</div></div>
+        <div class="card-hard" style="padding:28px 34px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:34px;font-weight:950">③ 成果物の型</div><div style="font-size:23px;font-weight:850;color:#555;line-height:1.4;margin-top:10px">LP・資料・メール・請求書のお手本を整備</div></div>
+        <div class="card-hard" style="padding:28px 34px;display:flex;flex-direction:column;justify-content:center"><div style="font-size:34px;font-weight:950">④ 売上導線</div><div style="font-size:23px;font-weight:850;color:#555;line-height:1.4;margin-top:10px">集客から制作・受注までを1本につなぐ</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 23 価格・条件（V13 価格・大きな数字・1主張） -->
+<section class="xop-slide tone-paper" data-template-id="PRICE" data-notes="価格です。AIO Marketing OS は498,000円・税別。8週間の伴走と、土台一式が含まれます。分割にも対応。まずは無料診断で、自分の事業なら何から作るべきかを整理するところからで大丈夫です。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;right:6%;top:8%;text-align:center;font-size:54px;font-weight:950;line-height:1.13">この土台一式を、<span class="hl">この価格で作りにいけます</span></div>
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62%">
+        <div class="card-hard" style="padding:54px 50px;text-align:center;box-shadow:14px 14px 0 #111">
+          <div style="font-size:26px;font-weight:950;color:#555">AIO Marketing OS / 8週間プログラム</div>
+          <div style="font-size:128px;font-weight:950;line-height:1;margin:18px 0 6px">498,000<span style="font-size:48px">円</span></div>
+          <div style="font-size:24px;font-weight:900;color:#555">税別 / 8週間伴走 + 土台一式</div>
+        </div>
+      </div>
+      <div style="position:absolute;left:8%;right:8%;bottom:8%;display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
+        <span style="background:#111;color:#f5d020;padding:12px 22px;font-size:24px;font-weight:950">分割払い対応</span>
+        <span style="background:#111;color:#f5d020;padding:12px 22px;font-size:24px;font-weight:950">8週間 伴走</span>
+        <span style="background:#111;color:#f5d020;padding:12px 22px;font-size:24px;font-weight:950">まずは無料診断から</span>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 24 限界つぶし2／土台だけでは足りない（V07 黒・マーケ導線が要る） -->
+<section class="xop-slide tone-dark" data-template-id="FOUNDATION-NOT-ENOUGH" data-notes="ひとつだけ正直に。土台だけではビジネスになりません。作った土台の上で、商品・発信・売上導線までつなげて初めて売上が残ります。AIO Marketing OS は、そこまでを設計します。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;right:6%;top:8%;text-align:center"><div style="font-size:22px;font-weight:950;color:#f5d020;letter-spacing:.08em;margin-bottom:16px">FOUNDATION IS NOT ENOUGH</div>
+        <div style="font-size:60px;font-weight:950;line-height:1.14">でも、土台だけでは<br><span style="color:#f5d020">売上にはなりません</span></div></div>
+      <div style="position:absolute;left:7%;right:7%;top:40%;height:28%;display:grid;grid-template-columns:repeat(4,1fr);gap:22px">
+        <div style="background:rgba(255,255,255,.94);border:3px solid #111;box-shadow:9px 9px 0 #111;padding:24px 18px;text-align:center;display:flex;flex-direction:column;justify-content:center"><div style="font-size:32px;font-weight:950;color:#111">土台</div><div style="font-size:20px;font-weight:850;color:#555;margin-top:10px">AI社員が動く基盤</div></div>
+        <div style="background:rgba(255,255,255,.94);border:3px solid #111;box-shadow:9px 9px 0 #111;padding:24px 18px;text-align:center;display:flex;flex-direction:column;justify-content:center"><div style="font-size:32px;font-weight:950;color:#111">商品</div><div style="font-size:20px;font-weight:850;color:#555;margin-top:10px">売れる形にする</div></div>
+        <div style="background:rgba(255,255,255,.94);border:3px solid #111;box-shadow:9px 9px 0 #111;padding:24px 18px;text-align:center;display:flex;flex-direction:column;justify-content:center"><div style="font-size:32px;font-weight:950;color:#111">発信</div><div style="font-size:20px;font-weight:850;color:#555;margin-top:10px">届ける導線を作る</div></div>
+        <div style="background:rgba(255,255,255,.94);border:3px solid #111;box-shadow:9px 9px 0 #111;padding:24px 18px;text-align:center;display:flex;flex-direction:column;justify-content:center"><div style="font-size:32px;font-weight:950;color:#111">売上導線</div><div style="font-size:20px;font-weight:850;color:#555;margin-top:10px">買われる流れまで</div></div>
+      </div>
+      <div style="position:absolute;left:9%;right:9%;bottom:9%;text-align:center;font-size:32px;font-weight:950;line-height:1.35">だからAIO Marketing OSは、基盤から<span class="hl" style="color:#111">マーケ・売上導線</span>までつなげます。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 25 質疑応答（V14 FAQ転換・吹き出し tone-paper） -->
+<section class="xop-slide tone-paper" data-template-id="QA-OPEN" data-notes="ここで一度、質疑応答にします。どこから作る？自分の業種でも使える？AI社員の中身は？どんなことでも遠慮なくどうぞ。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:8%;background:#111;color:#fff;font-size:30px;font-weight:950;padding:12px 26px">質疑応答</div>
+      <div style="position:absolute;left:6%;right:6%;top:30%;font-size:72px;font-weight:950;line-height:1.2">気になること、<span class="hl">なんでも</span>どうぞ</div>
+      <div style="position:absolute;left:6%;right:6%;top:58%;display:flex;flex-wrap:wrap;gap:22px">
+        <span class="card-hard" style="padding:18px 28px;font-size:28px;font-weight:900;border-radius:14px">どこから作る？</span>
+        <span class="card-hard" style="padding:18px 28px;font-size:28px;font-weight:900;border-radius:14px">自分の業種でも使える？</span>
+        <span class="card-hard" style="padding:18px 28px;font-size:28px;font-weight:900;border-radius:14px">AI社員の中身は？</span>
+        <span class="card-hard" style="padding:18px 28px;font-size:28px;font-weight:900;border-radius:14px">無料診断って何をやる？</span>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 26 最終CTA（V15 最終CTA・無料診断予約・tone-dark） -->
+<section class="xop-slide tone-dark" data-template-id="FINAL-CTA" data-notes="最後に。今日の話を自分の事業で何から始めるべきか、無料診断で一緒に整理しましょう。30分。ここで申し込みを迫ることはしません。まず現状を見える化するところからで大丈夫です。お申し込みはこちらから。ありがとうございました。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">アイウエオ</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;top:0;bottom:0;width:54%;display:flex;flex-direction:column;justify-content:center">
+        <div style="font-size:24px;font-weight:950;color:#f5d020;letter-spacing:.08em;margin-bottom:18px">FINAL STEP / 無料</div>
+        <div style="font-size:76px;font-weight:950;line-height:1.1">まずは<br><span style="color:#f5d020">無料診断</span>を<br>予約してください</div>
+        <div style="font-size:30px;font-weight:850;line-height:1.5;color:rgba(255,255,255,.82);margin-top:28px">30分。あなたの事業で「何から作るか」を一緒に整理します。申し込みを迫ることはしません。</div>
+      </div>
+      <div style="position:absolute;right:7%;top:18%;bottom:30%;width:31%;background:#fff;border:3px solid rgba(255,255,255,.9);box-shadow:0 34px 88px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;color:#111;text-align:center">
+        <div style="font-size:34px;font-weight:950;line-height:1.2">無料診断を予約する</div>
+        <div style="width:140px;height:140px;background:repeating-linear-gradient(45deg,#111 0 8px,#fff 8px 16px);margin:24px 0;border:2px solid #111"></div>
+        <div style="font-size:20px;font-weight:850;color:#555">QR / 予約フォームから</div>
+      </div>
+      <div style="position:absolute;right:7%;bottom:8%;width:31%;text-align:center;font-size:24px;font-weight:900;color:#f5d020">example.com/aiueo-ai-marketing</div>
+    </div></div>
+  </div>
+</section>
+
+</div>
+<script src="js07/deck07.js"></script>
+<script>
+// jump select を生成
+(function(){
+  var sel=document.querySelector('[data-jump]');
+  document.querySelectorAll('.xop-slide').forEach(function(s,i){
+    var o=document.createElement('option');o.value=i;o.textContent=String(i+1).padStart(2,'0');sel.appendChild(o);
+  });
+})();
+</script>
+</body>
+</html>

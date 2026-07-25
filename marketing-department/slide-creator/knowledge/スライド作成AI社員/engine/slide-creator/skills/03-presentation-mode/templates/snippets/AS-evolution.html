@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>AS evolution</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#000;font-family:"Noto Sans JP",sans-serif}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));container-type:inline-size;overflow:hidden;background:#fff;padding:3cqw 3.5cqw;display:flex;flex-direction:column}
+  .head{margin-bottom:1.5cqw}
+  .title{font-size:3.2cqw;font-weight:800;color:#1a1a2e;line-height:1.3;margin:0}
+  .row{flex:1;display:flex;align-items:center;gap:1.2cqw}
+  .state{flex:1;background:#f4f2fb;border-radius:1.4cqw;padding:2.5cqw;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2cqw;text-align:center;position:relative}
+  .state--after{background:linear-gradient(135deg,#e9e3ff 0%,#d1c4ff 100%);border:2px solid #9b8cff}
+  .label{position:absolute;top:1.5cqw;left:1.5cqw;background:#fff;border:1px solid #e0ddf0;border-radius:999px;padding:.4cqw 1cqw;font-size:.95cqw;font-weight:700;color:#6c6c8a}
+  .state--after .label{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
+  .icon{width:7cqw;height:7cqw;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:50%;box-shadow:0 .4cqw 1.5cqw rgba(155,140,255,.2);font-size:3cqw;color:#1a1a2e;font-weight:800}
+  .state--after .icon{background:#9b8cff;color:#fff}
+  .state h3{font-size:1.7cqw;font-weight:800;color:#1a1a2e;margin:0}
+  .state p{font-size:1.1cqw;color:#6c6c8a;margin:0;line-height:1.7}
+  .arrow{font-size:3.2cqw;color:#9b8cff;flex-shrink:0}
+  .cap{margin-top:1.5cqw;font-size:1.15cqw;color:#6c6c8a}
+</style></head><body><div class="stage"><div class="slide">
+  <div class="head"><h2 class="title">2状態進化 → Before / After を「成長」として見せる</h2></div>
+  <div class="row">
+    <div class="state">
+      <div class="label">BEFORE</div>
+      <div class="icon">A</div>
+      <h3>ひとりで全部</h3>
+      <p>知識が乏しい初期状態。<br>能力は伸びていない。</p>
+    </div>
+    <div class="arrow">▶</div>
+    <div class="state state--after">
+      <div class="label">AFTER</div>
+      <div class="icon">A+</div>
+      <h3>オンボーディング済</h3>
+      <p>ドメイン知識を持ち、<br>業務性能が高い状態へ。</p>
+    </div>
+  </div>
+  <p class="cap">同じ素材が、設定で「成長」する。AIエージェントもチームも同じ構造。</p>
+</div></div></body></html>

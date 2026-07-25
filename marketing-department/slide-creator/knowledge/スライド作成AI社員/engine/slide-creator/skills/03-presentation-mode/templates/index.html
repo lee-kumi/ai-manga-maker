@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>presentation-mode テンプレカタログ (全32種・カテゴリ別)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared/style.css">
+<style>
+  :root{--c-grad:linear-gradient(145deg,#7b6ce0 0%,#9b8cff 24%,#c87941 49%,#e8b88a 74%,#f7f0f6 100%)}
+  body{overflow:auto;background:#050510;color:#f4f3fa;padding:60px 20px;font-family:"Noto Sans JP",sans-serif}
+  .cat{max-width:1400px;margin:0 auto}
+  .cat__h1{font-family:"Shippori Mincho";font-weight:800;font-size:42px;color:#fff;text-align:center;margin:0 0 12px 0;
+    background:var(--c-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .cat__lead{text-align:center;color:#b4b8cd;margin:0 auto 48px;max-width:720px;line-height:1.8;font-size:14px}
+  .cat__category{font-family:"Shippori Mincho";font-size:26px;color:#fff;margin:48px 0 6px;letter-spacing:.06em;
+    padding:14px 22px;background:linear-gradient(90deg,rgba(155,140,255,.25),transparent);border-left:4px solid #9b8cff;border-radius:0 8px 8px 0;display:flex;align-items:baseline;gap:14px}
+  .cat__category-num{font-family:"Helvetica Neue";font-size:18px;font-weight:800;color:#e8b88a;letter-spacing:.1em}
+  .cat__category-desc{font-size:12px;color:#b4b8cd;letter-spacing:.05em;margin-left:auto;font-family:"Noto Sans JP";font-weight:400}
+  .cat__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:18px}
+  .item{background:#0c0d18;border:1px solid rgba(155,140,255,.2);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+  .item::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c-grad);opacity:.6}
+  .item__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .item__no{font-family:"Helvetica Neue";font-weight:800;font-size:14px;color:#e8b88a;letter-spacing:.08em;flex-shrink:0}
+  .item__h2{font-family:"Shippori Mincho";font-weight:800;font-size:17px;color:#fff;flex:1;line-height:1.4}
+  .item__class{font-family:"Helvetica Neue";font-size:10px;letter-spacing:.06em;color:#9b8cff;background:rgba(155,140,255,.12);padding:4px 9px;border-radius:999px;flex-shrink:0}
+  .item__use{font-size:12px;color:#b4b8cd;line-height:1.7}
+  .item__preview{aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:#000;position:relative}
+  .item__preview iframe{width:200%;height:200%;border:0;transform:scale(.5);transform-origin:top left}
+  .item__open{font-family:"Helvetica Neue";font-size:11px;font-weight:800;letter-spacing:.06em;color:#e8c06a;text-decoration:underline}
+  .toc{background:#0c0d18;border:1px solid rgba(155,140,255,.2);border-radius:14px;padding:24px;margin-bottom:36px}
+  .toc h3{margin:0 0 14px 0;color:#9b8cff;font-size:13px;letter-spacing:.15em}
+  .toc ul{margin:0;padding:0 0 0 18px;color:#b4b8cd;font-size:13px;line-height:1.9;columns:2;gap:24px}
+  .toc li{margin:0}
+  .toc strong{color:#e8b88a;font-family:"Helvetica Neue";letter-spacing:.05em;font-weight:800}
+</style>
+</head>
+<body>
+<div class="cat">
+  <h1 class="cat__h1">presentation-mode テンプレカタログ</h1>
+  <p class="cat__lead">登壇プレゼン用 HTML スライド。<br>「永久テンプレ (eternal/)」= そのまま使う完成品 と「普通テンプレ (snippets/)」= 型として使う placeholder の <b>2段構え</b>。<br>新規デッキは必ず E1〜En の永久テンプレを骨格にして組む (R13)。</p>
+
+  <div class="toc">
+    <h3>ETERNAL / 永久テンプレ — 文字を変えるな、そのまま使う</h3>
+    <ul style="columns:1">
+      <li><strong>E1.</strong> 講師 太郎 自己紹介 (bio-detail) — `eternal/01-speaker-self-intro.html`</li>
+      <li><strong>E2.</strong> サンプルスタジオ チーム自己紹介 (bio-team) — `eternal/02-team-intro.html`</li>
+    </ul>
+    <h3 style="margin-top:18px">CATEGORIES / 普通テンプレ (snippets/) — 型として使う・文字差し替え前提</h3>
+    <ul>
+      <li><strong>A.</strong> 表紙・AGENDA・章扉 — No.01〜04</li>
+      <li><strong>B.</strong> ワンスライドワンメッセージ — No.05〜12</li>
+      <li><strong>C.</strong> 人物・登壇者紹介 — No.13〜15</li>
+      <li><strong>D.</strong> 本文：対比・比較 — No.16〜18</li>
+      <li><strong>E.</strong> 本文：フロー・ステップ・進化 — No.19〜21</li>
+      <li><strong>F.</strong> 本文：組織図・構造 — No.22〜23</li>
+      <li><strong>G.</strong> 本文：データ・実績・数字 — No.24〜26</li>
+      <li><strong>H.</strong> 本文：画像・装飾・カード — No.27〜30</li>
+      <li><strong>I.</strong> 特典・CTA・クロージング — No.31〜34</li>
+    </ul>
+  </div>
+
+  <!-- ========== ETERNAL ========== -->
+  <h2 class="cat__category" style="background:linear-gradient(90deg,rgba(232,184,138,.3),transparent);border-left-color:#e8b88a">
+    <span class="cat__category-num" style="color:#e8b88a">★ ETERNAL ★</span>
+    永久テンプレ
+    <span class="cat__category-desc">そのまま貼る・文字数字以外触らない (R13)</span>
+  </h2>
+  <div class="cat__grid">
+    <div class="item" style="border-color:rgba(232,184,138,.45)">
+      <div class="item__head"><span class="item__no" style="color:#e8b88a">E1</span><h2 class="item__h2">講師 太郎 自己紹介</h2><span class="item__class">.tpl-bio-detail</span></div>
+      <p class="item__use">パートナー × AIツール × ナレッジ管理セミナーで投影。左にオレンジ角丸+人物切り抜き、右に名前/SNS3個/ひとこと/時系列経歴4段。<strong style="color:#e8c06a">毎回これを使う</strong>、数字だけ最新化。</p>
+      <div class="item__preview"><iframe src="eternal/01-speaker-self-intro.html"></iframe></div>
+      <a class="item__open" href="eternal/01-speaker-self-intro.html" target="_blank">単体で開く →</a>
+    </div>
+
+    <div class="item" style="border-color:rgba(232,184,138,.45)">
+      <div class="item__head"><span class="item__no" style="color:#e8b88a">E2</span><h2 class="item__h2">サンプルスタジオ チーム自己紹介</h2><span class="item__class">.tpl-bio-team</span></div>
+      <p class="item__use">セミナーで投影。左に円形ロゴ+紫角丸装飾、右に名前/handle/リード/箇条書き3点/メトリクス3つ (（フォロワー数） / 3 / DAILY)。<strong style="color:#e8c06a">チーム紹介の度に毎回これ</strong>。</p>
+      <div class="item__preview"><iframe src="eternal/02-team-intro.html"></iframe></div>
+      <a class="item__open" href="eternal/02-team-intro.html" target="_blank">単体で開く →</a>
+    </div>
+  </div>
+
+  <!-- ========== A. 表紙・AGENDA・章扉 ========== -->
+  <h2 class="cat__category"><span class="cat__category-num">A.</span> 表紙・AGENDA・章扉 <span class="cat__category-desc">デッキの入口・章切替 — 全部毎回どこかで使う</span></h2>
+  <div class="cat__grid">
+    <div class="item"><div class="item__head"><span class="item__no">No.01</span><h2 class="item__h2">表紙 (左テキスト + 右ビジュアル)</h2><span class="item__class">.tpl-cover</span></div>
+      <p class="item__use">1枚目の表紙。tpl-cover__img の background-image にカバー画像。</p>
+      <div class="item__preview"><iframe src="snippets/01-cover.html"></iframe></div>
+      <a class="item__open" href="snippets/01-cover.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.02</span><h2 class="item__h2">AGENDA (目次)</h2><span class="item__class">.tpl-agenda</span></div>
+      <p class="item__use">2枚目固定。左ダーク + 右に01〜0N目次。agendaItemsで可変。</p>
+      <div class="item__preview"><iframe src="snippets/02-agenda.html"></iframe></div>
+      <a class="item__open" href="snippets/02-agenda.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.03</span><h2 class="item__h2">章扉 (巨大番号 + 左下大見出し)</h2><span class="item__class">.tpl-chapter</span></div>
+      <p class="item__use">2026-06-01追加。右上に14cqwの巨大番号、グラデーション背景。インパクト最大。</p>
+      <div class="item__preview"><iframe src="snippets/AN-chapter.html"></iframe></div>
+      <a class="item__open" href="snippets/AN-chapter.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.04</span><h2 class="item__h2">セクション扉 (左番号 + 右タイトル)</h2><span class="item__class">.tpl-section</span></div>
+      <p class="item__use">目次の各ブロック直前。淡い大番号 + バー + タイトル。No.03より落ち着いた章扉。</p>
+      <div class="item__preview"><iframe src="snippets/03-section.html"></iframe></div>
+      <a class="item__open" href="snippets/03-section.html" target="_blank">単体で開く →</a></div>
+  </div>
+
+  <!-- ========== B. ワンスライドワンメッセージ ========== -->
+  <h2 class="cat__category"><span class="cat__category-num">B.</span> ワンスライドワンメッセージ <span class="cat__category-desc">問いかけ・宣言・ステートメント・ブリッジ — 短文の最強系</span></h2>
+  <div class="cat__grid">
+    <div class="item"><div class="item__head"><span class="item__no">No.05</span><h2 class="item__h2">写真背景 + 中央ヌキ文字</h2><span class="item__class">.tpl-photo-bg</span></div>
+      <p class="item__use">問いかけ / 強いステートメント / 共感フック。写真背景 or ブランドグラデ。中央ヌキ文字。</p>
+      <div class="item__preview"><iframe src="snippets/U-photo-bg.html"></iframe></div>
+      <a class="item__open" href="snippets/U-photo-bg.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.06</span><h2 class="item__h2">写真背景 + 番号 + 大見出し</h2><span class="item__class">.tpl-photo-num</span></div>
+      <p class="item__use">章番号 + 1メッセージ + 補足。問題提起や核心メッセージに最適。</p>
+      <div class="item__preview"><iframe src="snippets/V-photo-num.html"></iframe></div>
+      <a class="item__open" href="snippets/V-photo-num.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.07</span><h2 class="item__h2">上小キッカー + 下バーン大見出し</h2><span class="item__class">.tpl-eyebrow-big</span></div>
+      <p class="item__use">サブタイトル + 大見出し + 補足説明。テーマ単位の冒頭スライドに。</p>
+      <div class="item__preview"><iframe src="snippets/X-eyebrow-big.html"></iframe></div>
+      <a class="item__open" href="snippets/X-eyebrow-big.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.08</span><h2 class="item__h2">中央バーン 1メッセージ</h2><span class="item__class">.tpl-bigword</span></div>
+      <p class="item__use">「これだけ覚えて帰ってください」型。is-dark で暗背景バリエ。</p>
+      <div class="item__preview"><iframe src="snippets/Y-bigword.html"></iframe></div>
+      <a class="item__open" href="snippets/Y-bigword.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.09</span><h2 class="item__h2">フルブリードグラデ + 中央センター見出し</h2><span class="item__class">.tpl-statement-grad</span></div>
+      <p class="item__use">2026-06-01追加。問いかけ・発見・ブリッジ用ステートメント。短文の最強型。</p>
+      <div class="item__preview"><iframe src="snippets/AM-statement-grad.html"></iframe></div>
+      <a class="item__open" href="snippets/AM-statement-grad.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.10</span><h2 class="item__h2">呼びかけ質問 (写真 + 黒オーバーレイ・白文字)</h2><span class="item__class">.tpl-question-dark</span></div>
+      <p class="item__use">セミナー中の呼びかけ質問。写真背景に黒オーバーレイで白文字。「AIで悩んでることは?」型。</p>
+      <div class="item__preview"><iframe src="snippets/AK-question-dark.html"></iframe></div>
+      <a class="item__open" href="snippets/AK-question-dark.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.11</span><h2 class="item__h2">呼びかけ質問 (写真 + 白オーバーレイ・黒文字)</h2><span class="item__class">.tpl-question-light</span></div>
+      <p class="item__use">セミナー中の呼びかけ質問。No.10の対比。写真背景を白で透過させて黒文字。</p>
+      <div class="item__preview"><iframe src="snippets/AL-question-light.html"></iframe></div>
+      <a class="item__open" href="snippets/AL-question-light.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.12</span><h2 class="item__h2">大数字バーン</h2><span class="item__class">.tpl-stat-bang</span></div>
+      <p class="item__use">「何の数字か分かりますか？」型。1メトリック 1枚。（実績数）・100,000+ などインパクト数字に。</p>
+      <div class="item__preview"><iframe src="snippets/AF-stat-bang.html"></iframe></div>
+      <a class="item__open" href="snippets/AF-stat-bang.html" target="_blank">単体で開く →</a></div>
+  </div>
+
+  <!-- ========== C. 人物・登壇者紹介 ========== -->
+  <h2 class="cat__category"><span class="cat__category-num">C.</span> 人物・登壇者紹介 <span class="cat__category-desc">自己紹介スライドは毎回必須 — テーマ用途で使い分け</span></h2>
+  <div class="cat__grid">
+    <div class="item"><div class="item__head"><span class="item__no">No.13</span><h2 class="item__h2">登壇者2人 (写真 + bio)</h2><span class="item__class">.tpl-speakers</span></div>
+      <p class="item__use">登壇者紹介。sp__photo に丸画像、role/name/handle/bio。コラボ登壇向け。</p>
+      <div class="item__preview"><iframe src="snippets/04-speakers.html"></iframe></div>
+      <a class="item__open" href="snippets/04-speakers.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.14</span><h2 class="item__h2">自己紹介 (詳細・透過済人物 + 経歴)</h2><span class="item__class">.tpl-bio-detail</span></div>
+      <p class="item__use">登壇者本人の詳細自己紹介。透過済み人物切り抜き画像 + 名前(漢字+英字) + SNS + 時系列経歴。</p>
+      <div class="item__preview"><iframe src="snippets/AI-bio-detail.html"></iframe></div>
+      <a class="item__open" href="snippets/AI-bio-detail.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.15</span><h2 class="item__h2">チーム自己紹介 (円形ロゴ + メトリクス)</h2><span class="item__class">.tpl-bio-team</span></div>
+      <p class="item__use">チーム/チャンネルの自己紹介。円形ロゴ + リード + 箇条書き + 指標メトリクス。</p>
+      <div class="item__preview"><iframe src="snippets/AJ-bio-team.html"></iframe></div>
+      <a class="item__open" href="snippets/AJ-bio-team.html" target="_blank">単体で開く →</a></div>
+  </div>
+
+  <!-- ========== D. 本文：対比・比較 ========== -->
+  <h2 class="cat__category"><span class="cat__category-num">D.</span> 本文：対比・比較 <span class="cat__category-desc">Before/After・プラン比較・2軸の選択肢</span></h2>
+  <div class="cat__grid">
+    <div class="item"><div class="item__head"><span class="item__no">No.16</span><h2 class="item__h2">2状態進化 (Before → After + アイコン)</h2><span class="item__class">.tpl-evolution</span></div>
+      <p class="item__use">2026-06-01追加。同じ素材が「成長」する2状態を視覚化。アイコン円形＋矢印＋カラー切替。</p>
+      <div class="item__preview"><iframe src="snippets/AS-evolution.html"></iframe></div>
+      <a class="item__open" href="snippets/AS-evolution.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.17</span><h2 class="item__h2">2列/3列 対比カード (グラデヘッダー)</h2><span class="item__class">.tpl-vscards</span></div>
+      <p class="item__use">2026-06-01追加。プラン比較・選択肢を並べる。ブランド紫オレンジグラデヘッダー＋本文4-5行。</p>
+      <div class="item__preview"><iframe src="snippets/AT-vscards.html"></iframe></div>
+      <a class="item__open" href="snippets/AT-vscards.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.18</span><h2 class="item__h2">テーブル (強調列付き)</h2><span class="item__class">.tpl-table</span></div>
+      <p class="item__use">年次比較・数値表。強調したい列・セルにハイライト。料金プラン・機能一覧にも。</p>
+      <div class="item__preview"><iframe src="snippets/AB-table.html"></iframe></div>
+      <a class="item__open" href="snippets/AB-table.html" target="_blank">単体で開く →</a></div>
+  </div>
+
+  <!-- ========== E. 本文：フロー・ステップ・進化 ========== -->
+  <h2 class="cat__category"><span class="cat__category-num">E.</span> 本文：フロー・ステップ・進化 <span class="cat__category-desc">プロセス・手順・データ流れ</span></h2>
+  <div class="cat__grid">
+    <div class="item"><div class="item__head"><span class="item__no">No.19</span><h2 class="item__h2">縦バー横並び 5段ステップ</h2><span class="item__class">.tpl-flow-vbars</span></div>
+      <p class="item__use">プロセス可視化。お問い合せ→事前調査→打合せ→作業開始→確認。1段だけ強調。</p>
+      <div class="item__preview"><iframe src="snippets/AC-flow-vbars.html"></iframe></div>
+      <a class="item__open" href="snippets/AC-flow-vbars.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.20</span><h2 class="item__h2">データフロー (ソース → 処理 → DB → 出力)</h2><span class="item__class">.tpl-dataflow</span></div>
+      <p class="item__use">2026-06-01追加。複数の入力をハブで統合→段階的に出力へ。円形アイコンで段階可視化。</p>
+      <div class="item__preview"><iframe src="snippets/AU-dataflow.html"></iframe></div>
+      <a class="item__open" href="snippets/AU-dataflow.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.21</span><h2 class="item__h2">2列 + 中央ハブで合流ロジック</h2><span class="item__class">.tpl-merge</span></div>
+      <p class="item__use">2026-06-01追加。合弁・統合・一気通貫型のフロー。入力→ハブ→出力を1枚で。</p>
+      <div class="item__preview"><iframe src="snippets/AQ-merge.html"></iframe></div>
+      <a class="item__open" href="snippets/AQ-merge.html" target="_blank">単体で開く →</a></div>
+  </div>
+
+  <!-- ========== F. 本文：組織図・構造 ========== -->
+  <h2 class="cat__category"><span class="cat__category-num">F.</span> 本文：組織図・構造 <span class="cat__category-desc">マーケ部16名・複数部署・ロール階層</span></h2>
+  <div class="cat__grid">
+    <div class="item"><div class="item__head"><span class="item__no">No.22</span><h2 class="item__h2">4列組織図 (部署 → ロール)</h2><span class="item__class">.tpl-orgchart</span></div>
+      <p class="item__use">2026-06-01追加。複数部署を1枚に俯瞰。リードロールは強調背景で差別化。</p>
+      <div class="item__preview"><iframe src="snippets/AR-orgchart.html"></iframe></div>
+      <a class="item__open" href="snippets/AR-orgchart.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.23</span><h2 class="item__h2">自動化スタック (MCP / AIロゴ)</h2><span class="item__class">.tpl-stack</span></div>
+      <p class="item__use">使ってる AI ツール一覧 + 内製している機能タグ。ダーク背景。技術スタック可視化。</p>
+      <div class="item__preview"><iframe src="snippets/AE-stack.html"></iframe></div>
+      <a class="item__open" href="snippets/AE-stack.html" target="_blank">単体で開く →</a></div>
+  </div>
+
+  <!-- ========== G. 本文：データ・実績・数字 ========== -->
+  <h2 class="cat__category"><span class="cat__category-num">G.</span> 本文：データ・実績・数字 <span class="cat__category-desc">実績紹介・フォロワー数・KPI</span></h2>
+  <div class="cat__grid">
+    <div class="item"><div class="item__head"><span class="item__no">No.24</span><h2 class="item__h2">8アカウント Xグリッド</h2><span class="item__class">.tpl-xgrid</span></div>
+      <p class="item__use">運営アカウント実績紹介。合計フォロワー数を見せる。「ここまで伸ばせました」型。</p>
+      <div class="item__preview"><iframe src="snippets/AD-xgrid.html"></iframe></div>
+      <a class="item__open" href="snippets/AD-xgrid.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.25</span><h2 class="item__h2">大数字バーン (再掲: B.12参照)</h2><span class="item__class">.tpl-stat-bang</span></div>
+      <p class="item__use">1メトリックを画面いっぱいに。「（実績数）」「（フォロワー数）」など。データ枠でも使う。</p>
+      <div class="item__preview"><iframe src="snippets/AF-stat-bang.html"></iframe></div>
+      <a class="item__open" href="snippets/AF-stat-bang.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.26</span><h2 class="item__h2">テーブル (再掲: D.18参照)</h2><span class="item__class">.tpl-table</span></div>
+      <p class="item__use">数値表として使うことも。月次推移・前年比・KPIダッシュボード等。</p>
+      <div class="item__preview"><iframe src="snippets/AB-table.html"></iframe></div>
+      <a class="item__open" href="snippets/AB-table.html" target="_blank">単体で開く →</a></div>
+  </div>
+
+  <!-- ========== H. 本文：画像・装飾・カード ========== -->
+  <h2 class="cat__category"><span class="cat__category-num">H.</span> 本文：画像・装飾・カード <span class="cat__category-desc">写真・イラスト・3D装飾・カード並列</span></h2>
+  <div class="cat__grid">
+    <div class="item"><div class="item__head"><span class="item__no">No.27</span><h2 class="item__h2">写真背景 + 左下ラベル</h2><span class="item__class">.tpl-photo-label</span></div>
+      <p class="item__use">製品紹介や事例の写真背景に、左寄せのラベル。「製品紹介」「事例紹介」など。</p>
+      <div class="item__preview"><iframe src="snippets/W-photo-label.html"></iframe></div>
+      <a class="item__open" href="snippets/W-photo-label.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.28</span><h2 class="item__h2">左テキスト + 右イラスト</h2><span class="item__class">.tpl-illust-side</span></div>
+      <p class="item__use">unDraw 風イラストや AI ツールロゴと併用。「Obsidian を第二の脳に」など概念説明。</p>
+      <div class="item__preview"><iframe src="snippets/AA-illust-side.html"></iframe></div>
+      <a class="item__open" href="snippets/AA-illust-side.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.29</span><h2 class="item__h2">左大見出し + 右3D装飾画像</h2><span class="item__class">.tpl-bigword-3d</span></div>
+      <p class="item__use">2026-06-01追加。テーマ別の概観スライド。タイトル左50%以内・装飾は z-index:0 背面化必須。</p>
+      <div class="item__preview"><iframe src="snippets/AO-bigword-3d.html"></iframe></div>
+      <a class="item__open" href="snippets/AO-bigword-3d.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.30</span><h2 class="item__h2">左3カード + 右大ビジュアル</h2><span class="item__class">.tpl-cardsvis</span></div>
+      <p class="item__use">2026-06-01追加。特徴3点 + ビジュアル抜け感。サービス紹介・LP切り出しに。</p>
+      <div class="item__preview"><iframe src="snippets/AP-cardsvis.html"></iframe></div>
+      <a class="item__open" href="snippets/AP-cardsvis.html" target="_blank">単体で開く →</a></div>
+  </div>
+
+  <!-- ========== I. 特典・CTA・カラー扉・クロージング ========== -->
+  <h2 class="cat__category"><span class="cat__category-num">I.</span> 特典・CTA・カラー扉・クロージング <span class="cat__category-desc">3カード横並び・QR誘導・カラー扉・お礼</span></h2>
+  <div class="cat__grid">
+    <div class="item"><div class="item__head"><span class="item__no">No.31</span><h2 class="item__h2">3つの特典/カード横並び (汎用可)</h2><span class="item__class">.tpl-gifts-3</span></div>
+      <p class="item__use">プレゼント告知が原型。同じ型で「3つの特徴」「3つの導線」など汎用可。card__img に背景画像。</p>
+      <div class="item__preview"><iframe src="snippets/AG-gifts-3.html"></iframe></div>
+      <a class="item__open" href="snippets/AG-gifts-3.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.32</span><h2 class="item__h2">公式LINE QR + 案内</h2><span class="item__class">.tpl-qr</span></div>
+      <p class="item__use">受け取りCTA。左テキスト+リスト、右にQR画像+ID。プレゼント受け取り誘導。</p>
+      <div class="item__preview"><iframe src="snippets/AH-qr.html"></iframe></div>
+      <a class="item__open" href="snippets/AH-qr.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.33</span><h2 class="item__h2">カラー扉 + イラスト + 透かし</h2><span class="item__class">.tpl-color-tobira</span></div>
+      <p class="item__use">セクション扉のバリエ。is-orange / is-dark で色を変える。右にイラスト、奥に巨大透かしテキスト。</p>
+      <div class="item__preview"><iframe src="snippets/Z-color-tobira.html"></iframe></div>
+      <a class="item__open" href="snippets/Z-color-tobira.html" target="_blank">単体で開く →</a></div>
+
+    <div class="item"><div class="item__head"><span class="item__no">No.34</span><h2 class="item__h2">クロージング (Thank you)</h2><span class="item__class">.tpl-thanks</span></div>
+      <p class="item__use">最後のお礼スライド。大きな Thank you + 補足テキスト。</p>
+      <div class="item__preview"><iframe src="snippets/05-thanks.html"></iframe></div>
+      <a class="item__open" href="snippets/05-thanks.html" target="_blank">単体で開く →</a></div>
+  </div>
+
+  <p style="text-align:center;color:#6c6c8a;font-size:12px;margin:60px 0 20px;line-height:1.8">
+    全34スライド (= No.01〜No.34, B.12とG.25・D.18とG.26は同テンプレ別カテゴリ参照)<br>
+    新規追加は必ずこのカタログに <strong style="color:#e8b88a">「No.連番 + カテゴリ + tpl-クラス + 説明 + iframeプレビュー + 単体リンク」</strong> 形式で登録する (R7 / R12)
+  </p>
+</div>
+</body>
+</html>

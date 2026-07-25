@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>AT vscards</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--c-grad:linear-gradient(145deg,#7b6ce0 0%,#9b8cff 24%,#c87941 49%,#e8b88a 74%,#f7f0f6 100%);--c-grad-alt:linear-gradient(145deg,#c87941 0%,#e8b88a 50%,#9b8cff 100%)}
+  html,body{margin:0;padding:0;height:100%;background:#000;font-family:"Noto Sans JP",sans-serif}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));container-type:inline-size;overflow:hidden;background:#fff;padding:2cqw 2.5cqw;display:flex;flex-direction:column}
+  .head{margin-bottom:1cqw}
+  .title{font-size:3.2cqw;font-weight:800;color:#1a1a2e;margin:0 0 .4cqw 0;line-height:1.25}
+  .lead{font-size:1.25cqw;color:#6c6c8a;margin:0}
+  .row{flex:1;display:flex;gap:1.2cqw;margin-top:1cqw}
+  .col{flex:1;background:#f4f2fb;border-radius:1cqw;overflow:hidden;display:flex;flex-direction:column}
+  .col-head{background:var(--c-grad);color:#fff;padding:1.2cqw 1.4cqw;font-size:1.6cqw;font-weight:800;text-align:center}
+  .col--alt .col-head{background:var(--c-grad-alt)}
+  .col-body{flex:1;padding:1.4cqw 1.6cqw;display:flex;flex-direction:column;gap:.85cqw;justify-content:center}
+  .item{font-size:1.3cqw;color:#1a1a2e;line-height:1.6;padding-left:1.5cqw;position:relative}
+  .item::before{content:'●';position:absolute;left:0;color:#9b8cff;font-size:.9cqw;top:.35cqw}
+</style></head><body><div class="stage"><div class="slide">
+  <div class="head">
+    <h2 class="title">2列 / 3列の対比カード — グラデヘッダーで「比較」を明示</h2>
+    <p class="lead">ジャンル違いの選択肢を視覚的に並べる。3列までならスケール変えずに増やせる</p>
+  </div>
+  <div class="row">
+    <div class="col"><div class="col-head">A プラン</div>
+      <div class="col-body">
+        <div class="item">特徴 1: 機能をしっかり一行</div>
+        <div class="item">特徴 2: もうひとつ大きめに</div>
+        <div class="item">特徴 3: ここに利点を書く</div>
+        <div class="item">向く人: 例示</div>
+      </div>
+    </div>
+    <div class="col col--alt"><div class="col-head">B プラン</div>
+      <div class="col-body">
+        <div class="item">特徴 1: 機能をしっかり一行</div>
+        <div class="item">特徴 2: もうひとつ大きめに</div>
+        <div class="item">特徴 3: ここに利点を書く</div>
+        <div class="item">向く人: 例示</div>
+      </div>
+    </div>
+  </div>
+</div></div></body></html>

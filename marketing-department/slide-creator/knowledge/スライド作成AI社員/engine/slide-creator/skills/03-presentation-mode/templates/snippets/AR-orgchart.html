@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>AR orgchart</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--c-grad:linear-gradient(145deg,#7b6ce0 0%,#9b8cff 24%,#c87941 49%,#e8b88a 74%,#f7f0f6 100%)}
+  html,body{margin:0;padding:0;height:100%;background:#000;font-family:"Noto Sans JP",sans-serif}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));container-type:inline-size;overflow:hidden;background:#fff;padding:2cqw 2.5cqw;display:flex;flex-direction:column}
+  .head{margin-bottom:1cqw}
+  .title{font-size:3.2cqw;font-weight:800;color:#1a1a2e;margin:0 0 .4cqw 0;line-height:1.25}
+  .lead{font-size:1.3cqw;color:#6c6c8a;margin:0}
+  .cols{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:.9cqw;align-items:flex-start}
+  .col{display:flex;flex-direction:column;gap:.5cqw}
+  .dept{background:var(--c-grad);color:#fff;border-radius:.55cqw;padding:1cqw 1.1cqw;font-size:1.55cqw;font-weight:800;text-align:center;letter-spacing:.04em}
+  .role{background:#fff;border:1px solid #e0ddf0;border-radius:.45cqw;padding:.95cqw 1.2cqw;font-size:1.35cqw;color:#1a1a2e;font-weight:600;line-height:1.35;display:flex;align-items:center;gap:.5cqw}
+  .role--lead{background:#f4f2fb;border-color:#9b8cff;font-weight:800}
+</style></head><body><div class="stage"><div class="slide">
+  <div class="head">
+    <h2 class="title">4列組織図 — 部署 → ロール → ロール…</h2>
+    <p class="lead">マーケ部16名 / 開発部 / 経営部など、複数部署を1枚に俯瞰</p>
+  </div>
+  <div class="cols">
+    <div class="col"><div class="dept">配信</div>
+      <div class="role role--lead">x-operations</div>
+      <div class="role">line-broadcaster</div>
+      <div class="role">newsletter-writer</div>
+      <div class="role">open-chat-operator</div>
+    </div>
+    <div class="col"><div class="dept">セミナー</div>
+      <div class="role role--lead">seminar-producer</div>
+      <div class="role">launch-campaigner</div>
+      <div class="role">web-builder</div>
+    </div>
+    <div class="col"><div class="dept">動画</div>
+      <div class="role role--lead">youtube-writer</div>
+      <div class="role">thumbnail-gen</div>
+      <div class="role">video-editor</div>
+      <div class="role">video-generator</div>
+    </div>
+    <div class="col"><div class="dept">ビジュアル</div>
+      <div class="role role--lead">image-generator</div>
+      <div class="role">slide-creator</div>
+      <div class="role">design-utils</div>
+    </div>
+  </div>
+</div></div></body></html>

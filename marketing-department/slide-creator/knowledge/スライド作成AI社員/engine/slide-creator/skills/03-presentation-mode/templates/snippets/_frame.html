@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>tpl preview</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_shared/style.css">
+<style>
+  html,body{background:#000;margin:0;padding:0;height:100%;width:100%}
+  .stage{position:fixed;inset:0;width:100vw;height:100vh;background:#000;overflow:hidden}
+  .slide{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:min(100vw,calc(100vh*16/9));
+    height:min(100vh,calc(100vw*9/16));
+    container-type:inline-size;
+    background:var(--c-base);color:var(--c-text);
+    overflow:hidden;display:flex;font-family:var(--font-sans);
+    opacity:1;visibility:visible;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <!--SLIDE-->
+</div>
+</body>
+</html>

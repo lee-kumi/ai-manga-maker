@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>はじめてのGitHub｜アークル AI学生団体（勉強会デッキ）</title>
+<style>
+/* deck07.css — 07セミナー視覚DNA（特典のCSSをそのまま埋め込み） */
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0b0b0d;
+  font-family:"YuGothic","Yu Gothic","Hiragino Sans","Hiragino Kaku Gothic ProN",
+  "Noto Sans JP",Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#101010}
+.deck-stage{width:100vw;height:100vh;display:grid;place-items:center;overflow:hidden}
+.xop-slide{width:100vw;height:100vh;display:none;place-items:center;background:#0b0b0d}
+.xop-slide.is-active{display:grid}
+.xop-canvas{position:relative;width:min(100vw,177.7778vh);height:min(56.25vw,100vh);
+  aspect-ratio:16/9;overflow:hidden;background:#f7f6f1;box-shadow:0 0 0 1px rgba(255,255,255,.12);isolation:isolate}
+.tone-dark .xop-canvas{background:#050608}
+.tone-minimal .xop-canvas{background:#f7f6f2}
+.tone-brand .xop-canvas{background:#050608}
+.semantic-layer{position:absolute;left:0;top:0;width:1920px;height:1080px;
+  transform-origin:top left;transform:scale(var(--xs,1));z-index:5;pointer-events:none}
+.semantic-layer *{box-sizing:border-box}
+.corner-stripes{position:absolute;left:-22px;top:-20px;width:170px;height:150px;opacity:.72;
+  background:repeating-linear-gradient(135deg,#0b0b0b 0 10px,transparent 10px 20px);
+  clip-path:polygon(0 0,100% 0,0 100%);z-index:9;pointer-events:none}
+.tone-dark .corner-stripes,.tone-brand .corner-stripes{opacity:.24;
+  background:repeating-linear-gradient(135deg,#fff 0 10px,transparent 10px 20px)}
+.brand-watermark{position:absolute;left:50%;bottom:-3%;width:13%;height:13%;
+  transform:translateX(-50%);opacity:.13;z-index:8;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:950;font-size:22px;letter-spacing:.04em;color:#1a1a2e}
+.tone-dark .brand-watermark,.tone-brand .brand-watermark{color:rgba(255,255,255,.5);opacity:.16}
+.ug{background:linear-gradient(transparent 62%,#f5d020 62%);padding:0 .08em}
+.hl{background:#f5d020;padding:0 12px}
+.sem-paper{position:absolute;inset:0;background:#f7f6f1;color:#111;overflow:hidden;font-family:inherit}
+.sem-dark{position:absolute;inset:0;color:#fff;overflow:hidden;font-family:inherit;
+  background:radial-gradient(circle at 18% 8%,rgba(255,255,255,.16),transparent 32%),
+  radial-gradient(circle at 82% 76%,rgba(145,153,166,.28),transparent 36%),
+  linear-gradient(135deg,#050608 0%,#15181f 48%,#343941 100%)}
+.sem-brand{position:absolute;inset:0;color:#fff;overflow:hidden;font-family:inherit;
+  background:radial-gradient(circle at 16% 10%,rgba(255,255,255,.18),transparent 30%),
+  radial-gradient(circle at 86% 82%,rgba(155,165,178,.28),transparent 35%),
+  linear-gradient(145deg,#050608 0%,#15181f 34%,#343941 64%,#0b0d12 100%)}
+.sem-white{position:absolute;inset:0;background:#fff;color:#111;overflow:hidden;font-family:inherit}
+.card-hard{background:#fff;border:3px solid #111;box-shadow:10px 10px 0 #111}
+.deck-nav{position:fixed;right:14px;top:12px;z-index:200;display:flex;gap:8px;opacity:.1;
+  font-family:sans-serif;transition:opacity .2s}
+.deck-nav:hover{opacity:1}
+.deck-nav button,.deck-nav select{background:#1c1c1c;color:#fff;border:1px solid #444;
+  border-radius:6px;padding:4px 10px;font-size:13px;cursor:pointer}
+/* GitHub勉強会用の追記：コマンド箱（07の黒基調に合わせる） */
+.cmd07{background:#0d1117;color:#e6edf3;border:2px solid #111;border-radius:12px;
+  padding:22px 28px;font-family:"SFMono-Regular",Menlo,Consolas,monospace;line-height:1.7}
+.cmd07 .c{color:#f5d020}
+</style>
+</head>
+<body>
+<div class="deck-nav">
+  <button type="button" data-prev>◀</button>
+  <button type="button" data-next>▶</button>
+  <select data-jump aria-label="jump"></select>
+</div>
+<div class="deck-stage">
+
+<!-- 01 表紙 EVENT-COVER -->
+<section class="xop-slide tone-dark is-active" data-template-id="EVENT-COVER" data-notes="今日はアークルのGitHub勉強会です。約60分でGitHubの全体像とハンズオンをやります。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:5.6%;top:7%;bottom:7%;width:52%;display:flex;flex-direction:column;justify-content:center">
+        <div style="font-size:24px;font-weight:900;letter-spacing:.12em;color:#f5d020;margin-bottom:30px">AIRCLE / AI STUDENT COMMUNITY・STUDY SESSION</div>
+        <div style="font-size:96px;font-weight:950;line-height:1.08">はじめての<br><span style="color:#f5d020">GitHub</span></div>
+        <div style="width:210px;height:10px;background:#f5d020;margin:30px 0 26px"></div>
+        <div style="font-size:30px;font-weight:850;line-height:1.5;color:rgba(255,255,255,.8)">コードとチームを、<br>ひとつの場所に</div>
+        <div style="font-size:22px;font-weight:850;color:rgba(255,255,255,.62);margin-top:26px">約60分 / ハンズオンあり / 初心者歓迎</div>
+      </div>
+      <div style="position:absolute;right:6%;top:50%;transform:translateY(-50%);text-align:right;font-family:monospace;color:rgba(255,255,255,.16);font-size:70px;font-weight:900;line-height:1.5">$ git init<br>$ git add .<br>$ git commit<br>$ git push</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 02 INTRO-WALL 今日のゴール転換 -->
+<section class="xop-slide tone-dark" data-template-id="INTRO-WALL" data-notes="はじめに、今日のゴールをはっきりさせます。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;right:6%;top:50%;transform:translateY(-50%)">
+        <div style="font-size:24px;font-weight:900;letter-spacing:.1em;color:#f5d020;margin-bottom:24px">GOAL</div>
+        <div style="font-size:84px;font-weight:950;line-height:1.15">まず、今日の<br><span style="color:#f5d020">ゴール</span>から</div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 03 ゴール一覧 paper -->
+<section class="xop-slide tone-paper" data-template-id="GOAL-LIST" data-notes="終わったらこの4つができる状態を目指します。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:8%;font-size:62px;font-weight:950">終わったら、<span class="hl">これができる</span></div>
+      <div style="position:absolute;left:8%;right:8%;top:30%;bottom:8%;display:flex;flex-direction:column;justify-content:space-between">
+        <p style="margin:0;font-size:40px;font-weight:900;display:flex;gap:22px;align-items:center"><b style="color:#f5d020">01</b>GitHubが何で、なぜ使うのか説明できる</p>
+        <p style="margin:0;font-size:40px;font-weight:900;display:flex;gap:22px;align-items:center"><b style="color:#f5d020">02</b>自分のリポジトリを作って変更を保存できる</p>
+        <p style="margin:0;font-size:40px;font-weight:900;display:flex;gap:22px;align-items:center"><b style="color:#f5d020">03</b>push / pull / branch / PR の意味がわかる</p>
+        <p style="margin:0;font-size:40px;font-weight:900;display:flex;gap:22px;align-items:center"><b style="color:#f5d020">04</b>チームでコードを共有する第一歩を踏める</p>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 04 AGENDA -->
+<section class="xop-slide tone-paper" data-template-id="AGENDA" data-notes="今日の流れです。概念→用語→ハンズオン→活用の順で進めます。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:0;right:0;top:8%;text-align:center;font-size:72px;font-weight:950">本日の流れ</div>
+      <div style="position:absolute;left:15%;right:15%;top:28%;bottom:8%;display:flex;flex-direction:column;justify-content:space-between">
+        <p style="display:flex;align-items:center;gap:24px;margin:0;font-size:44px;font-weight:900"><b style="background:#111;color:#fff;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:30px">1</b><span>GitHubってなに？（概念）</span></p>
+        <p style="display:flex;align-items:center;gap:24px;margin:0;font-size:44px;font-weight:900"><b style="background:#111;color:#fff;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:30px">2</b><span>6つの用語を覚える</span></p>
+        <p style="display:flex;align-items:center;gap:24px;margin:0;font-size:44px;font-weight:900"><b style="background:#111;color:#fff;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:30px">3</b><span>さわってみる（ハンズオン）</span></p>
+        <p style="display:flex;align-items:center;gap:24px;margin:0;font-size:44px;font-weight:900"><b style="background:#111;color:#fff;width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;font-size:30px">4</b><span>アークルでの活用＆まとめ</span></p>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 05 CHAPTER 1 -->
+<section class="xop-slide tone-brand" data-template-id="CHAPTER-1" data-notes="まず1つ目の章。GitHubってなに？から。">
+  <div class="xop-canvas"><div class="corner-stripes"></div>
+    <div class="semantic-layer"><div class="sem-brand">
+      <div style="position:absolute;right:5.2%;top:7%;font-size:205px;line-height:.82;font-weight:950;color:#fff;opacity:.92;text-shadow:0 20px 52px rgba(0,0,0,.42)">1</div>
+      <div style="position:absolute;left:4.2%;right:24%;bottom:15%;font-size:92px;line-height:1.12;font-weight:950">GitHubって<br>なに？</div>
+      <div style="position:absolute;left:4.2%;bottom:7%;font-size:27px;font-weight:850;color:rgba(255,255,255,.78)">WHAT IS GITHUB</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 06 PROOF-WALL one message -->
+<section class="xop-slide tone-dark" data-template-id="ONE-MESSAGE" data-notes="ひとことで言うとこれです。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;right:6%;top:50%;transform:translateY(-50%)">
+        <div style="font-size:52px;font-weight:900;line-height:1.35;color:rgba(255,255,255,.9)">GitHubはひとことで言うと</div>
+        <div style="font-size:80px;font-weight:950;line-height:1.2;color:#f5d020">コードを保存・共有・<br>共同作業する場所</div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 07 定義＋たとえ paper -->
+<section class="xop-slide tone-paper" data-template-id="DEF" data-notes="たとえるとチーム用のGoogleドライブ。誰がいつ何を変えたかが残ります。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:9%;font-size:60px;font-weight:950">クラウド上の<span class="hl">共同作業スペース</span></div>
+      <div style="position:absolute;left:8%;right:8%;top:34%;font-size:38px;font-weight:800;line-height:1.7">・コードや資料をチームで置いて、一緒に育てられる<br>・<b class="ug">誰が・いつ・何を変えたか</b>が全部残る<br>・世界中のプロジェクトが公開されていて、勉強できる</div>
+      <div style="position:absolute;left:8%;right:8%;bottom:9%;font-size:30px;font-weight:850;color:#444;background:#fff;border-left:8px solid #f5d020;padding:20px 26px">たとえ：Googleドライブの「プログラム＆チーム作業に特化した版」</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 08 Gitはタイムマシン bigword paper -->
+<section class="xop-slide tone-paper" data-template-id="BIGWORD-GIT" data-notes="GitはGitHubの土台。変更履歴を記録する仕組みです。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:12%;font-size:34px;font-weight:900;color:#777;letter-spacing:.06em">GIT ＝ バージョン管理</div>
+      <div style="position:absolute;left:6%;top:26%;font-size:150px;font-weight:950;line-height:1">Gitは<span style="color:#f5d020">タイムマシン</span></div>
+      <div style="position:absolute;left:8%;right:8%;top:64%;font-size:38px;font-weight:800;line-height:1.65">いつでも過去の状態に戻れる「セーブ機能つきの作業」。<br>上書き保存で消えて泣く、がなくなる。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 09 GitとGitHubの違い 2card -->
+<section class="xop-slide tone-paper" data-template-id="VS-2" data-notes="似た名前ですが別物です。Gitは道具、GitHubは置き場所。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:8%;font-size:60px;font-weight:950">Git と GitHub の<span class="hl">違い</span></div>
+      <div style="position:absolute;left:7%;right:7%;top:30%;bottom:9%;display:grid;grid-template-columns:1fr 1fr;gap:34px">
+        <div class="card-hard" style="padding:40px"><div style="font-size:46px;font-weight:950;margin-bottom:18px">Git</div><div style="font-size:32px;font-weight:800;line-height:1.6">あなたのPCの中で動く<br><b>「履歴を記録する道具」</b>。<br>オフラインでも使える。</div></div>
+        <div class="card-hard" style="padding:40px"><div style="font-size:46px;font-weight:950;margin-bottom:18px">GitHub</div><div style="font-size:32px;font-weight:800;line-height:1.6">その履歴をネットに置いて<br><b>「共有・共同作業する場所」</b>。<br>チーム作業の中心。</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 10 なぜAI団体に効く grid6 -->
+<section class="xop-slide tone-paper" data-template-id="BENEFIT-GRID6" data-notes="アークルのようなAI団体に効く理由です。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:6.5%;font-size:58px;font-weight:950">なぜ<span class="hl">AI団体</span>に効くのか</div>
+      <div style="position:absolute;left:7%;right:7%;top:28%;bottom:8%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:22px">
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;gap:10px;padding:26px"><div style="font-size:30px;font-weight:950">コード共有</div><div style="font-size:23px;font-weight:800;color:#555;line-height:1.5">プロンプトやコードをチームで改善</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;gap:10px;padding:26px"><div style="font-size:30px;font-weight:950">壊れにくい</div><div style="font-size:23px;font-weight:800;color:#555;line-height:1.5">誰が何を変えたか残る</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;gap:10px;padding:26px"><div style="font-size:30px;font-weight:950">実績になる</div><div style="font-size:23px;font-weight:800;color:#555;line-height:1.5">そのままポートフォリオ</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;gap:10px;padding:26px"><div style="font-size:30px;font-weight:950">OSS参加</div><div style="font-size:23px;font-weight:800;color:#555;line-height:1.5">世界のAI開発に触れる</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;gap:10px;padding:26px"><div style="font-size:30px;font-weight:950">ナレッジ蓄積</div><div style="font-size:23px;font-weight:800;color:#555;line-height:1.5">資料・議事録を1か所に</div></div>
+        <div class="card-hard" style="display:flex;flex-direction:column;justify-content:center;gap:10px;padding:26px"><div style="font-size:30px;font-weight:950">無料公開</div><div style="font-size:23px;font-weight:800;color:#555;line-height:1.5">GitHub Pagesで作品を発信</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 11 CHAPTER 2 -->
+<section class="xop-slide tone-brand" data-template-id="CHAPTER-2" data-notes="次は用語です。6つだけ覚えれば十分。">
+  <div class="xop-canvas"><div class="corner-stripes"></div>
+    <div class="semantic-layer"><div class="sem-brand">
+      <div style="position:absolute;right:5.2%;top:7%;font-size:205px;line-height:.82;font-weight:950;color:#fff;opacity:.92;text-shadow:0 20px 52px rgba(0,0,0,.42)">2</div>
+      <div style="position:absolute;left:4.2%;right:24%;bottom:15%;font-size:92px;line-height:1.12;font-weight:950">6つの用語を<br>覚える</div>
+      <div style="position:absolute;left:4.2%;bottom:7%;font-size:27px;font-weight:850;color:rgba(255,255,255,.78)">6 WORDS</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 12 リポジトリ bigword -->
+<section class="xop-slide tone-paper" data-template-id="WORD-REPO" data-notes="用語1。リポジトリはプロジェクトの箱。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:11%;font-size:32px;font-weight:900;color:#777;letter-spacing:.06em">用語 01 ・ REPOSITORY</div>
+      <div style="position:absolute;left:6%;top:24%;font-size:120px;font-weight:950;line-height:1"><span style="color:#f5d020">リポジトリ</span>＝箱</div>
+      <div style="position:absolute;left:8%;right:8%;top:56%;font-size:38px;font-weight:800;line-height:1.65">1プロジェクト＝1リポジトリ。コード・画像・説明書（README）をまとめて入れる。<br>公開／非公開を選べる。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 13 コミット bigword -->
+<section class="xop-slide tone-paper" data-template-id="WORD-COMMIT" data-notes="用語2。コミットはセーブ。一言メモをつける。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:11%;font-size:32px;font-weight:900;color:#777;letter-spacing:.06em">用語 02 ・ COMMIT</div>
+      <div style="position:absolute;left:6%;top:24%;font-size:120px;font-weight:950;line-height:1"><span style="color:#f5d020">コミット</span>＝セーブ</div>
+      <div style="position:absolute;left:8%;right:8%;top:56%;font-size:38px;font-weight:800;line-height:1.65">「ここまでやった」と名前をつけて記録する。1コミット＝1つの区切り。<br>メッセージを書くと、後から履歴が読める。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 14 push/pull 2card -->
+<section class="xop-slide tone-paper" data-template-id="WORD-PUSHPULL" data-notes="用語3。pushはアップロード、pullはダウンロード。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:8%;font-size:32px;font-weight:900;color:#777;letter-spacing:.06em">用語 03 ・ PUSH / PULL</div>
+      <div style="position:absolute;left:6%;top:15%;font-size:58px;font-weight:950">送る と 取ってくる</div>
+      <div style="position:absolute;left:7%;right:7%;top:35%;bottom:9%;display:grid;grid-template-columns:1fr 1fr;gap:34px">
+        <div class="card-hard" style="padding:38px"><div style="font-size:44px;font-weight:950;margin-bottom:16px">push ⬆</div><div style="font-size:30px;font-weight:800;line-height:1.6">手元のコミットを<br>GitHubへ<b>アップロード</b></div></div>
+        <div class="card-hard" style="padding:38px"><div style="font-size:44px;font-weight:950;margin-bottom:16px">pull ⬇</div><div style="font-size:30px;font-weight:800;line-height:1.6">GitHubの最新を<br>手元へ<b>ダウンロード</b></div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 15 ブランチ bigword -->
+<section class="xop-slide tone-paper" data-template-id="WORD-BRANCH" data-notes="用語4。ブランチは作業用の分身。本番を触らず試せる。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:11%;font-size:32px;font-weight:900;color:#777;letter-spacing:.06em">用語 04 ・ BRANCH</div>
+      <div style="position:absolute;left:6%;top:24%;font-size:110px;font-weight:950;line-height:1"><span style="color:#f5d020">ブランチ</span>＝分身</div>
+      <div style="position:absolute;left:8%;right:8%;top:55%;font-size:38px;font-weight:800;line-height:1.65">本番（main）を触らず、別レーンで安全に作業する仕組み。<br>失敗しても本番は無傷。たとえ：清書はそのまま、下書き用紙で試す。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 16 マージ bigword -->
+<section class="xop-slide tone-paper" data-template-id="WORD-MERGE" data-notes="用語5。マージは合流。ブランチを本番に取り込む。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:11%;font-size:32px;font-weight:900;color:#777;letter-spacing:.06em">用語 05 ・ MERGE</div>
+      <div style="position:absolute;left:6%;top:24%;font-size:120px;font-weight:950;line-height:1"><span style="color:#f5d020">マージ</span>＝合流</div>
+      <div style="position:absolute;left:8%;right:8%;top:56%;font-size:38px;font-weight:800;line-height:1.65">ブランチの変更を本番（main）に取り込む。複数人の変更もここで1つにまとまる。<br>ぶつかったら「どちらを採用するか」選ぶだけ。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 17 PR bigword -->
+<section class="xop-slide tone-paper" data-template-id="WORD-PR" data-notes="用語6。PRは合流の申請。共同開発の心臓部。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:11%;font-size:32px;font-weight:900;color:#777;letter-spacing:.06em">用語 06 ・ PULL REQUEST</div>
+      <div style="position:absolute;left:6%;top:23%;font-size:88px;font-weight:950;line-height:1.05"><span style="color:#f5d020">プルリク</span>＝合流の申請</div>
+      <div style="position:absolute;left:8%;right:8%;top:52%;font-size:38px;font-weight:800;line-height:1.65">「このブランチをmainに入れていい？」とチームに提案する場。<br>変更をみんなで見てレビューし、OKが出たらマージ。<b class="ug">共同開発の心臓部</b>。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 18 基本の6歩 flow dark -->
+<section class="xop-slide tone-dark" data-template-id="FLOW-6" data-notes="この6歩がGitHub共同作業の土台。今日はこれを1周します。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;top:9%;font-size:58px;font-weight:950;color:#fff">基本の<span style="color:#f5d020">6歩</span>（これだけ覚える）</div>
+      <div style="position:absolute;left:6%;right:6%;top:40%;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <span style="border:3px solid #f5d020;color:#fff;font-weight:900;border-radius:12px;padding:20px 22px;font-size:30px">ブランチ</span>
+        <span style="color:#f5d020;font-size:36px;font-weight:950">→</span>
+        <span style="border:3px solid #f5d020;color:#fff;font-weight:900;border-radius:12px;padding:20px 22px;font-size:30px">変更</span>
+        <span style="color:#f5d020;font-size:36px;font-weight:950">→</span>
+        <span style="border:3px solid #f5d020;color:#fff;font-weight:900;border-radius:12px;padding:20px 22px;font-size:30px">commit</span>
+        <span style="color:#f5d020;font-size:36px;font-weight:950">→</span>
+        <span style="border:3px solid #f5d020;color:#fff;font-weight:900;border-radius:12px;padding:20px 22px;font-size:30px">push</span>
+        <span style="color:#f5d020;font-size:36px;font-weight:950">→</span>
+        <span style="border:3px solid #f5d020;color:#fff;font-weight:900;border-radius:12px;padding:20px 22px;font-size:30px">PR</span>
+        <span style="color:#f5d020;font-size:36px;font-weight:950">→</span>
+        <span style="border:3px solid #f5d020;color:#fff;font-weight:900;border-radius:12px;padding:20px 22px;font-size:30px">merge</span>
+      </div>
+      <div style="position:absolute;left:6%;bottom:10%;font-size:30px;font-weight:800;color:rgba(255,255,255,.75)">この1周ができれば、チーム開発の入口はクリア。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 19 CHAPTER 3 -->
+<section class="xop-slide tone-brand" data-template-id="CHAPTER-3" data-notes="ここからハンズオン。実際に手を動かします。">
+  <div class="xop-canvas"><div class="corner-stripes"></div>
+    <div class="semantic-layer"><div class="sem-brand">
+      <div style="position:absolute;right:5.2%;top:7%;font-size:205px;line-height:.82;font-weight:950;color:#fff;opacity:.92;text-shadow:0 20px 52px rgba(0,0,0,.42)">3</div>
+      <div style="position:absolute;left:4.2%;right:24%;bottom:15%;font-size:92px;line-height:1.12;font-weight:950">さわって<br>みる</div>
+      <div style="position:absolute;left:4.2%;bottom:7%;font-size:27px;font-weight:850;color:rgba(255,255,255,.78)">HANDS-ON</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 20 準備 paper -->
+<section class="xop-slide tone-paper" data-template-id="PREP" data-notes="準備。アカウントと、クリック操作アプリのGitHub Desktopがおすすめ。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:9%;font-size:58px;font-weight:950">準備するもの</div>
+      <div style="position:absolute;left:8%;right:8%;top:32%;font-size:40px;font-weight:800;line-height:1.9">・GitHubアカウント（github.com で Sign up）<br>・おすすめ：<b class="ug">GitHub Desktop</b>（コマンド不要のアプリ）<br>・慣れたい人：ターミナル＋VS Code</div>
+      <div style="position:absolute;left:8%;right:8%;bottom:9%;font-size:30px;font-weight:850;color:#444;background:#fff;border-left:8px solid #f5d020;padding:20px 26px">難しいコマンドは「困ったらAIに貼って聞く」でOK</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 21 手順1 リポジトリ作成 -->
+<section class="xop-slide tone-paper" data-template-id="STEP-REPO" data-notes="手順1。リポジトリを作る。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:9%;font-size:34px;font-weight:900;color:#f5d020">HANDS-ON ①</div>
+      <div style="position:absolute;left:6%;top:16%;font-size:60px;font-weight:950">リポジトリを作る</div>
+      <div style="position:absolute;left:8%;right:8%;top:38%;font-size:38px;font-weight:800;line-height:1.8">・GitHub右上の「＋」→ New repository<br>・名前を入れる（例：<b>aircle-github-practice</b>）<br>・「Add a README」にチェック → Create</div>
+      <div style="position:absolute;left:8%;right:8%;bottom:9%;font-size:30px;font-weight:850;color:#444;background:#fff;border-left:8px solid #f5d020;padding:20px 26px">これで「プロジェクトの箱」がクラウドに完成。中身は空でOK。</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 22 手順2 clone -->
+<section class="xop-slide tone-paper" data-template-id="STEP-CLONE" data-notes="手順2。手元に持ってくる clone。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:9%;font-size:34px;font-weight:900;color:#f5d020">HANDS-ON ②</div>
+      <div style="position:absolute;left:6%;top:16%;font-size:60px;font-weight:950">手元に持ってくる（clone）</div>
+      <div style="position:absolute;left:8%;right:8%;top:40%;font-size:34px;font-weight:800">GitHub Desktopなら「Clone」ボタン一つ。コマンド派はこちら：</div>
+      <div class="cmd07" style="position:absolute;left:8%;right:8%;top:56%;font-size:30px"><span class="c">git clone</span> https://github.com/&lt;あなた&gt;/aircle-github-practice.git</div>
+      <div style="position:absolute;left:8%;bottom:9%;font-size:28px;font-weight:800;color:#555">clone＝GitHubの箱を、そのまま自分のPCにコピー</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 23 手順3 commit -->
+<section class="xop-slide tone-paper" data-template-id="STEP-COMMIT" data-notes="手順3。変更してセーブ commit。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:9%;font-size:34px;font-weight:900;color:#f5d020">HANDS-ON ③</div>
+      <div style="position:absolute;left:6%;top:16%;font-size:60px;font-weight:950">変更して、セーブ（commit）</div>
+      <div style="position:absolute;left:8%;right:8%;top:40%;font-size:34px;font-weight:800">READMEに自己紹介を1行足して、保存したら：</div>
+      <div class="cmd07" style="position:absolute;left:8%;right:8%;top:55%;font-size:30px"><span class="c">git add</span> .
+<span class="c">git commit</span> -m "READMEに自己紹介を追加"</div>
+      <div style="position:absolute;left:8%;bottom:9%;font-size:28px;font-weight:800;color:#555">add＝セーブするファイルを選ぶ／commit＝メモをつけてセーブ</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 24 手順4 push -->
+<section class="xop-slide tone-paper" data-template-id="STEP-PUSH" data-notes="手順4。GitHubへ送る push。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:9%;font-size:34px;font-weight:900;color:#f5d020">HANDS-ON ④</div>
+      <div style="position:absolute;left:6%;top:16%;font-size:60px;font-weight:950">GitHubへ送る（push）</div>
+      <div class="cmd07" style="position:absolute;left:8%;right:8%;top:40%;font-size:34px"><span class="c">git push</span></div>
+      <div style="position:absolute;left:8%;right:8%;top:58%;font-size:38px;font-weight:800;line-height:1.6">ブラウザでリポジトリを更新すると、変更が反映されている。<br><b class="ug">クラウドに自分の作業が乗った瞬間</b>🎉</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 25 手順5 branch→PR -->
+<section class="xop-slide tone-paper" data-template-id="STEP-PR" data-notes="手順5。ブランチを切ってプルリクを体験。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:9%;font-size:34px;font-weight:900;color:#f5d020">HANDS-ON ⑤</div>
+      <div style="position:absolute;left:6%;top:16%;font-size:60px;font-weight:950">ブランチ → プルリク体験</div>
+      <div class="cmd07" style="position:absolute;left:8%;right:8%;top:38%;font-size:27px"><span class="c">git switch</span> -c my-first-branch
+<span class="c">git commit</span> -am "変更"
+<span class="c">git push</span> -u origin my-first-branch</div>
+      <div style="position:absolute;left:8%;right:8%;bottom:10%;font-size:34px;font-weight:800;line-height:1.6">GitHubに出る「Compare &amp; pull request」→ 説明を書いて Create → Merge</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 26 CHAPTER 4 -->
+<section class="xop-slide tone-brand" data-template-id="CHAPTER-4" data-notes="最後の章。活用とまとめ。">
+  <div class="xop-canvas"><div class="corner-stripes"></div>
+    <div class="semantic-layer"><div class="sem-brand">
+      <div style="position:absolute;right:5.2%;top:7%;font-size:205px;line-height:.82;font-weight:950;color:#fff;opacity:.92;text-shadow:0 20px 52px rgba(0,0,0,.42)">4</div>
+      <div style="position:absolute;left:4.2%;right:24%;bottom:15%;font-size:92px;line-height:1.12;font-weight:950">活用と<br>まとめ</div>
+      <div style="position:absolute;left:4.2%;bottom:7%;font-size:27px;font-weight:850;color:rgba(255,255,255,.78)">USE &amp; WRAP-UP</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 27 アークルでの活用 grid4 -->
+<section class="xop-slide tone-paper" data-template-id="USE-GRID4" data-notes="アークルでの具体的な使い方アイデア。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:7%;font-size:58px;font-weight:950"><span class="hl">アークル</span>での使い方</div>
+      <div style="position:absolute;left:7%;right:7%;top:30%;bottom:9%;display:grid;grid-template-columns:1fr 1fr;gap:26px">
+        <div class="card-hard" style="padding:30px"><div style="font-size:32px;font-weight:950;margin-bottom:10px">プロンプト＆コード共有</div><div style="font-size:25px;font-weight:800;color:#555;line-height:1.5">チームで改善し合う練習に</div></div>
+        <div class="card-hard" style="padding:30px"><div style="font-size:32px;font-weight:950;margin-bottom:10px">勉強会ナレッジ蓄積</div><div style="font-size:25px;font-weight:800;color:#555;line-height:1.5">資料・議事録を1リポジトリに</div></div>
+        <div class="card-hard" style="padding:30px"><div style="font-size:32px;font-weight:950;margin-bottom:10px">ハッカソン作品置き場</div><div style="font-size:25px;font-weight:800;color:#555;line-height:1.5">そのまま就活ポートフォリオ</div></div>
+        <div class="card-hard" style="padding:30px"><div style="font-size:32px;font-weight:950;margin-bottom:10px">PRレビュー練習</div><div style="font-size:25px;font-weight:800;color:#555;line-height:1.5">役割分担して見せ合う</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 28 Pages / Student Pack 2card -->
+<section class="xop-slide tone-paper" data-template-id="EXTRA-2" data-notes="無料で公開できるPagesと、学生無料のStudent Pack。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-paper">
+      <div style="position:absolute;left:6%;top:8%;font-size:58px;font-weight:950">学生の<span class="hl">おトク</span>2つ</div>
+      <div style="position:absolute;left:7%;right:7%;top:32%;bottom:9%;display:grid;grid-template-columns:1fr 1fr;gap:34px">
+        <div class="card-hard" style="padding:38px"><div style="font-size:40px;font-weight:950;margin-bottom:14px">GitHub Pages</div><div style="font-size:29px;font-weight:800;line-height:1.6">リポジトリのHTMLを<br><b>無料でWeb公開</b>。作品を世界に見せられる。</div></div>
+        <div class="card-hard" style="padding:38px"><div style="font-size:40px;font-weight:950;margin-bottom:14px">Student Pack</div><div style="font-size:29px;font-weight:800;line-height:1.6">学生は<b>有料機能が無料</b>に。<br>学校メールで申請しておこう。</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 29 つまずき＆宿題 dark -->
+<section class="xop-slide tone-dark" data-template-id="TIPS-HW" data-notes="つまずき対策と、今日の宿題。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;top:9%;font-size:56px;font-weight:950;color:#fff">つまずき対策 ＆ <span style="color:#f5d020">宿題</span></div>
+      <div style="position:absolute;left:8%;right:52%;top:30%;font-size:31px;font-weight:800;line-height:1.9;color:rgba(255,255,255,.9)"><b style="color:#f5d020">よくある詰まり</b><br>・push できない → 先に pull<br>・コンフリクト → 残す方を選ぶだけ<br>・不安 → エラーをAIに貼って聞く</div>
+      <div style="position:absolute;left:52%;right:8%;top:30%;font-size:31px;font-weight:800;line-height:1.9;color:rgba(255,255,255,.9)"><b style="color:#f5d020">今日の宿題</b><br>・リポジトリを1つ作る<br>・READMEに自己紹介を push<br>・誰かのrepoにIssueを1つ立てる</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 30 CLOSING -->
+<section class="xop-slide tone-dark" data-template-id="CLOSING" data-notes="お疲れさまでした。6歩を覚えて帰ってください。質問どうぞ。">
+  <div class="xop-canvas"><div class="corner-stripes"></div><div class="brand-watermark">AIRCLE</div>
+    <div class="semantic-layer"><div class="sem-dark">
+      <div style="position:absolute;left:6%;top:20%;font-size:24px;font-weight:900;letter-spacing:.1em;color:#f5d020">THANK YOU</div>
+      <div style="position:absolute;left:6%;top:28%;font-size:82px;font-weight:950;line-height:1.15">お疲れさまでした🎉<br><span style="color:#f5d020">GitHub</span>、もう怖くない</div>
+      <div style="position:absolute;left:6%;bottom:16%;font-size:32px;font-weight:850;color:rgba(255,255,255,.82)">覚えて帰る6歩：ブランチ→変更→commit→push→PR→merge</div>
+      <div style="position:absolute;left:6%;bottom:8%;font-size:26px;font-weight:800;color:rgba(255,255,255,.6)">Questions? ・ アークル GitHub勉強会</div>
+    </div></div>
+  </div>
+</section>
+
+</div>
+<script>
+/* deck07.js — 特典のJSをそのまま埋め込み（jumpセレクトは自動生成を追加） */
+(() => {
+  const slides = Array.from(document.querySelectorAll(".xop-slide"));
+  let current = 0;
+  const select = document.querySelector("[data-jump]");
+  if (select) { slides.forEach((s,i)=>{ const o=document.createElement("option"); o.value=i; o.textContent=(i+1)+" / "+slides.length; select.appendChild(o); }); }
+  const clamp = (n) => Math.max(0, Math.min(slides.length - 1, n));
+  function fit() {
+    slides.forEach((s) => {
+      const c = s.querySelector(".xop-canvas");
+      const layer = s.querySelector(".semantic-layer");
+      if (c && layer) layer.style.setProperty("--xs", (c.clientWidth / 1920).toString());
+    });
+  }
+  function show(index) {
+    if (!slides.length) return;
+    current = clamp(Number(index) || 0);
+    slides.forEach((s, i) => s.classList.toggle("is-active", i === current));
+    if (select) select.value = String(current);
+    requestAnimationFrame(fit);
+    history.replaceState(null, "", `#${current + 1}`);
+  }
+  document.querySelector("[data-prev]")?.addEventListener("click", () => show(current - 1));
+  document.querySelector("[data-next]")?.addEventListener("click", () => show(current + 1));
+  select?.addEventListener("change", () => show(Number(select.value)));
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") show(current + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(current - 1);
+  });
+  window.addEventListener("resize", fit);
+  const fromHash = () => { const n = Number(location.hash.replace("#", "")); return Number.isFinite(n) && n > 0 ? n - 1 : 0; };
+  show(fromHash());
+  fit();
+})();
+</script>
+</body>
+</html>

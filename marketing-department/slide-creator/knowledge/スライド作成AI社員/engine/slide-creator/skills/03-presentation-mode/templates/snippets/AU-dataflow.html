@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>AU dataflow</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--c-grad:linear-gradient(145deg,#9b8cff 0%,#c4baff 50%,#e8b88a 100%);--c-grad-db:linear-gradient(145deg,#7b6ce0 0%,#9b8cff 60%,#c87941 100%);--c-grad-out:linear-gradient(145deg,#c87941 0%,#e8b88a 60%,#9b8cff 100%)}
+  html,body{margin:0;padding:0;height:100%;background:#000;font-family:"Noto Sans JP",sans-serif}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));container-type:inline-size;overflow:hidden;background:#fff;padding:2cqw 2.5cqw;display:flex;flex-direction:column}
+  .head{margin-bottom:1cqw}
+  .title{font-size:3cqw;font-weight:800;color:#1a1a2e;margin:0 0 .4cqw 0;line-height:1.25}
+  .lead{font-size:1.2cqw;color:#6c6c8a;margin:0}
+  .row{flex:1;display:flex;align-items:center;justify-content:space-between;gap:1cqw;margin-top:1cqw}
+  .sources{display:flex;flex-direction:column;gap:.7cqw}
+  .source{display:flex;align-items:center;gap:.9cqw;background:#fff;border:1px solid #e0ddf0;border-radius:.6cqw;padding:1cqw 1.3cqw;min-width:12cqw;font-size:1.2cqw;font-weight:700;color:#1a1a2e}
+  .source .dot{width:1.7cqw;height:1.7cqw;border-radius:50%;background:var(--c-grad)}
+  .arrow{font-size:2.2cqw;color:#9b8cff;flex-shrink:0}
+  .node{display:flex;flex-direction:column;align-items:center;gap:.7cqw;text-align:center}
+  .node-icon{width:9cqw;height:9cqw;border-radius:50%;background:var(--c-grad);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.7cqw;font-weight:800;box-shadow:0 .4cqw 1.5cqw rgba(155,140,255,.35)}
+  .node-icon--db{background:var(--c-grad-db)}
+  .node-icon--out{background:var(--c-grad-out)}
+  .node-label{font-size:1.3cqw;font-weight:700;color:#1a1a2e;max-width:12cqw;line-height:1.4}
+  .node-sub{font-size:1.05cqw;color:#6c6c8a;max-width:12cqw;line-height:1.5}
+</style></head><body><div class="stage"><div class="slide">
+  <div class="head">
+    <h2 class="title">データフロー: ソース → 処理 → DB → 出力</h2>
+    <p class="lead">複数の入力をハブで統合し、段階的に出力へ流す典型構造</p>
+  </div>
+  <div class="row">
+    <div class="sources">
+      <div class="source"><span class="dot"></span><span>Source A</span></div>
+      <div class="source"><span class="dot"></span><span>Source B</span></div>
+      <div class="source"><span class="dot"></span><span>Source C</span></div>
+    </div>
+    <div class="arrow">▶</div>
+    <div class="node"><div class="node-icon">01</div><div class="node-label">処理</div><div class="node-sub">マルチモーダル解析</div></div>
+    <div class="arrow">▶</div>
+    <div class="node"><div class="node-icon node-icon--db">02</div><div class="node-label">検索インデックス</div><div class="node-sub">に登録</div></div>
+    <div class="arrow">▶</div>
+    <div class="node"><div class="node-icon node-icon--out">03</div><div class="node-label">出力</div><div class="node-sub">エージェントで最適化</div></div>
+  </div>
+</div></div></body></html>

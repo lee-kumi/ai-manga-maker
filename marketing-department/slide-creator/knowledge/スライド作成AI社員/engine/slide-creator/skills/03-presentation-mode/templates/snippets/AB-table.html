@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>§AB tpl-table</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="../_shared/style.css?v=4">
+<style>
+html,body{background:#000;margin:0;padding:0;height:100%}
+.stage{position:fixed;inset:0;width:100vw;height:100vh;background:#000;overflow:hidden}
+.slide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));
+  container-type:inline-size;background:#fff;color:var(--c-dark);
+  overflow:hidden;display:flex;font-family:var(--font-sans);
+  opacity:1;visibility:visible;}
+.hint{position:fixed;top:14px;left:14px;font-family:var(--font-num);font-size:11px;
+  letter-spacing:.18em;color:#fff;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:999px;z-index:99;max-width:80vw}
+</style></head><body>
+<div class="hint">§AB .tpl-table — 数値比較表(強調列にis-highlight)</div>
+<div class="stage"><section class="slide tpl-table"><h2 class="tpl-table__h1">余白と表のデザインを<span class="grad">改善</span></h2><table class="tpl-table__tbl"><thead><tr><th></th><th>りんご</th><th>みかん</th><th class="is-highlight">いちご</th><th>パイナップル</th></tr></thead><tbody><tr><td class="is-row-label">2019年</td><td>100</td><td>80</td><td class="is-highlight">300</td><td>40</td></tr><tr><td class="is-row-label">2020年</td><td>30</td><td>40</td><td class="is-highlight">20</td><td>100</td></tr><tr><td class="is-row-label">2021年</td><td>50</td><td>120</td><td class="is-highlight">80</td><td>60</td></tr><tr><td class="is-row-label">2022年</td><td>200</td><td>100</td><td class="is-highlight">65</td><td>90</td></tr></tbody></table><p class="tpl-table__cap">強調したいことの補足テキストがあってもいいですね</p></section></div>
+</body></html>

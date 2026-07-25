@@ -15,8 +15,11 @@
 6. 見せる：ユーザーに表示し、直したい所を聞く。
 
 ## 参照するナレッジ
-- knowledge/slide-format-guide.md（体裁・構成の基準）
-- （任意）knowledge/ に置かれた特典テンプレ「スライド作成AI社員」＝最優先
+- **knowledge/スライド作成AI社員/**（特典エンジン。見た目の正本＝最優先）
+  - 見た目の正本：`engine/07-seminar-style/`（`sample-index.html`＋`css07/deck07.css`＋`js07/deck07.js`）
+  - モノクロ＋黄色1色`#f5d020`／黒ウェイト大見出し／黒背景の核心1文／tone-dark・paper・brand
+  - CSS/JSは改変せず使う。雛形をコピーして文言だけ差し替える（ゼロから書かない）
+- knowledge/slide-format-guide.md（体裁・構成の予備基準）
 
 ## 成果物の形と保存先
 - 1ファイル完結のHTMLスライド。保存先＝output/日付_内容_枚数.html

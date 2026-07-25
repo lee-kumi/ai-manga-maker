@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>tpl-agenda</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="../_shared/style.css?v=6">
+<style>
+html,body{background:#000;margin:0;padding:0;height:100%}
+.stage{position:fixed;inset:0;width:100vw;height:100vh;background:#000;overflow:hidden}
+.slide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));
+  container-type:inline-size;background:#fff;color:#1a1a2e;
+  overflow:hidden;display:flex;font-family:var(--font-sans);
+  opacity:1;visibility:visible;}
+.hint{position:fixed;top:14px;left:14px;font-family:var(--font-num);font-size:11px;
+  letter-spacing:.18em;color:#fff;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:999px;z-index:99;max-width:80vw}
+</style></head><body>
+<div class="hint">.tpl-agenda — 左ダーク + 右目次(行はagendaItems配列で可変)</div>
+<div class="stage"><section class="slide tpl-agenda"><div class="tpl-agenda__left"><div class="tpl-agenda__bar"></div><h1 class="tpl-agenda__title">AGENDA</h1><p class="tpl-agenda__sub">本日の流れ</p></div><div class="tpl-agenda__right"><div class="tpl-agenda__row"><div class="tpl-agenda__num">01</div><div class="tpl-agenda__body"><h3>AIツール × ナレッジ管理 本編</h3><p>講師 太郎 / 60分</p></div></div><div class="tpl-agenda__row"><div class="tpl-agenda__num">02</div><div class="tpl-agenda__body"><h3>受講者 実践パート</h3><p>パートナー / 30分</p></div></div><div class="tpl-agenda__row"><div class="tpl-agenda__num">03</div><div class="tpl-agenda__body"><h3>サンプル講座 案内</h3><p>講師 太郎 / 10分</p></div></div><div class="tpl-agenda__row"><div class="tpl-agenda__num">04</div><div class="tpl-agenda__body"><h3>パートナースクール ＋ Q&A</h3><p>パートナー / 20分 + Q&A</p></div></div></div></section></div>
+</body></html>

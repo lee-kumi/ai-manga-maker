@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>E1: 講師 太郎 自己紹介 — 永久テンプレ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800;900&family=Shippori+Mincho:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --c-dark:#1a1a2e;--c-accent:#9b8cff;--c-accent-dark:#7b6ce0;
+    --c-orange:#c87941;--c-orange-light:#e8b88a;--c-surface:#f4f2fb;
+    --c-muted:#6c6c8a;--c-border:#e0ddf0;
+    --font-sans:"Noto Sans JP","Helvetica Neue","Hiragino Kaku Gothic ProN",system-ui,sans-serif;
+    --font-num:"Helvetica Neue",Helvetica,sans-serif;
+  }
+  html,body{margin:0;padding:0;height:100%;background:#000;font-family:var(--font-sans)}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16));container-type:inline-size;overflow:hidden;display:flex;background:#f7f6f1;position:relative}
+  /* tpl-bio-detail (基準デッキ原本コピー) */
+  .tpl-bio-detail{flex-direction:row;align-items:stretch;background:#f7f6f1;padding:0;position:relative;overflow:hidden;width:100%;height:100%}
+  .tpl-bio-detail__head{position:absolute;top:1.8cqw;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 3cqw;z-index:5;font-family:var(--font-num);font-size:1.05cqw;letter-spacing:.16em;color:var(--c-muted);font-weight:700;text-transform:uppercase}
+  .tpl-bio-detail__head__brand{display:flex;gap:1.4cqw}
+  .tpl-bio-detail__head__brand b{color:var(--c-dark)}
+  .tpl-bio-detail__head__page{font-weight:800;color:var(--c-dark);background:#fff;border:1px solid var(--c-border);border-radius:999px;padding:.4cqw 1cqw}
+  .tpl-bio-detail__left{flex:0 0 36%;position:relative;display:flex;align-items:flex-end;justify-content:center;height:100%}
+  .tpl-bio-detail__bg{position:absolute;left:0;top:14%;bottom:0;width:80%;background:var(--c-orange);border-top-right-radius:6cqw;border-bottom-right-radius:6cqw;z-index:1}
+  .tpl-bio-detail__photo{position:relative;z-index:2;height:90%;width:auto;object-fit:contain;object-position:bottom center;max-width:96%}
+  .tpl-bio-detail__right{flex:1;padding:8cqw 5cqw 5cqw;display:flex;flex-direction:column;justify-content:flex-start;gap:1.2cqw}
+  .tpl-bio-detail__name-row{display:flex;align-items:baseline;gap:1.4cqw;flex-wrap:wrap}
+  .tpl-bio-detail__name__jp{font-family:"游ゴシック体","Yu Gothic",YuGothic,sans-serif;font-size:4.6cqw;font-weight:900;color:var(--c-dark);letter-spacing:.04em;line-height:1;margin:0}
+  .tpl-bio-detail__name__en{font-family:var(--font-num);font-size:2cqw;font-weight:800;color:var(--c-orange);letter-spacing:.04em}
+  .tpl-bio-detail__social{display:flex;gap:2.4cqw;margin-top:.4cqw;align-items:center;flex-wrap:wrap}
+  .tpl-bio-detail__sn{display:flex;align-items:center;gap:.6cqw;font-family:var(--font-num);font-size:1.4cqw;font-weight:700;color:var(--c-dark)}
+  .tpl-bio-detail__sn-ico{width:2.2cqw;height:2.2cqw;border-radius:.4cqw;background:var(--c-dark);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.3cqw;font-family:var(--font-num)}
+  .tpl-bio-detail__hobby{font-size:1.3cqw;color:var(--c-dark);font-weight:700;margin:.4cqw 0 0 0}
+  .tpl-bio-detail__hobby b{margin-right:.8cqw;color:var(--c-dark)}
+  .tpl-bio-detail__hobby span{color:var(--c-dark);font-weight:500}
+  .tpl-bio-detail__timeline{display:flex;flex-direction:column;gap:0;margin-top:.6cqw}
+  .tpl-bio-detail__row{display:grid;grid-template-columns:1fr 2.6fr;gap:1.4cqw;align-items:start;padding:1cqw 0;border-top:1px solid var(--c-border)}
+  .tpl-bio-detail__row:first-child{border-top:0;padding-top:.6cqw}
+  .tpl-bio-detail__year{font-family:var(--font-num);font-size:1.3cqw;font-weight:800;color:var(--c-dark);letter-spacing:.04em;line-height:1.65}
+  .tpl-bio-detail__desc{font-size:1.2cqw;color:var(--c-dark);line-height:1.85}
+  .tpl-bio-detail__desc b{color:var(--c-orange);font-weight:800}
+</style></head><body><div class="stage"><div class="slide">
+<div class="tpl-bio-detail">
+  <div class="tpl-bio-detail__head">
+    <div class="tpl-bio-detail__head__brand"><span><b>ブランド × サンプルプロダクト</b></span><span>Speaker Introduction</span></div>
+    <div class="tpl-bio-detail__head__page">E1 / Eternal</div>
+  </div>
+  <div class="tpl-bio-detail__left">
+    <div class="tpl-bio-detail__bg"></div>
+    <img class="tpl-bio-detail__photo" src="assets/people/speaker_cutout.png" alt="講師 太郎">
+  </div>
+  <div class="tpl-bio-detail__right">
+    <div class="tpl-bio-detail__name-row">
+      <h2 class="tpl-bio-detail__name__jp">講師 太郎</h2>
+      <span class="tpl-bio-detail__name__en">Taro Yamada</span>
+    </div>
+    <div class="tpl-bio-detail__social">
+      <div class="tpl-bio-detail__sn"><span class="tpl-bio-detail__sn-ico">X</span>@your_sub</div>
+      <div class="tpl-bio-detail__sn"><span class="tpl-bio-detail__sn-ico">URL</span>@your_main</div>
+      <div class="tpl-bio-detail__sn"><span class="tpl-bio-detail__sn-ico">URL</span>example.com</div>
+    </div>
+    <p class="tpl-bio-detail__hobby"><b>ひとこと：</b><span>24時間AIを触ってます。AI社員を作るのが趣味。</span></p>
+    <div class="tpl-bio-detail__timeline">
+      <div class="tpl-bio-detail__row">
+        <div class="tpl-bio-detail__year">現在</div>
+        <div class="tpl-bio-detail__desc">株式会社 <b>ブランド</b> 代表 ／ <b>サンプルスタジオ</b> 運営。<br> <b>総売上 （売上実績）</b>、サンプルコミュニティ 含む <b>（複数アカウント運用）</b>、（チーム規模）の組織を運営。</div>
+      </div>
+      <div class="tpl-bio-detail__row">
+        <div class="tpl-bio-detail__year">事業開始 1 年</div>
+        <div class="tpl-bio-detail__desc"><b>売上 （売上実績）</b> 達成。サンプルコミュニティ 含む X （複数アカウント）で <b>合計フォロワー （フォロワー数）</b>。</div>
+      </div>
+      <div class="tpl-bio-detail__row">
+        <div class="tpl-bio-detail__year">事業開始 半年</div>
+        <div class="tpl-bio-detail__desc">自社事業を <b>（実績例）</b>。学生 AI コミュニティ <b>サンプルコミュニティ</b> を立ち上げ。</div>
+      </div>
+      <div class="tpl-bio-detail__row">
+        <div class="tpl-bio-detail__year">それまで</div>
+        <div class="tpl-bio-detail__desc">AI 企業のマーケティングに数々従事。〇〇大学大学院 （最終学歴）。</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div></div></body></html>
