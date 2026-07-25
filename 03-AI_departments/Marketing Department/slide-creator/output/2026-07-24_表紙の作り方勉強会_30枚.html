@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>売れるKindle表紙の作り方 — 勉強会</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --accent:#E8612A; --ink:#1f2733; --sub:#5b6674; --line:#e6e9ee; --bg:#f4f6f9; }
+  *{ box-sizing:border-box; margin:0; padding:0; font-family:"Noto Sans JP",sans-serif; }
+  html,body{ height:100%; background:var(--bg); color:var(--ink); }
+  #stage{ height:100vh; display:flex; align-items:center; justify-content:center; padding:28px; }
+  .slide{ display:none; width:min(960px,94vw); height:min(600px,86vh); background:#fff;
+    border-radius:18px; box-shadow:0 18px 50px rgba(20,30,50,.12); padding:48px 54px;
+    position:relative; overflow:hidden; }
+  .slide.active{ display:flex; flex-direction:column; animation:fade .35s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .tag{ display:inline-block; font-size:13px; font-weight:700; color:var(--accent);
+    letter-spacing:.08em; border:1.5px solid var(--accent); border-radius:999px; padding:3px 12px; margin-bottom:14px; align-self:flex-start; }
+  h1{ font-size:32px; font-weight:900; line-height:1.3; margin-bottom:18px; }
+  h1 .em{ color:var(--accent); }
+  h2{ font-size:27px; font-weight:800; line-height:1.35; margin-bottom:16px; }
+  h2 .em{ color:var(--accent); }
+  p{ font-size:18px; line-height:1.85; color:var(--ink); }
+  .sub{ color:var(--sub); }
+  ul{ margin:6px 0 0 0; padding:0; list-style:none; }
+  li{ font-size:18px; line-height:1.7; padding:9px 0 9px 30px; position:relative; border-bottom:1px dashed var(--line); }
+  li:before{ content:""; position:absolute; left:6px; top:18px; width:9px; height:9px; border-radius:2px; background:var(--accent); }
+  .big{ font-size:22px; }
+  .huge{ font-size:60px; font-weight:900; line-height:1.1; }
+  .note{ margin-top:auto; background:var(--bg); border-left:4px solid var(--accent); border-radius:8px;
+    padding:12px 16px; font-size:15.5px; color:var(--sub); }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px; }
+  .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:6px; }
+  .card{ background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+  .card h3{ font-size:17px; color:var(--accent); margin-bottom:6px; }
+  .card p{ font-size:15px; color:var(--sub); line-height:1.6; }
+  .flow{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .step{ background:#fff; border:2px solid var(--accent); color:var(--accent); font-weight:700;
+    border-radius:10px; padding:10px 14px; font-size:15px; }
+  .arrow{ color:var(--accent); font-weight:900; font-size:18px; }
+  .sw{ display:inline-block; width:16px; height:16px; border-radius:3px; vertical-align:middle; margin-right:6px; border:1px solid #bbb; }
+  .cover{ background:linear-gradient(135deg,#20293a,#33261d); color:#fff; }
+  .cover h1{ font-size:46px; }
+  .cover .tag{ color:#fff; border-color:rgba(255,255,255,.6); }
+  .cover .sub{ color:#d7dce4; }
+  .cover .brand{ margin-top:auto; font-weight:700; color:var(--accent); font-size:18px; }
+  #bar{ position:fixed; left:0; bottom:0; width:100%; height:5px; background:transparent; }
+  #barfill{ height:100%; width:0; background:var(--accent); transition:width .3s; }
+  #pager{ position:fixed; right:18px; bottom:16px; font-size:14px; font-weight:700; color:var(--sub);
+    background:#fff; border:1px solid var(--line); border-radius:999px; padding:5px 14px; }
+  #hint{ position:fixed; left:18px; bottom:16px; font-size:12.5px; color:#9aa4b1; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1 -->
+  <section class="slide cover active">
+    <span class="tag">Kindle出版 / 勉強会</span>
+    <h1>売れる<span class="em">Kindle表紙</span>の作り方<br>〜3秒で伝わる表紙を設計する〜</h1>
+    <p class="sub big">今日つくる：表紙タイプの判定／画像生成プロンプト／Canva仕上げ指示</p>
+    <div class="brand">Cover Design Study Session ・ 2026</div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <span class="tag">今日のゴール</span>
+    <h2>終わったら、<span class="em">これができる</span></h2>
+    <ul>
+      <li>「売れる表紙」と「きれいなだけの表紙」の違いを説明できる</li>
+      <li>本の内容から感情フックと表紙タイプを判定できる</li>
+      <li>画像生成AIに渡すプロンプトを組み立てられる</li>
+      <li>Canvaで文字を載せる仕上げの指示が書ける</li>
+    </ul>
+    <div class="note">むずかしい専門用語は全部かみくだきます。PCがなくても、考え方を掴めばOK。</div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <span class="tag">アジェンダ</span>
+    <h2>今日の流れ</h2>
+    <div class="grid">
+      <div class="card"><h3>① 大前提</h3><p>表紙は「広告」。売れるかで判断する</p></div>
+      <div class="card"><h3>② 5つのルール</h3><p>タイトル最優先・感情フック・メリット・情報量・タイプ判定</p></div>
+      <div class="card"><h3>③ 制作フロー</h3><p>STEP0〜5で1案に絞る</p></div>
+      <div class="card"><h3>④ 実践＆まとめ</h3><p>約束事・失敗例・宿題</p></div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <span class="tag">大前提</span>
+    <h2>表紙は<span class="em">アートではなく広告</span></h2>
+    <p class="big">美しさで判断しない。いつも<b>「この表紙は売れるか」</b>で判断する。</p>
+    <div class="note">きれいでも、内容が伝わらず・クリックされなければ、表紙としては失敗。</div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <span class="tag">目的</span>
+    <h2>表紙がやるべき<span class="em">4つの仕事</span></h2>
+    <ul>
+      <li>スクロールを止める</li>
+      <li>クリックされる</li>
+      <li>内容が伝わる</li>
+      <li>購入候補に入る</li>
+    </ul>
+    <div class="note">この4つができて初めて「売れる表紙」。飾りではなく、働く広告。</div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <span class="tag">なぜ重要</span>
+    <h2>勝負は<span class="em">サムネで3秒</span></h2>
+    <p class="big">Kindleは小さなサムネイルで一覧表示される。<br>読者は3秒で「読むか・スルーか」を決める。</p>
+    <div class="note">だから、小さく縮小しても伝わる表紙が正解。細かい説明文は縮むと読めない。</div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <span class="tag">ルール 1</span>
+    <h2>タイトル<span class="em">最優先</span></h2>
+    <ul>
+      <li>表紙で最も大きく見えるべきは「タイトル」</li>
+      <li>タイトルが読めない表紙は、それだけで失敗</li>
+      <li>人物の顔や主役に、文字をかぶせない</li>
+    </ul>
+    <div class="note">まず縮小表示で、タイトルが一発で読めるかを確認する。</div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <span class="tag">ルール 1</span>
+    <h2>視線を<span class="em">この順</span>で誘導する</h2>
+    <div class="flow">
+      <span class="step">タイトル</span><span class="arrow">→</span>
+      <span class="step">主役</span><span class="arrow">→</span>
+      <span class="step">感情フック</span><span class="arrow">→</span>
+      <span class="step">補足情報</span>
+    </div>
+    <div class="note">この順に目が動く配置にすると、内容が一瞬で伝わる。</div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <span class="tag">ルール 2</span>
+    <h2>感情フックを探せ</h2>
+    <p class="big">本の内容から<b>「読者の感情が最も動く要素」</b>を1つ見つける。</p>
+    <div class="note">表紙は情報ではなく、感情を売る。全部を説明しようとしない。</div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <span class="tag">ルール 2</span>
+    <h2>感情フック<span class="em">早見表</span></h2>
+    <div class="grid">
+      <div class="card"><h3>歴史人物</h3><p>母への想い／夢／挑戦</p></div>
+      <div class="card"><h3>自己啓発</h3><p>変われる／逆転</p></div>
+      <div class="card"><h3>ビジネス</h3><p>稼げる／失敗回避</p></div>
+      <div class="card"><h3>健康</h3><p>不安解消／若返り</p></div>
+      <div class="card"><h3>旅行</h3><p>憧れ／非日常</p></div>
+      <div class="card"><h3>共通</h3><p>「自分ごと」に感じる一言</p></div>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <span class="tag">ルール 3</span>
+    <h2>読者は<span class="em">未来を買う</span></h2>
+    <ul>
+      <li>読者は本ではなく「得られる未来」を買う</li>
+      <li>表紙に「何が得られるか／何が分かるか」を置く</li>
+    </ul>
+    <div class="note">例：「月3万円の副収入」「9割が知らない◯◯」——読者メリットを見せる。</div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide">
+    <span class="tag">ルール 4</span>
+    <h2>情報量を<span class="em">ちょうどよく</span></h2>
+    <div class="grid3">
+      <div class="card"><h3>情報不足</h3><p>綺麗な人物＋背景だけ→内容不明</p></div>
+      <div class="card"><h3>情報過多</h3><p>帯＋バッジ＋吹き出し＋説明文→ごちゃごちゃ</p></div>
+      <div class="card"><h3>理想</h3><p>タイトル＋感情フック＋読者メリット、以上</p></div>
+    </div>
+    <div class="note">迷ったら削る。3秒で読める情報量に絞る。</div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide">
+    <span class="tag">ルール 5</span>
+    <h2>表紙<span class="em">タイプ</span>を判定する</h2>
+    <p class="big">本を分析して、A〜Dのどの型が最適かを決める。<br>型が決まると、何を大きく見せるかが決まる。</p>
+    <div class="note">次の4枚で、A型〜D型を1つずつ見ていきます。</div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide">
+    <span class="tag">タイプ A</span>
+    <h2><span class="em">人物ドラマ型</span></h2>
+    <ul>
+      <li>例：歴史漫画・自伝・小説</li>
+      <li>重視するもの：人物・感情</li>
+      <li>主役の表情・ドラマ性で惹きつける</li>
+    </ul>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide">
+    <span class="tag">タイプ B</span>
+    <h2><span class="em">問題解決型</span></h2>
+    <ul>
+      <li>例：ビジネス・健康・副業</li>
+      <li>重視するもの：ベネフィット（得られる結果）</li>
+      <li>「稼げる／不安解消」を数字や言葉で見せる</li>
+    </ul>
+  </section>
+
+  <!-- 16 -->
+  <section class="slide">
+    <span class="tag">タイプ C</span>
+    <h2><span class="em">権威型</span></h2>
+    <ul>
+      <li>例：専門書・投資</li>
+      <li>重視するもの：信頼</li>
+      <li>落ち着いた配色・実績・専門性で安心させる</li>
+    </ul>
+  </section>
+
+  <!-- 17 -->
+  <section class="slide">
+    <span class="tag">タイプ D</span>
+    <h2><span class="em">憧れ型</span></h2>
+    <ul>
+      <li>例：旅行・ライフスタイル</li>
+      <li>重視するもの：世界観</li>
+      <li>美しい風景・空気感で「行きたい／なりたい」を刺激</li>
+    </ul>
+  </section>
+
+  <!-- 18 -->
+  <section class="slide">
+    <span class="tag">評価基準</span>
+    <h2>画像の<span class="em">5つのチェック</span></h2>
+    <ul>
+      <li>① タイトルは読めるか</li>
+      <li>② 何の本か分かるか</li>
+      <li>③ 誰向けか分かるか</li>
+      <li>④ 感情が動くか</li>
+      <li>⑤ クリックしたくなるか</li>
+    </ul>
+    <div class="note">美しいだけは高評価にしない。3秒で内容が伝わる表紙を高評価にする。</div>
+  </section>
+
+  <!-- 19 -->
+  <section class="slide">
+    <span class="tag">制作フロー</span>
+    <h2>表紙は<span class="em">STEP0〜5</span>で作る</h2>
+    <div class="flow">
+      <span class="step">0 売れる要素</span><span class="arrow">→</span>
+      <span class="step">1 感情フック</span><span class="arrow">→</span>
+      <span class="step">2 タイプ判定</span><span class="arrow">→</span>
+      <span class="step">3 レイアウト</span><span class="arrow">→</span>
+      <span class="step">4 画像プロンプト</span><span class="arrow">→</span>
+      <span class="step">5 Canva仕上げ</span>
+    </div>
+    <div class="note">案は複数並べず、プロとして判断した「最適解1案」に絞る。</div>
+  </section>
+
+  <!-- 20 -->
+  <section class="slide">
+    <span class="tag">STEP 0</span>
+    <h2>売れる要素<span class="em">分析</span></h2>
+    <ul>
+      <li>この本だけの固有価値は？</li>
+      <li>読者ターゲットは誰？</li>
+      <li>読者が得る未来（メリット）は？</li>
+      <li>クリックしたくなる要素は？</li>
+    </ul>
+  </section>
+
+  <!-- 21 -->
+  <section class="slide">
+    <span class="tag">STEP 1</span>
+    <h2>感情フック<span class="em">抽出</span></h2>
+    <p class="big">早見表を参考に、最も感情が動く要素を1つに絞る。<br>情報より感情を優先する。</p>
+    <div class="note">「変われる」「私にもできそう」など、読者の心が動く一言を決める。</div>
+  </section>
+
+  <!-- 22 -->
+  <section class="slide">
+    <span class="tag">STEP 2</span>
+    <h2>表紙タイプ<span class="em">判定</span></h2>
+    <p class="big">A〜D型のどれかを、理由つきで決める。</p>
+    <div class="note">例：副業ジャンル→B型（問題解決型）。ベネフィット訴求が刺さるから。</div>
+  </section>
+
+  <!-- 23 -->
+  <section class="slide">
+    <span class="tag">STEP 3</span>
+    <h2>レイアウト設計（<span class="em">3色以内</span>）</h2>
+    <ul>
+      <li>視線誘導：タイトル→主役→感情フック→補足</li>
+      <li>配色は3色：<span class="sw" style="background:#1B3A5B"></span>ベース <span class="sw" style="background:#ffffff"></span>文字 <span class="sw" style="background:#E8612A"></span>アクセント</li>
+      <li>情報量は「理想形」に絞る。顔に文字をかぶせない</li>
+    </ul>
+  </section>
+
+  <!-- 24 -->
+  <section class="slide">
+    <span class="tag">STEP 4</span>
+    <h2>画像生成<span class="em">プロンプト</span></h2>
+    <ul>
+      <li>「文字なし版」と「文字入り想定版」の2つを作る</li>
+      <li>サイズは <b>1600×2560px</b>（Kindle推奨）</li>
+      <li>生成画像に<b>日本語文字は入れない</b>（Canvaで後載せ）</li>
+    </ul>
+    <div class="note">ナノバナナやChatGPTに渡す。文字はAIに任せず、後でCanvaで載せる前提。</div>
+  </section>
+
+  <!-- 25 -->
+  <section class="slide">
+    <span class="tag">STEP 5</span>
+    <h2>Canvaで<span class="em">仕上げ</span></h2>
+    <ul>
+      <li>タイトル・サブ・著者名の配置を決める</li>
+      <li>帯の有無・バッジ案・配色・フォントを指定</li>
+      <li>画像生成AIが出した文字は信用せず、必ず載せ直す</li>
+    </ul>
+  </section>
+
+  <!-- 26 -->
+  <section class="slide">
+    <span class="tag">約束事</span>
+    <h2>これだけは<span class="em">守る</span></h2>
+    <ul>
+      <li>タイトル・コピー・帯・バッジに句点（。）を付けない</li>
+      <li>色数は基本3色以内（ベース＋文字＋アクセント）</li>
+      <li>サイズは1600×2560px、生成画像に日本語文字は入れない</li>
+    </ul>
+  </section>
+
+  <!-- 27 -->
+  <section class="slide">
+    <span class="tag">失敗＆改善</span>
+    <h2>よくある<span class="em">つまずき</span></h2>
+    <ul>
+      <li>綺麗だけど内容不明 → 感情フック＋メリットを足す</li>
+      <li>要素を盛りすぎ → 3秒で読めるまで削る</li>
+      <li>タイトルが小さい → 一番大きく、読める色に</li>
+    </ul>
+    <div class="note">迷ったら「サムネで3秒、伝わるか？」に戻る。</div>
+  </section>
+
+  <!-- 28 -->
+  <section class="slide">
+    <span class="tag">ツール</span>
+    <h2>使う<span class="em">道具</span></h2>
+    <div class="grid3">
+      <div class="card"><h3>Cover Compass</h3><p>表紙メーカーで要素を整理しプロンプト設計</p></div>
+      <div class="card"><h3>画像生成AI</h3><p>ナノバナナ／ChatGPTで文字なし画像を生成</p></div>
+      <div class="card"><h3>Canva</h3><p>タイトル等の文字を後から載せて完成</p></div>
+    </div>
+  </section>
+
+  <!-- 29 -->
+  <section class="slide">
+    <span class="tag">宿題</span>
+    <h2>今日の<span class="em">宿題</span></h2>
+    <ul>
+      <li>自分の本を1冊選ぶ（仮タイトルでOK）</li>
+      <li>感情フックと表紙タイプ（A〜D）を決める</li>
+      <li>配色3色と、画像プロンプト（文字なし版）を書いてみる</li>
+    </ul>
+    <div class="note">小さく1案作るのが上達の近道。まずは「決めて、言葉にする」まで。</div>
+  </section>
+
+  <!-- 30 -->
+  <section class="slide cover">
+    <span class="tag">まとめ</span>
+    <h1>お疲れさまでした🎉<br><span class="em">表紙は広告</span>、3秒で伝える</h1>
+    <p class="sub big">覚えて帰る：タイトル最優先／感情を売る／3色・1600×2560／文字はCanva<br>フローは STEP0〜5 で1案に絞る</p>
+    <div class="brand">Questions? ・ 売れるKindle表紙の作り方 勉強会</div>
+  </section>
+
+</div>
+
+<div id="bar"><div id="barfill"></div></div>
+<div id="pager">1 / 30</div>
+<div id="hint">← → キー / クリックでめくれます</div>
+
+<script>
+  var slides = document.querySelectorAll('.slide');
+  var i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    document.getElementById('pager').textContent = (i+1)+' / '+slides.length;
+    document.getElementById('barfill').style.width = ((i+1)/slides.length*100)+'%';
+  }
+  function next(){ show(i+1); }
+  function prev(){ show(i-1); }
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(slides.length-1); }
+  });
+  document.getElementById('stage').addEventListener('click', function(e){
+    var mid = window.innerWidth/2;
+    if(e.clientX < mid*0.5) prev(); else next();
+  });
+  show(0);
+</script>
+</body>
+</html>
