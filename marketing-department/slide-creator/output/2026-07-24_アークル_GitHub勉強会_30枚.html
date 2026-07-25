@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub勉強会 — アークル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --accent:#E8612A; --ink:#1f2733; --sub:#5b6674; --line:#e6e9ee; --bg:#f4f6f9; }
+  *{ box-sizing:border-box; margin:0; padding:0; font-family:"Noto Sans JP",sans-serif; }
+  html,body{ height:100%; background:var(--bg); color:var(--ink); }
+  #stage{ height:100vh; display:flex; align-items:center; justify-content:center; padding:28px; }
+  .slide{ display:none; width:min(960px,94vw); height:min(600px,86vh); background:#fff;
+    border-radius:18px; box-shadow:0 18px 50px rgba(20,30,50,.12); padding:48px 54px;
+    position:relative; overflow:hidden; }
+  .slide.active{ display:flex; flex-direction:column; animation:fade .35s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .tag{ display:inline-block; font-size:13px; font-weight:700; color:var(--accent);
+    letter-spacing:.08em; border:1.5px solid var(--accent); border-radius:999px; padding:3px 12px; margin-bottom:14px; align-self:flex-start; }
+  h1{ font-size:30px; font-weight:900; line-height:1.3; margin-bottom:18px; }
+  h1 .em{ color:var(--accent); }
+  h2{ font-size:26px; font-weight:800; line-height:1.35; margin-bottom:16px; }
+  h2 .em{ color:var(--accent); }
+  p{ font-size:18px; line-height:1.85; color:var(--ink); }
+  .sub{ color:var(--sub); }
+  ul{ margin:6px 0 0 0; padding:0; list-style:none; }
+  li{ font-size:18px; line-height:1.7; padding:9px 0 9px 30px; position:relative; border-bottom:1px dashed var(--line); }
+  li:before{ content:""; position:absolute; left:6px; top:18px; width:9px; height:9px; border-radius:2px; background:var(--accent); }
+  .big{ font-size:22px; }
+  .note{ margin-top:auto; background:var(--bg); border-left:4px solid var(--accent); border-radius:8px;
+    padding:12px 16px; font-size:15.5px; color:var(--sub); }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px; }
+  .card{ background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+  .card h3{ font-size:17px; color:var(--accent); margin-bottom:6px; }
+  .card p{ font-size:15px; color:var(--sub); line-height:1.6; }
+  code,.cmd{ font-family:"SFMono-Regular",Menlo,Consolas,monospace; }
+  .cmd{ display:block; background:#1f2733; color:#eaf0f7; border-radius:10px; padding:14px 16px;
+    font-size:16px; margin:10px 0; white-space:pre-wrap; word-break:break-word; }
+  .cmd .c{ color:#ffb38a; }
+  .flow{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .step{ background:#fff; border:2px solid var(--accent); color:var(--accent); font-weight:700;
+    border-radius:10px; padding:10px 14px; font-size:15px; }
+  .arrow{ color:var(--accent); font-weight:900; font-size:18px; }
+  /* title slide */
+  .cover{ background:linear-gradient(135deg,#20293a,#33261d); color:#fff; }
+  .cover h1{ font-size:44px; }
+  .cover .tag{ color:#fff; border-color:rgba(255,255,255,.6); }
+  .cover .sub{ color:#d7dce4; }
+  .cover .brand{ margin-top:auto; font-weight:700; color:var(--accent); font-size:18px; }
+  /* footer */
+  #bar{ position:fixed; left:0; bottom:0; width:100%; height:5px; background:transparent; }
+  #barfill{ height:100%; width:0; background:var(--accent); transition:width .3s; }
+  #pager{ position:fixed; right:18px; bottom:16px; font-size:14px; font-weight:700; color:var(--sub);
+    background:#fff; border:1px solid var(--line); border-radius:999px; padding:5px 14px; }
+  #hint{ position:fixed; left:18px; bottom:16px; font-size:12.5px; color:#9aa4b1; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1 -->
+  <section class="slide cover active">
+    <span class="tag">AI学生団体 アークル / 勉強会</span>
+    <h1>はじめての<span class="em">GitHub</span><br>〜コードとチームを、ひとつの場所に〜</h1>
+    <p class="sub big">今日つくる：自分のリポジトリ／初コミット／プルリク体験</p>
+    <div class="brand">Aircle Study Session ・ 2026</div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <span class="tag">今日のゴール</span>
+    <h2>終わったら、<span class="em">これができる</span></h2>
+    <ul>
+      <li>GitHubが何で、なぜ使うのかを人に説明できる</li>
+      <li>自分のリポジトリを作って、変更を保存（コミット）できる</li>
+      <li>プッシュ／プル／ブランチ／プルリクの意味がわかる</li>
+      <li>チームでコードを共有する第一歩を踏み出せる</li>
+    </ul>
+    <div class="note">難しい用語は全部たとえ話にします。今日はPCがなくても大丈夫、雰囲気を掴めばOK。</div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <span class="tag">アジェンダ</span>
+    <h2>今日の流れ（約60分）</h2>
+    <div class="grid">
+      <div class="card"><h3>① 概念（10分）</h3><p>GitとGitHubって何？なぜ必要？</p></div>
+      <div class="card"><h3>② 用語（15分）</h3><p>コミット・プッシュ・ブランチ・PR</p></div>
+      <div class="card"><h3>③ ハンズオン（25分）</h3><p>リポジトリ作成→コミット→PR体験</p></div>
+      <div class="card"><h3>④ 活用＆まとめ（10分）</h3><p>AI団体での使い方・次の一歩</p></div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <span class="tag">概念</span>
+    <h2>そもそも <span class="em">GitHub</span> って何？</h2>
+    <p class="big">ひとことで言うと——<br><b>コードを保存・共有・共同作業できる、クラウド上の場所</b>です。</p>
+    <div class="note">たとえ：Googleドライブの「プログラム＆チーム作業に特化した版」。誰が・いつ・何を変えたかが全部残る。</div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <span class="tag">概念</span>
+    <h2><span class="em">Git</span> はタイムマシン</h2>
+    <ul>
+      <li>Git＝ファイルの変更履歴を記録する仕組み（バージョン管理）</li>
+      <li>「いつでも過去の状態に戻れる」セーブ機能つきの作業</li>
+      <li>上書き保存で消えて泣く…がなくなる</li>
+    </ul>
+    <div class="note">ゲームのセーブポイントを好きなだけ作れて、いつでもロードできるイメージ。</div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <span class="tag">概念</span>
+    <h2>Git と GitHub の <span class="em">違い</span></h2>
+    <div class="grid">
+      <div class="card"><h3>Git</h3><p>あなたのPCの中で動く「履歴を記録する道具」。オフラインでも使える。</p></div>
+      <div class="card"><h3>GitHub</h3><p>その履歴をネット上に置いて、共有・共同作業できる「サービス」。</p></div>
+    </div>
+    <div class="note">Git＝道具、GitHub＝その道具でつくった記録を置くクラウド倉庫。似た名前だけど別物。</div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <span class="tag">なぜ</span>
+    <h2>なぜ <span class="em">AI団体</span> にGitHubが効くの？</h2>
+    <ul>
+      <li>コードやプロンプトをチームで共有・改善できる</li>
+      <li>誰が何を変えたか残るので、共同開発でも壊れにくい</li>
+      <li>成果物がそのまま「ポートフォリオ（実績）」になる</li>
+      <li>世界中のAIプロジェクト（OSS）に参加・勉強できる</li>
+    </ul>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <span class="tag">全体像</span>
+    <h2>2つの場所を行き来する</h2>
+    <div class="flow">
+      <span class="step">手元のPC（ローカル）</span>
+      <span class="arrow">— push →</span>
+      <span class="step">GitHub（リモート）</span>
+    </div>
+    <div class="flow">
+      <span class="step">手元のPC（ローカル）</span>
+      <span class="arrow">← pull —</span>
+      <span class="step">GitHub（リモート）</span>
+    </div>
+    <div class="note">自分のPCで作業 → GitHubへ「アップロード＝push」／ GitHubの最新を「ダウンロード＝pull」。この往復が基本。</div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <span class="tag">準備</span>
+    <h2>まずは <span class="em">アカウント作成</span></h2>
+    <ul>
+      <li>github.com にアクセスして「Sign up」</li>
+      <li>メール・ユーザー名・パスワードを登録（学生はメール認証で無料強化あり）</li>
+      <li>ユーザー名は今後ずっと使う「表札」。シンプルなものが◎</li>
+    </ul>
+    <div class="note">GitHub Student Pack を使うと学生は有料機能が無料に。あとで案内します。</div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <span class="tag">用語 1</span>
+    <h2><span class="em">リポジトリ</span>（repo）＝プロジェクトの箱</h2>
+    <ul>
+      <li>1つのプロジェクト＝1つのリポジトリ</li>
+      <li>コード・画像・説明書（README）をまとめて入れる</li>
+      <li>公開（Public）／非公開（Private）を選べる</li>
+    </ul>
+    <div class="note">たとえ：作品ごとの「フォルダ＋作業ノート」。アークルのプロジェクトごとに1箱つくる。</div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <span class="tag">用語 2</span>
+    <h2><span class="em">コミット</span>（commit）＝セーブ</h2>
+    <ul>
+      <li>変更に「ここまでやった」と名前をつけて記録すること</li>
+      <li>1コミット＝1つの区切り（例：「ログイン画面を追加」）</li>
+      <li>メッセージを書くと、後から履歴が読める</li>
+    </ul>
+    <div class="note">ゲームのセーブ＋メモ。「何をしたセーブか」を一言つけるのがコツ。</div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide">
+    <span class="tag">用語 3</span>
+    <h2><span class="em">プッシュ / プル</span></h2>
+    <div class="grid">
+      <div class="card"><h3>push（プッシュ）</h3><p>手元のコミットを GitHub へアップロードする。</p></div>
+      <div class="card"><h3>pull（プル）</h3><p>GitHub の最新を手元へダウンロードする。</p></div>
+    </div>
+    <div class="note">チームで作業する前に pull（最新を取る）、作業が終わったら push（共有する）。</div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide">
+    <span class="tag">用語 4</span>
+    <h2><span class="em">ブランチ</span>（branch）＝作業用の分身</h2>
+    <ul>
+      <li>本番（main）を触らずに、別レーンで安全に作業する仕組み</li>
+      <li>実験・新機能ごとに枝を分けて、失敗しても本番は無傷</li>
+      <li>できたら本番に合流させる（次のマージへ）</li>
+    </ul>
+    <div class="note">たとえ：清書（main）はそのままに、下書き用紙（ブランチ）で試す。良ければ清書に反映。</div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide">
+    <span class="tag">用語 5</span>
+    <h2><span class="em">マージ</span>（merge）＝合流</h2>
+    <ul>
+      <li>ブランチの変更を、本番（main）に取り込むこと</li>
+      <li>複数人の変更もここで1つにまとまる</li>
+      <li>ぶつかったら「コンフリクト」→ どちらを採用するか選ぶ</li>
+    </ul>
+    <div class="note">支流（ブランチ）が本流（main）に合流するイメージ。</div>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide">
+    <span class="tag">用語 6</span>
+    <h2><span class="em">プルリクエスト</span>（PR）＝合流の申請</h2>
+    <ul>
+      <li>「このブランチをmainに入れていい？」とチームに提案する場</li>
+      <li>変更点をみんなで見て、コメント・レビューできる</li>
+      <li>OKが出たらマージ。共同開発の心臓部</li>
+    </ul>
+    <div class="note">いきなり本番に入れず、「これ入れます、確認して」と一度みんなに見せる作法。</div>
+  </section>
+
+  <!-- 16 -->
+  <section class="slide">
+    <span class="tag">全体像</span>
+    <h2>基本の流れ（これだけ覚えて帰る）</h2>
+    <div class="flow">
+      <span class="step">ブランチ作る</span><span class="arrow">→</span>
+      <span class="step">変更</span><span class="arrow">→</span>
+      <span class="step">commit</span><span class="arrow">→</span>
+      <span class="step">push</span><span class="arrow">→</span>
+      <span class="step">PR</span><span class="arrow">→</span>
+      <span class="step">merge</span>
+    </div>
+    <div class="note">この6歩がGitHubの共同作業のすべての土台。今日はこれを1周体験します。</div>
+  </section>
+
+  <!-- 17 -->
+  <section class="slide">
+    <span class="tag">ハンズオン 準備</span>
+    <h2>道具をそろえる</h2>
+    <ul>
+      <li>GitHubアカウント（作成済みでOK）</li>
+      <li>おすすめ：<b>GitHub Desktop</b>（コマンド不要のクリック操作アプリ）</li>
+      <li>慣れたい人：ターミナル＋<b>VS Code</b></li>
+    </ul>
+    <div class="note">今日は最短ルート。難しいコマンドは「困ったらAIに聞く」でOK。</div>
+  </section>
+
+  <!-- 18 -->
+  <section class="slide">
+    <span class="tag">ハンズオン ①</span>
+    <h2>リポジトリを作る</h2>
+    <ul>
+      <li>GitHub右上の「＋」→ New repository</li>
+      <li>名前を入れる（例：<code>aircle-github-practice</code>）</li>
+      <li>「Add a README」にチェック → Create</li>
+    </ul>
+    <div class="note">これであなたの「プロジェクトの箱」がクラウドに完成。まだ中身は空でOK。</div>
+  </section>
+
+  <!-- 19 -->
+  <section class="slide">
+    <span class="tag">ハンズオン ②</span>
+    <h2>手元に持ってくる（clone）</h2>
+    <p>GitHub Desktop なら「Clone」ボタン一つ。コマンド派はこちら：</p>
+    <span class="cmd"><span class="c">git clone</span> https://github.com/&lt;あなた&gt;/aircle-github-practice.git</span>
+    <div class="note">clone＝GitHubの箱を、そのまま自分のPCにコピーしてくること。</div>
+  </section>
+
+  <!-- 20 -->
+  <section class="slide">
+    <span class="tag">ハンズオン ③</span>
+    <h2>変更して、セーブ（commit）</h2>
+    <p>READMEに自己紹介を1行足してみよう。保存したら：</p>
+    <span class="cmd"><span class="c">git add</span> .
+<span class="c">git commit</span> -m "READMEに自己紹介を追加"</span>
+    <div class="note">add＝セーブするファイルを選ぶ／commit＝メモをつけてセーブ。Desktopならクリックだけ。</div>
+  </section>
+
+  <!-- 21 -->
+  <section class="slide">
+    <span class="tag">ハンズオン ④</span>
+    <h2>GitHubへ送る（push）</h2>
+    <span class="cmd"><span class="c">git push</span></span>
+    <ul>
+      <li>ブラウザでリポジトリを更新すると、変更が反映されている</li>
+      <li>「クラウドに自分の作業が乗った」瞬間🎉</li>
+    </ul>
+    <div class="note">ここまでで「作る→セーブ→共有」の1往復を体験。おめでとうございます！</div>
+  </section>
+
+  <!-- 22 -->
+  <section class="slide">
+    <span class="tag">ハンズオン ⑤</span>
+    <h2>ブランチ → プルリク体験</h2>
+    <span class="cmd"><span class="c">git switch</span> -c my-first-branch
+<span class="c">git commit</span> -am "変更"
+<span class="c">git push</span> -u origin my-first-branch</span>
+    <ul>
+      <li>GitHubに「Compare &amp; pull request」ボタンが出る → 押す</li>
+      <li>説明を書いて Create pull request → Merge</li>
+    </ul>
+  </section>
+
+  <!-- 23 -->
+  <section class="slide">
+    <span class="tag">コツ</span>
+    <h2><span class="em">README</span> はプロジェクトの顔</h2>
+    <ul>
+      <li>何のプロジェクトか、を最初の3行で書く</li>
+      <li>使い方・メンバー・リンクを箇条書きで</li>
+      <li>Markdown（# や - で書く軽い書式）で見やすく</li>
+    </ul>
+    <div class="note">訪問者が最初に読むページ。ここが丁寧だと「ちゃんとした団体」に見える。</div>
+  </section>
+
+  <!-- 24 -->
+  <section class="slide">
+    <span class="tag">共同作業</span>
+    <h2>Issue と PR でチーム開発</h2>
+    <div class="grid">
+      <div class="card"><h3>Issue（イシュー）</h3><p>「やること・バグ・アイデア」を書いておく付箋。担当も決められる。</p></div>
+      <div class="card"><h3>Pull Request</h3><p>変更を提案し、レビューしてから取り込む。会話が記録に残る。</p></div>
+    </div>
+    <div class="note">Issueで「何をやるか」、PRで「やったものを確認して入れる」。この2つで回る。</div>
+  </section>
+
+  <!-- 25 -->
+  <section class="slide">
+    <span class="tag">活用</span>
+    <h2>アークルでの <span class="em">使い方アイデア</span></h2>
+    <ul>
+      <li>プロンプト集・AIツールのコードをチームで共有＆改善</li>
+      <li>勉強会の資料・議事録をリポジトリに蓄積（ナレッジ化）</li>
+      <li>ハッカソン作品を置いて、そのまま就活ポートフォリオに</li>
+      <li>役割分担してPRでレビューし合う練習</li>
+    </ul>
+  </section>
+
+  <!-- 26 -->
+  <section class="slide">
+    <span class="tag">活用</span>
+    <h2><span class="em">GitHub Pages</span> で無料公開</h2>
+    <ul>
+      <li>リポジトリのHTMLを、そのままWebサイトとして公開できる</li>
+      <li>Settings → Pages → ブランチを選ぶだけ</li>
+      <li>作品やLPを世界に見せられる（例：このスライドも公開可）</li>
+    </ul>
+    <div class="note">「作る」だけで終わらず「公開して見せる」まで無料でいける。</div>
+  </section>
+
+  <!-- 27 -->
+  <section class="slide">
+    <span class="tag">つまずき対策</span>
+    <h2>よくある詰まり＆解決</h2>
+    <ul>
+      <li>「push できない」→ 先に pull して最新を取る</li>
+      <li>「コンフリクト」→ 落ち着いて、残す方を選ぶだけ</li>
+      <li>「コマンドが不安」→ 画面とエラーをそのままAIに貼って聞く</li>
+    </ul>
+    <div class="note">エラーは敵じゃない。メッセージをコピペしてAIに聞けば、たいてい解決します。</div>
+  </section>
+
+  <!-- 28 -->
+  <section class="slide">
+    <span class="tag">便利ツール</span>
+    <h2>味方になるツール</h2>
+    <div class="grid">
+      <div class="card"><h3>GitHub Desktop</h3><p>コマンド不要。クリックでcommit/push。初心者はまずこれ。</p></div>
+      <div class="card"><h3>VS Code</h3><p>編集＋Git操作が1画面で完結。拡張機能も豊富。</p></div>
+      <div class="card"><h3>Claude Code</h3><p>AIに「これやって」と頼むと、コードもGit操作も代行。</p></div>
+      <div class="card"><h3>Student Pack</h3><p>学生は有料機能が無料に。申請しておこう。</p></div>
+    </div>
+  </section>
+
+  <!-- 29 -->
+  <section class="slide">
+    <span class="tag">次の一歩</span>
+    <h2>今日の宿題（かんたん）</h2>
+    <ul>
+      <li>自分のリポジトリを1つ作る（テーマは何でもOK）</li>
+      <li>READMEに自己紹介を書いて commit &amp; push</li>
+      <li>アークルの誰かのリポジトリに Issue を1つ立ててみる</li>
+    </ul>
+    <div class="note">小さく1周まわすのが上達の最短。まずは「触った」実績をつくろう。</div>
+  </section>
+
+  <!-- 30 -->
+  <section class="slide cover">
+    <span class="tag">まとめ</span>
+    <h1>お疲れさまでした🎉<br><span class="em">GitHub</span>、もう怖くない</h1>
+    <p class="sub big">覚えて帰る6歩：ブランチ→変更→commit→push→PR→merge<br>困ったら「エラーをAIに貼って聞く」</p>
+    <div class="brand">Questions? ・ アークル GitHub勉強会</div>
+  </section>
+
+</div>
+
+<div id="bar"><div id="barfill"></div></div>
+<div id="pager">1 / 30</div>
+<div id="hint">← → キー / クリックでめくれます</div>
+
+<script>
+  var slides = document.querySelectorAll('.slide');
+  var i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    document.getElementById('pager').textContent = (i+1)+' / '+slides.length;
+    document.getElementById('barfill').style.width = ((i+1)/slides.length*100)+'%';
+  }
+  function next(){ show(i+1); }
+  function prev(){ show(i-1); }
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(slides.length-1); }
+  });
+  document.getElementById('stage').addEventListener('click', function(e){
+    var mid = window.innerWidth/2;
+    if(e.clientX < mid*0.5) prev(); else next();
+  });
+  show(0);
+</script>
+</body>
+</html>
