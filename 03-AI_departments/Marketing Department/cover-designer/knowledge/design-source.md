@@ -1,9 +1,9 @@
 # 表紙設計の判断材料（原本への案内＋早見表）
 
 本文の原本はここ。食い違ったら**必ず原本を優先**する（複製しない・薄く持つ）。
-- 原本：`../../docs/kindle-cover-design-rules.md`（思想の原本）
-- 自己完結版：`../../Agent.md`（他AIに貼る用）
-- アプリの知識：`../../cover-maker.html` の `COVER_KNOWHOW`
+- 原本：`docs/kindle-cover-design-rules.md`（リポジトリ直下・思想の原本）
+- 自己完結版：`Agent.md`（リポジトリ直下・他AIに貼る用）
+- アプリの知識：`cover-maker.html`（リポジトリ直下）の `COVER_KNOWHOW`
 
 ## 基本思想（1行）
 表紙はアートではなく**広告**。判断は「美しいか」ではなく「**売れるか**」。

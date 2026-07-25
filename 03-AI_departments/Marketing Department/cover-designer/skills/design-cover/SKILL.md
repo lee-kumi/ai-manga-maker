@@ -9,7 +9,7 @@
 - 「表紙を設計して」「売れる表紙にして」「表紙タイプを判定して」と頼まれたとき
 
 ## 手順（動詞で3〜7歩）
-1. 読む：原本 `../../docs/kindle-cover-design-rules.md` と knowledge/design-source.md を読む。
+1. 読む：原本 `docs/kindle-cover-design-rules.md`（リポジトリ直下）と knowledge/design-source.md を読む。
 2. 受け取る：本の情報（タイトル案・ジャンル・テーマ・ターゲット読者）を確認する。足りなければ1つずつ聞く。
 3. 分析する：STEP0 売れる要素 → STEP1 感情フック → STEP2 表紙タイプ(A〜D)判定 を出す。
 4. 設計する：STEP3 レイアウト（視線誘導・配色3色以内・情報量）を決める。
@@ -18,8 +18,8 @@
 7. 書き出す：設計書を `output/日付_本タイトル_cover.md` に保存する。
 
 ## 参照するナレッジ
-- `../../docs/kindle-cover-design-rules.md`（原本・最優先）
-- `../../Agent.md`（自己完結版の指示書）
+- `docs/kindle-cover-design-rules.md`（リポジトリ直下・原本・最優先）
+- `Agent.md`（リポジトリ直下・自己完結版の指示書）
 - `knowledge/design-source.md`（早見表・約束事）
 
 ## 成果物の形と保存先

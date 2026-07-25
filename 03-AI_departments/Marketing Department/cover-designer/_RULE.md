@@ -4,7 +4,7 @@ CLAUDE.md（会社の地図）と表紙設計の原本から方針を継承し�
 
 ## 担当
 - 本の情報から、**売れるKindle表紙の設計**（STEP0〜5）を出す。
-- 判断の原本は `../../docs/kindle-cover-design-rules.md`。knowledge/design-source.md はその薄い案内。
+- 判断の原本は `docs/kindle-cover-design-rules.md`（リポジトリ直下）。knowledge/design-source.md はその薄い案内。
 - 「作品を完成させる係」ではなく、**画像生成AI（ナノバナナ等）とCanvaに渡す指示を設計する係**。
 
 ## 判断の方針
