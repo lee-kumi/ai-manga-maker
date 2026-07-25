@@ -1,6 +1,6 @@
 # slide-creator（スライドクリエイター）_RULE.md
 
-所属：マーケティング部門。上位ルールは `../_RULE.md` と `../../CLAUDE.md` を継承。
+所属：03-AI_departments / Marketing Department。上位ルールは `../_RULE.md`（部門）と `../../../CLAUDE.md`（会社の地図）を継承。
 
 ## 担当
 - 勉強会・セミナー・説明会のための**プレゼンスライド**をつくる。
