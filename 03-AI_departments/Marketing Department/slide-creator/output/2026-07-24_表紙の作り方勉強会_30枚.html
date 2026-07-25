@@ -9,54 +9,59 @@
 <style>
   :root{ --accent:#E8612A; --ink:#1f2733; --sub:#5b6674; --line:#e6e9ee; --bg:#f4f6f9; }
   *{ box-sizing:border-box; margin:0; padding:0; font-family:"Noto Sans JP",sans-serif; }
-  html,body{ height:100%; background:var(--bg); color:var(--ink); }
-  #stage{ height:100vh; display:flex; align-items:center; justify-content:center; padding:28px; }
-  .slide{ display:none; width:min(960px,94vw); height:min(600px,86vh); background:#fff;
-    border-radius:18px; box-shadow:0 18px 50px rgba(20,30,50,.12); padding:48px 54px;
-    position:relative; overflow:hidden; }
-  .slide.active{ display:flex; flex-direction:column; animation:fade .35s ease; }
-  @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
-  .tag{ display:inline-block; font-size:13px; font-weight:700; color:var(--accent);
-    letter-spacing:.08em; border:1.5px solid var(--accent); border-radius:999px; padding:3px 12px; margin-bottom:14px; align-self:flex-start; }
-  h1{ font-size:32px; font-weight:900; line-height:1.3; margin-bottom:18px; }
+  h1,h2,p,li,.step,.card,.tag{ overflow-wrap:anywhere; word-break:break-word; }
+  html,body{ height:100%; background:var(--bg); color:var(--ink); overflow:hidden; }
+  #stage{ height:100vh; display:flex; align-items:center; justify-content:center; padding:clamp(10px,3vw,28px); }
+  .slide{ display:none; width:min(960px,100%); height:min(600px,82vh); background:#fff;
+    border-radius:16px; box-shadow:0 18px 50px rgba(20,30,50,.12);
+    padding:clamp(22px,4.2vw,48px) clamp(24px,4.6vw,54px);
+    position:relative; overflow:auto; }
+  .slide.active{ display:flex; flex-direction:column; }
+  .tag{ display:inline-block; font-size:clamp(11px,2.6vw,13px); font-weight:700; color:var(--accent);
+    letter-spacing:.06em; border:1.5px solid var(--accent); border-radius:999px; padding:3px 12px; margin-bottom:clamp(10px,2vw,14px); align-self:flex-start; }
+  h1{ font-size:clamp(24px,5.6vw,32px); font-weight:900; line-height:1.3; margin-bottom:clamp(12px,2.4vw,18px); }
   h1 .em{ color:var(--accent); }
-  h2{ font-size:27px; font-weight:800; line-height:1.35; margin-bottom:16px; }
+  h2{ font-size:clamp(21px,4.6vw,27px); font-weight:800; line-height:1.35; margin-bottom:clamp(12px,2.4vw,16px); }
   h2 .em{ color:var(--accent); }
-  p{ font-size:18px; line-height:1.85; color:var(--ink); }
+  p{ font-size:clamp(15px,3.4vw,18px); line-height:1.8; color:var(--ink); }
   .sub{ color:var(--sub); }
+  .big{ font-size:clamp(16px,3.8vw,22px); }
   ul{ margin:6px 0 0 0; padding:0; list-style:none; }
-  li{ font-size:18px; line-height:1.7; padding:9px 0 9px 30px; position:relative; border-bottom:1px dashed var(--line); }
-  li:before{ content:""; position:absolute; left:6px; top:18px; width:9px; height:9px; border-radius:2px; background:var(--accent); }
-  .big{ font-size:22px; }
-  .huge{ font-size:60px; font-weight:900; line-height:1.1; }
+  li{ font-size:clamp(15px,3.4vw,18px); line-height:1.6; padding:8px 0 8px 26px; position:relative; border-bottom:1px dashed var(--line); }
+  li:before{ content:""; position:absolute; left:4px; top:15px; width:9px; height:9px; border-radius:2px; background:var(--accent); }
   .note{ margin-top:auto; background:var(--bg); border-left:4px solid var(--accent); border-radius:8px;
-    padding:12px 16px; font-size:15.5px; color:var(--sub); }
-  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px; }
-  .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:6px; }
-  .card{ background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
-  .card h3{ font-size:17px; color:var(--accent); margin-bottom:6px; }
-  .card p{ font-size:15px; color:var(--sub); line-height:1.6; }
-  .flow{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    padding:clamp(10px,2vw,12px) clamp(12px,2.4vw,16px); font-size:clamp(13px,3vw,15.5px); color:var(--sub); }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(9px,1.8vw,14px); margin-top:6px; }
+  .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:clamp(9px,1.8vw,14px); margin-top:6px; }
+  @media(max-width:560px){ .grid,.grid3{ grid-template-columns:1fr; } }
+  .card{ background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:clamp(12px,2.4vw,16px) clamp(13px,2.6vw,18px); }
+  .card h3{ font-size:clamp(15px,3.2vw,17px); color:var(--accent); margin-bottom:5px; }
+  .card p{ font-size:clamp(13px,3vw,15px); color:var(--sub); line-height:1.55; }
+  .flow{ display:flex; align-items:center; gap:clamp(6px,1.4vw,10px); flex-wrap:wrap; margin-top:10px; }
   .step{ background:#fff; border:2px solid var(--accent); color:var(--accent); font-weight:700;
-    border-radius:10px; padding:10px 14px; font-size:15px; }
-  .arrow{ color:var(--accent); font-weight:900; font-size:18px; }
-  .sw{ display:inline-block; width:16px; height:16px; border-radius:3px; vertical-align:middle; margin-right:6px; border:1px solid #bbb; }
+    border-radius:10px; padding:8px 12px; font-size:clamp(13px,3vw,15px); }
+  .arrow{ color:var(--accent); font-weight:900; font-size:clamp(15px,3.4vw,18px); }
+  .sw{ display:inline-block; width:15px; height:15px; border-radius:3px; vertical-align:middle; margin-right:5px; border:1px solid #bbb; }
   .cover{ background:linear-gradient(135deg,#20293a,#33261d); color:#fff; }
-  .cover h1{ font-size:46px; }
+  .cover h1{ font-size:clamp(22px,5.8vw,46px); }
   .cover .tag{ color:#fff; border-color:rgba(255,255,255,.6); }
   .cover .sub{ color:#d7dce4; }
-  .cover .brand{ margin-top:auto; font-weight:700; color:var(--accent); font-size:18px; }
-  #bar{ position:fixed; left:0; bottom:0; width:100%; height:5px; background:transparent; }
-  #barfill{ height:100%; width:0; background:var(--accent); transition:width .3s; }
-  #pager{ position:fixed; right:18px; bottom:16px; font-size:14px; font-weight:700; color:var(--sub);
-    background:#fff; border:1px solid var(--line); border-radius:999px; padding:5px 14px; }
-  #hint{ position:fixed; left:18px; bottom:16px; font-size:12.5px; color:#9aa4b1; }
+  .cover .brand{ margin-top:auto; font-weight:700; color:var(--accent); font-size:clamp(14px,3vw,18px); }
+  /* ナビ（大きなタップしやすいボタン） */
+  #nav{ position:fixed; left:50%; bottom:14px; transform:translateX(-50%); z-index:50;
+    display:flex; align-items:center; gap:14px; background:#fff; border:1px solid var(--line);
+    border-radius:999px; padding:7px 10px; box-shadow:0 6px 20px rgba(20,30,50,.14); }
+  #nav button{ width:44px; height:44px; border-radius:50%; border:none; background:var(--accent);
+    color:#fff; font-size:20px; font-weight:900; cursor:pointer; line-height:1; }
+  #nav button:active{ transform:scale(.94); }
+  #pager{ font-size:14px; font-weight:800; color:var(--sub); min-width:56px; text-align:center; }
+  #bar{ position:fixed; left:0; top:0; width:100%; height:5px; background:transparent; z-index:50; }
+  #barfill{ height:100%; width:0; background:var(--accent); transition:width .25s; }
 </style>
 </head>
 <body>
 <div id="stage">
 
-  <!-- 1 -->
   <section class="slide cover active">
     <span class="tag">Kindle出版 / 勉強会</span>
     <h1>売れる<span class="em">Kindle表紙</span>の作り方<br>〜3秒で伝わる表紙を設計する〜</h1>
@@ -64,7 +69,6 @@
     <div class="brand">Cover Design Study Session ・ 2026</div>
   </section>
 
-  <!-- 2 -->
   <section class="slide">
     <span class="tag">今日のゴール</span>
     <h2>終わったら、<span class="em">これができる</span></h2>
@@ -77,7 +81,6 @@
     <div class="note">むずかしい専門用語は全部かみくだきます。PCがなくても、考え方を掴めばOK。</div>
   </section>
 
-  <!-- 3 -->
   <section class="slide">
     <span class="tag">アジェンダ</span>
     <h2>今日の流れ</h2>
@@ -89,7 +92,6 @@
     </div>
   </section>
 
-  <!-- 4 -->
   <section class="slide">
     <span class="tag">大前提</span>
     <h2>表紙は<span class="em">アートではなく広告</span></h2>
@@ -97,7 +99,6 @@
     <div class="note">きれいでも、内容が伝わらず・クリックされなければ、表紙としては失敗。</div>
   </section>
 
-  <!-- 5 -->
   <section class="slide">
     <span class="tag">目的</span>
     <h2>表紙がやるべき<span class="em">4つの仕事</span></h2>
@@ -110,15 +111,13 @@
     <div class="note">この4つができて初めて「売れる表紙」。飾りではなく、働く広告。</div>
   </section>
 
-  <!-- 6 -->
   <section class="slide">
     <span class="tag">なぜ重要</span>
     <h2>勝負は<span class="em">サムネで3秒</span></h2>
-    <p class="big">Kindleは小さなサムネイルで一覧表示される。<br>読者は3秒で「読むか・スルーか」を決める。</p>
+    <p class="big">Kindleは小さなサムネイルで一覧表示される。読者は3秒で「読むか・スルーか」を決める。</p>
     <div class="note">だから、小さく縮小しても伝わる表紙が正解。細かい説明文は縮むと読めない。</div>
   </section>
 
-  <!-- 7 -->
   <section class="slide">
     <span class="tag">ルール 1</span>
     <h2>タイトル<span class="em">最優先</span></h2>
@@ -130,7 +129,6 @@
     <div class="note">まず縮小表示で、タイトルが一発で読めるかを確認する。</div>
   </section>
 
-  <!-- 8 -->
   <section class="slide">
     <span class="tag">ルール 1</span>
     <h2>視線を<span class="em">この順</span>で誘導する</h2>
@@ -143,7 +141,6 @@
     <div class="note">この順に目が動く配置にすると、内容が一瞬で伝わる。</div>
   </section>
 
-  <!-- 9 -->
   <section class="slide">
     <span class="tag">ルール 2</span>
     <h2>感情フックを探せ</h2>
@@ -151,7 +148,6 @@
     <div class="note">表紙は情報ではなく、感情を売る。全部を説明しようとしない。</div>
   </section>
 
-  <!-- 10 -->
   <section class="slide">
     <span class="tag">ルール 2</span>
     <h2>感情フック<span class="em">早見表</span></h2>
@@ -165,7 +161,6 @@
     </div>
   </section>
 
-  <!-- 11 -->
   <section class="slide">
     <span class="tag">ルール 3</span>
     <h2>読者は<span class="em">未来を買う</span></h2>
@@ -176,7 +171,6 @@
     <div class="note">例：「月3万円の副収入」「9割が知らない◯◯」——読者メリットを見せる。</div>
   </section>
 
-  <!-- 12 -->
   <section class="slide">
     <span class="tag">ルール 4</span>
     <h2>情報量を<span class="em">ちょうどよく</span></h2>
@@ -188,15 +182,13 @@
     <div class="note">迷ったら削る。3秒で読める情報量に絞る。</div>
   </section>
 
-  <!-- 13 -->
   <section class="slide">
     <span class="tag">ルール 5</span>
     <h2>表紙<span class="em">タイプ</span>を判定する</h2>
-    <p class="big">本を分析して、A〜Dのどの型が最適かを決める。<br>型が決まると、何を大きく見せるかが決まる。</p>
+    <p class="big">本を分析して、A〜Dのどの型が最適かを決める。型が決まると、何を大きく見せるかが決まる。</p>
     <div class="note">次の4枚で、A型〜D型を1つずつ見ていきます。</div>
   </section>
 
-  <!-- 14 -->
   <section class="slide">
     <span class="tag">タイプ A</span>
     <h2><span class="em">人物ドラマ型</span></h2>
@@ -207,7 +199,6 @@
     </ul>
   </section>
 
-  <!-- 15 -->
   <section class="slide">
     <span class="tag">タイプ B</span>
     <h2><span class="em">問題解決型</span></h2>
@@ -218,7 +209,6 @@
     </ul>
   </section>
 
-  <!-- 16 -->
   <section class="slide">
     <span class="tag">タイプ C</span>
     <h2><span class="em">権威型</span></h2>
@@ -229,7 +219,6 @@
     </ul>
   </section>
 
-  <!-- 17 -->
   <section class="slide">
     <span class="tag">タイプ D</span>
     <h2><span class="em">憧れ型</span></h2>
@@ -240,7 +229,6 @@
     </ul>
   </section>
 
-  <!-- 18 -->
   <section class="slide">
     <span class="tag">評価基準</span>
     <h2>画像の<span class="em">5つのチェック</span></h2>
@@ -254,7 +242,6 @@
     <div class="note">美しいだけは高評価にしない。3秒で内容が伝わる表紙を高評価にする。</div>
   </section>
 
-  <!-- 19 -->
   <section class="slide">
     <span class="tag">制作フロー</span>
     <h2>表紙は<span class="em">STEP0〜5</span>で作る</h2>
@@ -269,7 +256,6 @@
     <div class="note">案は複数並べず、プロとして判断した「最適解1案」に絞る。</div>
   </section>
 
-  <!-- 20 -->
   <section class="slide">
     <span class="tag">STEP 0</span>
     <h2>売れる要素<span class="em">分析</span></h2>
@@ -281,15 +267,13 @@
     </ul>
   </section>
 
-  <!-- 21 -->
   <section class="slide">
     <span class="tag">STEP 1</span>
     <h2>感情フック<span class="em">抽出</span></h2>
-    <p class="big">早見表を参考に、最も感情が動く要素を1つに絞る。<br>情報より感情を優先する。</p>
+    <p class="big">早見表を参考に、最も感情が動く要素を1つに絞る。情報より感情を優先する。</p>
     <div class="note">「変われる」「私にもできそう」など、読者の心が動く一言を決める。</div>
   </section>
 
-  <!-- 22 -->
   <section class="slide">
     <span class="tag">STEP 2</span>
     <h2>表紙タイプ<span class="em">判定</span></h2>
@@ -297,7 +281,6 @@
     <div class="note">例：副業ジャンル→B型（問題解決型）。ベネフィット訴求が刺さるから。</div>
   </section>
 
-  <!-- 23 -->
   <section class="slide">
     <span class="tag">STEP 3</span>
     <h2>レイアウト設計（<span class="em">3色以内</span>）</h2>
@@ -308,7 +291,6 @@
     </ul>
   </section>
 
-  <!-- 24 -->
   <section class="slide">
     <span class="tag">STEP 4</span>
     <h2>画像生成<span class="em">プロンプト</span></h2>
@@ -320,7 +302,6 @@
     <div class="note">ナノバナナやChatGPTに渡す。文字はAIに任せず、後でCanvaで載せる前提。</div>
   </section>
 
-  <!-- 25 -->
   <section class="slide">
     <span class="tag">STEP 5</span>
     <h2>Canvaで<span class="em">仕上げ</span></h2>
@@ -331,7 +312,6 @@
     </ul>
   </section>
 
-  <!-- 26 -->
   <section class="slide">
     <span class="tag">約束事</span>
     <h2>これだけは<span class="em">守る</span></h2>
@@ -342,7 +322,6 @@
     </ul>
   </section>
 
-  <!-- 27 -->
   <section class="slide">
     <span class="tag">失敗＆改善</span>
     <h2>よくある<span class="em">つまずき</span></h2>
@@ -354,7 +333,6 @@
     <div class="note">迷ったら「サムネで3秒、伝わるか？」に戻る。</div>
   </section>
 
-  <!-- 28 -->
   <section class="slide">
     <span class="tag">ツール</span>
     <h2>使う<span class="em">道具</span></h2>
@@ -365,7 +343,6 @@
     </div>
   </section>
 
-  <!-- 29 -->
   <section class="slide">
     <span class="tag">宿題</span>
     <h2>今日の<span class="em">宿題</span></h2>
@@ -377,39 +354,37 @@
     <div class="note">小さく1案作るのが上達の近道。まずは「決めて、言葉にする」まで。</div>
   </section>
 
-  <!-- 30 -->
   <section class="slide cover">
     <span class="tag">まとめ</span>
     <h1>お疲れさまでした🎉<br><span class="em">表紙は広告</span>、3秒で伝える</h1>
-    <p class="sub big">覚えて帰る：タイトル最優先／感情を売る／3色・1600×2560／文字はCanva<br>フローは STEP0〜5 で1案に絞る</p>
+    <p class="sub big">覚えて帰る：タイトル最優先／感情を売る／3色・1600×2560／文字はCanva。フローは STEP0〜5 で1案に絞る</p>
     <div class="brand">Questions? ・ 売れるKindle表紙の作り方 勉強会</div>
   </section>
 
 </div>
 
 <div id="bar"><div id="barfill"></div></div>
-<div id="pager">1 / 30</div>
-<div id="hint">← → キー / クリックでめくれます</div>
+<div id="nav">
+  <button type="button" id="prev" aria-label="前へ">◀</button>
+  <span id="pager">1 / 30</span>
+  <button type="button" id="next" aria-label="次へ">▶</button>
+</div>
 
 <script>
   var slides = document.querySelectorAll('.slide');
   var i = 0;
   function show(n){
     i = Math.max(0, Math.min(slides.length-1, n));
-    slides.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    slides.forEach(function(s,k){ s.classList.toggle('active', k===i); s.scrollTop=0; });
     document.getElementById('pager').textContent = (i+1)+' / '+slides.length;
     document.getElementById('barfill').style.width = ((i+1)/slides.length*100)+'%';
   }
-  function next(){ show(i+1); }
-  function prev(){ show(i-1); }
+  document.getElementById('next').addEventListener('click', function(){ show(i+1); });
+  document.getElementById('prev').addEventListener('click', function(){ show(i-1); });
   document.addEventListener('keydown', function(e){
-    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); next(); }
-    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); show(i+1); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); show(i-1); }
     else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(slides.length-1); }
-  });
-  document.getElementById('stage').addEventListener('click', function(e){
-    var mid = window.innerWidth/2;
-    if(e.clientX < mid*0.5) prev(); else next();
   });
   show(0);
 </script>
