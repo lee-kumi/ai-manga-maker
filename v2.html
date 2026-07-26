@@ -23,7 +23,7 @@ input,textarea,select,button,option{font-family:'Noto Sans JP',-apple-system,san
 .step-num{font-size:15px;font-weight:900;line-height:1;}
 .step-label{font-size:9px;line-height:1.2;text-align:center;color:var(--muted);}
 .step-btn.active .step-label{color:rgba(255,255,255,0.8);}
-.save-ind{font-size:12px;color:var(--accent);white-space:nowrap;opacity:0;transition:opacity 0.3s;margin-left:auto;}
+.save-ind{font-size:13px;color:var(--accent);white-space:nowrap;opacity:0;transition:opacity 0.3s;margin-left:auto;}
 .save-ind.show{opacity:1;}
 
 /* Layout */
@@ -33,7 +33,7 @@ input,textarea,select,button,option{font-family:'Noto Sans JP',-apple-system,san
 
 /* Step header */
 .step-header{margin-bottom:22px;}
-.step-badge{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:white;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:10px;}
+.step-badge{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:white;padding:3px 14px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:10px;}
 .step-header h1{font-size:24px;font-weight:900;margin-bottom:6px;line-height:1.3;}
 .step-header p{color:var(--muted);font-size:14px;line-height:1.7;}
 
@@ -41,12 +41,12 @@ input,textarea,select,button,option{font-family:'Noto Sans JP',-apple-system,san
 .card{background:var(--card);border-radius:var(--r);padding:22px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--border);}
 .card.hl{border:2px solid var(--primary);}
 .card-title{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.card-title .icon{width:26px;height:26px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.card-title .icon{width:26px;height:26px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
 
 /* Forms */
 .fg{margin-bottom:14px;}
 .fg:last-child{margin-bottom:0;}
-label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
 input[type=text],input[type=number],textarea,select{width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;color:var(--text);background:#FAFAFA;transition:border-color 0.2s;outline:none;}
 input[type=text]:focus,textarea:focus{border-color:var(--primary);background:white;}
 textarea{resize:vertical;min-height:72px;}
@@ -58,33 +58,33 @@ textarea{resize:vertical;min-height:72px;}
 
 /* Toggle buttons */
 .tog-group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
-.tog{font-family:inherit;font-size:12px;padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.tog{font-family:inherit;font-size:13px;padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
 .tog:hover{background:var(--primary-light);}
 .tog.on{background:var(--primary-light);border-color:#AFA9EC;color:#3C3489;font-weight:700;}
-.tog-label{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;display:block;}
+.tog-label{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;display:block;}
 
 /* Boxes */
-.info-box{border-left:4px solid var(--primary);background:var(--primary-light);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13px;line-height:1.7;}
-.warn-box{border-left:4px solid var(--warning);background:#FFF8E1;padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13px;line-height:1.7;}
+.info-box{border-left:4px solid var(--primary);background:var(--primary-light);padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:15px;line-height:1.7;}
+.warn-box{border-left:4px solid var(--warning);background:#FFF8E1;padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:15px;line-height:1.7;}
 .kabeuchi-box{background:#f8f8f5;border:1px solid var(--border);border-radius:10px;padding:16px;}
 .q-row{margin-bottom:14px;}
-.q-label{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.q-label{font-size:15px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
 .q-num{width:20px;height:20px;border-radius:50%;background:#BA7517;color:#FAEEDA;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 
 /* Prompt output */
 .prompt-box{background:#1A1A2E;border-radius:10px;padding:18px;margin-top:14px;position:relative;}
-.prompt-box pre{color:#E8E8F0;font-family:'Consolas','Courier New',monospace;font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-word;margin-top:28px;}
-.copy-btn{position:absolute;top:10px;right:10px;background:var(--primary);color:white;border:none;padding:5px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;z-index:1;}
+.prompt-box pre{color:#E8E8F0;font-family:'Consolas','Courier New',monospace;font-size:13px;line-height:1.7;white-space:pre-wrap;word-break:break-word;margin-top:28px;}
+.copy-btn{position:absolute;top:10px;right:10px;background:var(--primary);color:white;border:none;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;z-index:1;}
 .copy-btn:hover{background:#5954D6;}
 .copy-btn.ok{background:var(--accent);}
 
 /* Buttons */
-.gen-btn{display:inline-flex;align-items:center;gap:7px;background:var(--primary);color:white;border:none;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-top:14px;}
+.gen-btn{display:inline-flex;align-items:center;gap:7px;background:var(--primary);color:white;border:none;padding:10px 22px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-top:14px;}
 .gen-btn:hover{background:#5954D6;transform:translateY(-1px);}
 .gen-btn.green{background:var(--accent);}
 .gen-btn.green:hover{background:#359e85;}
 .gen-btn.full{width:100%;justify-content:center;font-size:14px;padding:12px;}
-.add-btn{background:none;border:2px dashed var(--primary);color:var(--primary);padding:7px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;width:100%;transition:all 0.2s;}
+.add-btn{background:none;border:2px dashed var(--primary);color:var(--primary);padding:7px 20px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;width:100%;transition:all 0.2s;}
 .add-btn:hover{background:var(--primary-light);}
 .del-btn{background:none;border:none;color:#ccc;cursor:pointer;font-size:18px;line-height:1;padding:4px;}
 .del-btn:hover{color:#f44;}
@@ -92,16 +92,16 @@ textarea{resize:vertical;min-height:72px;}
 /* Dynamic blocks */
 .dyn-block{border:2px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;}
 .dyn-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.dyn-num{font-size:12px;font-weight:700;color:var(--muted);}
+.dyn-num{font-size:13px;font-weight:700;color:var(--muted);}
 
 /* Project bar */
 .proj-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-.proj-btn{font-family:inherit;font-size:12px;padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.proj-btn{font-family:inherit;font-size:13px;padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
 .proj-btn:hover{background:var(--primary-light);}
 .proj-btn.active{background:var(--primary);color:white;border-color:var(--primary);font-weight:700;}
-.proj-add{font-family:inherit;font-size:12px;padding:5px 10px;border-radius:20px;border:1.5px dashed var(--border);background:#fff;color:var(--muted);cursor:pointer;}
+.proj-add{font-family:inherit;font-size:13px;padding:5px 10px;border-radius:20px;border:1.5px dashed var(--border);background:#fff;color:var(--muted);cursor:pointer;}
 .proj-add:hover{border-color:var(--primary);color:var(--primary);}
-.proj-edit{font-family:inherit;font-size:12px;padding:5px 9px;border-radius:20px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all 0.2s;margin-left:-4px;}
+.proj-edit{font-family:inherit;font-size:13px;padding:5px 9px;border-radius:20px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all 0.2s;margin-left:-4px;}
 .proj-edit:hover{border-color:var(--primary);background:var(--primary-light);}
 .proj-btn.dragging{opacity:0.4;}
 .proj-btn.drag-over{border-style:dashed;border-color:var(--primary);}
@@ -111,8 +111,8 @@ textarea{resize:vertical;min-height:72px;}
 .flow-card{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:all 0.2s;text-align:center;}
 .flow-card:hover{border-color:var(--primary);box-shadow:var(--shadow);transform:translateY(-2px);}
 .flow-num{font-size:28px;font-weight:900;color:var(--primary);line-height:1;}
-.flow-name{font-size:12px;font-weight:700;margin-top:6px;color:var(--text);}
-.flow-desc{font-size:11px;color:var(--muted);margin-top:4px;}
+.flow-name{font-size:13px;font-weight:700;margin-top:6px;color:var(--text);}
+.flow-desc{font-size:12px;color:var(--muted);margin-top:4px;}
 
 /* Navigation */
 .nav-buttons{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:22px;border-top:2px solid var(--border);}
@@ -130,15 +130,15 @@ textarea{resize:vertical;min-height:72px;}
 
 /* Tool links */
 .tool-links{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;}
-.tool-link{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;transition:all 0.2s;}
+.tool-link{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);padding:5px 14px;border-radius:20px;font-size:13px;font-weight:700;text-decoration:none;transition:all 0.2s;}
 .tool-link:hover{background:var(--primary);color:white;}
 
 /* Toast */
-.toast{position:fixed;bottom:20px;right:20px;background:#1A1A2E;color:white;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;z-index:9999;transform:translateY(70px);opacity:0;transition:all 0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.25);}
+.toast{position:fixed;bottom:20px;right:20px;background:#1A1A2E;color:white;padding:10px 18px;border-radius:8px;font-size:15px;font-weight:700;z-index:9999;transform:translateY(70px);opacity:0;transition:all 0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.25);}
 .toast.show{transform:translateY(0);opacity:1;}
 
 /* Table */
-.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table{width:100%;border-collapse:collapse;font-size:15px;}
 .data-table th{background:var(--primary-light);color:var(--primary);font-weight:700;padding:9px 12px;text-align:left;border:1px solid var(--border);}
 .data-table td{padding:8px 12px;border:1px solid var(--border);vertical-align:top;line-height:1.5;}
 
@@ -173,8 +173,8 @@ textarea{resize:vertical;min-height:72px;}
     <div class="info-box" style="margin-bottom:10px;">💡 作品ごとに独立して保存されます。複数の漫画を同時進行できます。作品名は<strong>✏️マーク</strong>で変更できます。漫画のタイトルが決まったら作品名にしましょう。</div>
     <div class="warn-box" style="margin-bottom:10px;">⚠️ <strong>データはこのブラウザにのみ保存されます。</strong>別のブラウザ・別の端末・ブラウザのキャッシュ削除では消えます。定期的に「バックアップを保存」でファイルに書き出してください。</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button onclick="backupData()" style="font-family:inherit;font-size:12px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;">💾 バックアップを保存</button>
-      <label style="font-family:inherit;font-size:12px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;">📂 バックアップから復元<input type="file" accept=".json" onchange="restoreData(event)" style="display:none;"></label>
+      <button onclick="backupData()" style="font-family:inherit;font-size:13px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;">💾 バックアップを保存</button>
+      <label style="font-family:inherit;font-size:13px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;">📂 バックアップから復元<input type="file" accept=".json" onchange="restoreData(event)" style="display:none;"></label>
     </div>
   </div>
 
@@ -216,7 +216,7 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">🗑️</span> この作品をリセット・削除</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;"><strong>リセット</strong>＝今開いている作品の中身を最初の状態に戻します（作品は残ります）。<br><strong>削除</strong>＝今開いている作品を一覧ごと取り除きます。<br>どちらも他の作品には影響しません。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:12px;"><strong>リセット</strong>＝今開いている作品の中身を最初の状態に戻します（作品は残ります）。<br><strong>削除</strong>＝今開いている作品を一覧ごと取り除きます。<br>どちらも他の作品には影響しません。</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button class="gen-btn" style="background:#EF4444;margin-top:0;" onclick="resetProject()">🗑️ この作品をリセット</button>
       <button class="gen-btn" style="background:#991B1B;margin-top:0;" onclick="deleteProject()">❌ この作品を削除</button>
@@ -234,7 +234,7 @@ textarea{resize:vertical;min-height:72px;}
   <div class="step-header">
     <div class="step-badge">STEP 1</div>
     <h1>企画書を作る</h1>
-    <p><span style="background:#FAECE7;color:#993C1D;font-size:11px;padding:2px 7px;border-radius:10px;font-weight:700;">必須</span> の項目だけ入力すればOKです。あとはAIが補完します。</p>
+    <p><span style="background:#FAECE7;color:#993C1D;font-size:12px;padding:2px 7px;border-radius:10px;font-weight:700;">必須</span> の項目だけ入力すればOKです。あとはAIが補完します。</p>
     <div class="tool-links">
       <a href="https://gemini.google.com/" target="_blank" class="tool-link">🔵 Gemini</a>
       <a href="https://claude.ai/" target="_blank" class="tool-link">🟣 Claude</a>
@@ -245,7 +245,7 @@ textarea{resize:vertical;min-height:72px;}
   <!-- 作業用ドキュメント -->
   <div class="card">
     <div class="card-title"><span class="icon">📄</span> 作業用ドキュメント</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">この作品専用のGoogleドキュメントを1つ作り、URLを登録しておきましょう。<strong>STEP1〜4すべての出力をここに貼り付けて保存</strong>していくと、制作全体の記録＝設計図になります。各出力ボックスの<strong>「📄 ドキュメントへ」ボタン</strong>を押すと、STEP名・日付の見出し付きでコピーされ、ドキュメントが自動で開きます。あとは貼り付けるだけです。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:10px;">この作品専用のGoogleドキュメントを1つ作り、URLを登録しておきましょう。<strong>STEP1〜4すべての出力をここに貼り付けて保存</strong>していくと、制作全体の記録＝設計図になります。各出力ボックスの<strong>「📄 ドキュメントへ」ボタン</strong>を押すと、STEP名・日付の見出し付きでコピーされ、ドキュメントが自動で開きます。あとは貼り付けるだけです。</p>
     <div class="fg">
       <label>ドキュメントURL<span class="opt-badge">任意</span></label>
       <input type="url" id="doc_url" placeholder="例：https://docs.google.com/document/d/..." oninput="sv('doc_url',this.value);showSave()">
@@ -261,7 +261,7 @@ textarea{resize:vertical;min-height:72px;}
     </div>
     <div class="fg">
       <label>👤 ペルソナ（読者の原型）<span class="req-badge">必須</span></label>
-      <div class="info-box" style="margin-bottom:8px;font-size:12px;">読者は「みんな」ではなく<strong>たった一人</strong>に絞るほど刺さります。実在の知人を思い浮かべてOK。この人が主人公の原型になります。</div>
+      <div class="info-box" style="margin-bottom:8px;font-size:13px;">読者は「みんな」ではなく<strong>たった一人</strong>に絞るほど刺さります。実在の知人を思い浮かべてOK。この人が主人公の原型になります。</div>
       <input type="text" id="p1_persona" placeholder="例：佐藤みなこ・42歳・事務職・夫と子ども2人・副業に興味があるが一歩踏み出せない" oninput="autoSave()">
     </div>
   </div>
@@ -269,27 +269,27 @@ textarea{resize:vertical;min-height:72px;}
   <!-- 構成の型 -->
   <div class="card">
     <div class="card-title"><span class="icon">🗂️</span> ストーリーの構成を選ぶ<span class="opt-badge" style="margin-left:8px;">任意</span></div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">選ぶとAIがその型に沿ってストーリーを組み立てます。迷ったら<strong>起承転結</strong>がおすすめ。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:14px;">選ぶとAIがその型に沿ってストーリーを組み立てます。迷ったら<strong>起承転結</strong>がおすすめ。</p>
     <div class="tog-group" id="g-structure">
       <button class="tog" onclick="pick(this,'g-structure')" id="tog-kisho">起承転結</button>
       <button class="tog" onclick="pick(this,'g-structure')" id="tog-3maku">三幕構成</button>
       <button class="tog" onclick="pick(this,'g-structure')" id="tog-heroes">ヒーローズジャーニー</button>
       <button class="tog" onclick="pick(this,'g-structure')" id="tog-mondai">問題解決型</button>
     </div>
-    <div id="structure-desc" style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.8;min-height:20px;"></div>
+    <div id="structure-desc" style="margin-top:12px;font-size:13px;color:var(--muted);line-height:1.8;min-height:20px;"></div>
   </div>
 
   <!-- ストーリー概要 -->
   <div class="card">
     <div class="card-title"><span class="icon">📖</span> ストーリーを考える</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;"><strong>5つすべて入力してください。</strong>ここが充実するほどAIの出力が読者の心に刺さる漫画になります。わからない場合は下の「AIと一緒に考える」を先に使いましょう。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:14px;"><strong>5つすべて入力してください。</strong>ここが充実するほどAIの出力が読者の心に刺さる漫画になります。わからない場合は下の「AIと一緒に考える」を先に使いましょう。</p>
     <div class="fg">
       <label>悩み（主人公の出発点）<span class="req-badge">必須</span></label>
       <textarea id="p1_s1" placeholder="例：○歳の△△。□□で働きながら、○○に悩んでいる。このままでいいのか不安を感じている。" oninput="autoSave()"></textarea>
     </div>
     <div class="fg">
       <label>💭 本音（心の声）<span class="req-badge">必須</span></label>
-      <div class="info-box" style="margin-bottom:8px;font-size:12px;">物語の心臓。建前ではなく、人には言えない泥臭い本音。ここがそのまま主人公のモノローグになります。</div>
+      <div class="info-box" style="margin-bottom:8px;font-size:13px;">物語の心臓。建前ではなく、人には言えない泥臭い本音。ここがそのまま主人公のモノローグになります。</div>
       <textarea id="p1_honne" placeholder="例：「このままじゃ終わりたくない。でも何もできない自分が情けない」" oninput="autoSave()"></textarea>
     </div>
     <div class="grid2">
@@ -340,21 +340,21 @@ textarea{resize:vertical;min-height:72px;}
   <div class="card">
     <div class="card-title"><span class="icon">📄</span> ページ数</div>
     <div style="display:flex;align-items:center;gap:12px;">
-      <label style="margin:0;white-space:nowrap;font-size:13px;font-weight:700;text-transform:none;letter-spacing:0;">全体のページ数<span class="opt-badge">任意</span></label>
+      <label style="margin:0;white-space:nowrap;font-size:15px;font-weight:700;text-transform:none;letter-spacing:0;">全体のページ数<span class="opt-badge">任意</span></label>
       <input type="number" id="p1_pages" value="20" min="4" max="100" style="width:80px;text-align:center;font-size:16px;font-weight:700;" oninput="autoSave()">
-      <span style="font-size:13px;color:var(--muted);">ページ</span>
+      <span style="font-size:15px;color:var(--muted);">ページ</span>
     </div>
   </div>
 
   <!-- 章立て -->
   <div class="card">
     <div class="card-title"><span class="icon">📚</span> 章立て</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">章ごとのタイトル・内容を登録しておくと、②のコマ割り生成プロンプトに自動で反映されます。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:14px;">章ごとのタイトル・内容を登録しておくと、②のコマ割り生成プロンプトに自動で反映されます。</p>
     <div id="chapterList"></div>
     <button class="add-btn" onclick="addChapter()">＋ 章を追加</button>
     <div style="margin-top:16px;">
       <button class="gen-btn" style="margin-top:0;" onclick="genChapterPlan()">📋 章立て提案プロンプトを生成</button>
-      <p style="font-size:12px;color:var(--muted);margin-top:6px;">STEP1のストーリー設計をもとに、AIに章立てを提案してもらうプロンプトを生成します。ChatGPTなどに貼り付けて章案をもらってください。</p>
+      <p style="font-size:13px;color:var(--muted);margin-top:6px;">STEP1のストーリー設計をもとに、AIに章立てを提案してもらうプロンプトを生成します。ChatGPTなどに貼り付けて章案をもらってください。</p>
     </div>
     <div id="chapterPlanOut" style="display:none;margin-top:10px;">
       <div class="prompt-box">
@@ -393,30 +393,30 @@ textarea{resize:vertical;min-height:72px;}
   <!-- 画風 -->
   <div class="card">
     <div class="card-title"><span class="icon">🎨</span> 画風・スタイル</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">選ぶだけでOKです。全コマに統一して反映されます。<br>📎 <a href="https://docs.google.com/document/d/1m1E5NpKhbIWxiwefl2rp63qSWHqbySQhPsrtgYtKXMI/edit?usp=sharing" target="_blank" style="color:var(--primary);font-weight:700;">画風サンプル集を見る（Googleドキュメント）</a></p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:14px;">選ぶだけでOKです。全コマに統一して反映されます。<br>📎 <a href="https://docs.google.com/document/d/1m1E5NpKhbIWxiwefl2rp63qSWHqbySQhPsrtgYtKXMI/edit?usp=sharing" target="_blank" style="color:var(--primary);font-weight:700;">画風サンプル集を見る（Googleドキュメント）</a></p>
 
     <span class="tog-label">画風（1つ選択）</span>
     <div class="tog-group" id="g-style">
-      <div style="width:100%;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px;">漫画</div>
+      <div style="width:100%;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:4px;">漫画</div>
       <button class="tog" onclick="pickStyle(this,'g-style')">少年漫画風</button>
       <button class="tog" onclick="pickStyle(this,'g-style')">少女漫画風</button>
       <button class="tog" onclick="pickStyle(this,'g-style')">青年漫画風</button>
       <button class="tog" onclick="pickStyle(this,'g-style')">劇画風</button>
       <button class="tog" onclick="pickStyle(this,'g-style')">商業Webtoon風</button>
       <button class="tog" onclick="pickStyle(this,'g-style')">学習漫画風</button>
-      <div style="width:100%;font-size:11px;color:var(--muted);font-weight:700;margin:8px 0 4px;">イラスト・キャラシート</div>
+      <div style="width:100%;font-size:12px;color:var(--muted);font-weight:700;margin:8px 0 4px;">イラスト・キャラシート</div>
       <button class="tog" onclick="pickStyle(this,'g-style')">ゆるいイラスト風</button>
       <button class="tog" onclick="pickStyle(this,'g-style')">絵本風</button>
       <button class="tog" onclick="pickStyle(this,'g-style')">アメコミ風</button>
       <button class="tog" onclick="pickStyle(this,'g-style')">上品な商業イラスト風 × 北欧ナチュラル</button>
-      <div style="width:100%;font-size:11px;color:var(--muted);font-weight:700;margin:8px 0 4px;">プロフィール・SNS</div>
+      <div style="width:100%;font-size:12px;color:var(--muted);font-weight:700;margin:8px 0 4px;">プロフィール・SNS</div>
       <button class="tog" onclick="pickStyle(this,'g-style')">女性誌挿絵風 × 北欧ナチュラル</button>
     </div>
 
     <div style="margin-top:12px;">
       <span class="tog-label">自由入力（画像から取得したプロンプトなど）</span>
       <textarea id="p2_style_custom" placeholder="例：soft watercolor illustration, gentle lineart, pastel nordic tones, cozy atmosphere&#10;好きな画像からAIで抽出したプロンプトをそのまま貼り付けてOK" style="min-height:72px;margin-top:6px;" oninput="onStyleCustomInput()"></textarea>
-      <p style="font-size:11px;color:var(--muted);margin-top:4px;">※ ボタン選択か自由入力、どちらか一方を使ってください。</p>
+      <p style="font-size:12px;color:var(--muted);margin-top:4px;">※ ボタン選択か自由入力、どちらか一方を使ってください。</p>
     </div>
 
     <span class="tog-label">線・質感（複数選択可）</span>
@@ -446,7 +446,7 @@ textarea{resize:vertical;min-height:72px;}
     <div class="divider"></div>
 
     <span class="tog-label">キャンバスサイズ</span>
-    <p style="font-size:13px;color:var(--muted);margin:4px 0 0;">1000×1414px（A4縦・固定）</p>
+    <p style="font-size:15px;color:var(--muted);margin:4px 0 0;">1000×1414px（A4縦・固定）</p>
 
     <div class="divider"></div>
     <div class="fg" style="margin-bottom:0;">
@@ -466,7 +466,7 @@ textarea{resize:vertical;min-height:72px;}
   <!-- キャラシート -->
   <div class="card">
     <div class="card-title"><span class="icon">🧑‍🎨</span> キャラクターシート生成プロンプト</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">上のキャラクター設定をもとに、全身図・表情集・小物・カラーパレットを含む本格的なキャラクターシートプロンプトを生成します。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:10px;">上のキャラクター設定をもとに、全身図・表情集・小物・カラーパレットを含む本格的なキャラクターシートプロンプトを生成します。</p>
     <div class="info-box" style="margin-bottom:14px;">
       📌 <strong>生成の流れ：</strong><br>
       プロンプトをコピー → 画像AI（ChatGPT / Gemini / Nano Banana）に貼り付けて送信 → キャラシート画像が完成<br>
@@ -517,7 +517,7 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">📊</span> ① ページ構成表を章ごとに作る</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong>この工程は任意です。</strong>短い作品なら②から直接始めてもOK。長編や、ページ配分・見せ場を自分で設計したいときに使ってください。<strong>章番号を入れるだけでOK</strong>。第2章以降は番号を変えて繰り返すだけです。章ごとに出すことで、長い漫画でも途中で切れずに確実に出力できます。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:10px;"><strong>この工程は任意です。</strong>短い作品なら②から直接始めてもOK。長編や、ページ配分・見せ場を自分で設計したいときに使ってください。<strong>章番号を入れるだけでOK</strong>。第2章以降は番号を変えて繰り返すだけです。章ごとに出すことで、長い漫画でも途中で切れずに確実に出力できます。</p>
     <div class="info-box" style="margin-bottom:14px;">
       <strong>流れ：</strong><br>
       プロンプトを生成 → コピーして <strong>Gemini / ChatGPT / Claude</strong> に貼り付ける → AIが各ページの役割・内容・感情の概要を返してくれる → <strong>Googleドキュメントに保存する</strong> → 章番号を変えて次の章へ<br><br>
@@ -548,7 +548,7 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">🎬</span> ② コマ割りシナリオを章ごとに生成する</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">STEP1の設計から章まるごとのコマ割り＋セリフを一発生成します。<strong>章番号を入れるだけでOK</strong>。第2章以降は番号を変えて繰り返すだけです。①で構成表を作った場合は、下の欄に貼り付けるとその設計どおりに生成されます。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:14px;">STEP1の設計から章まるごとのコマ割り＋セリフを一発生成します。<strong>章番号を入れるだけでOK</strong>。第2章以降は番号を変えて繰り返すだけです。①で構成表を作った場合は、下の欄に貼り付けるとその設計どおりに生成されます。</p>
     <div class="grid2">
       <div class="fg">
         <label>章番号</label>
@@ -594,7 +594,7 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">🖼️</span> コマ別画像生成プロンプト</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">コマ割りシナリオをもとに、1ページずつ画像生成プロンプトを作るためのプロンプトです。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:14px;">コマ割りシナリオをもとに、1ページずつ画像生成プロンプトを作るためのプロンプトです。</p>
     <div class="fg">
       <label>コマ割りシナリオ（STEP3で生成した内容を貼り付けてください）</label>
       <textarea id="p4_scenario" placeholder="AIが生成したコマ割りシナリオをここに貼り付けてください" style="min-height:120px;" oninput="autoSave()"></textarea>
@@ -612,7 +612,7 @@ textarea{resize:vertical;min-height:72px;}
   <!-- 背景なし素材画像 -->
   <div class="card">
     <div class="card-title"><span class="icon">✂️</span> 背景なし素材画像プロンプト</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">背景なし（白背景）でキャラクターだけを描いた素材画像を作るプロンプトです。生成したコマにCanvaなどで背景と合成したり、キャラクターだけを自由に配置したいときに使います。キャラクター情報はSTEP2の設定が使われます。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:10px;">背景なし（白背景）でキャラクターだけを描いた素材画像を作るプロンプトです。生成したコマにCanvaなどで背景と合成したり、キャラクターだけを自由に配置したいときに使います。キャラクター情報はSTEP2の設定が使われます。</p>
     <div id="bglessSelectorArea" style="margin-bottom:14px;display:none;">
       <label>対象キャラクター</label>
       <select id="bglessCharaSel" style="width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-size:14px;outline:none;background:#FAFAFA;font-family:inherit;"></select>
@@ -629,7 +629,7 @@ textarea{resize:vertical;min-height:72px;}
 
   <div class="card">
     <div class="card-title"><span class="icon">🔧</span> ③ 修正プロンプト</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">画像が思い通りにならないときの修正指示テンプレートです。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:14px;">画像が思い通りにならないときの修正指示テンプレートです。</p>
     <div class="fg">
       <label>どこを直したいですか？（複数選択可）</label>
       <div class="tog-group" id="g-fix">
@@ -650,7 +650,7 @@ textarea{resize:vertical;min-height:72px;}
     <div class="fg">
       <label>出力サイズ<span class="opt-badge">任意</span></label>
       <input type="text" id="p4_fix_size" placeholder="例：1080×1350px（インスタ縦）／空欄なら 1000×1414px のまま" oninput="autoSave()">
-      <p style="font-size:12px;color:var(--muted);margin:4px 0 0;">空欄なら元のサイズ（1000×1414px・A4縦）を維持。インスタ用など別サイズにしたいときはここに入力（正方形 1080×1080px／縦 1080×1350px／ストーリーズ 1080×1920px）。</p>
+      <p style="font-size:13px;color:var(--muted);margin:4px 0 0;">空欄なら元のサイズ（1000×1414px・A4縦）を維持。インスタ用など別サイズにしたいときはここに入力（正方形 1080×1080px／縦 1080×1350px／ストーリーズ 1080×1920px）。</p>
     </div>
     <div class="fg">
       <label>その他・詳細<span class="opt-badge">任意</span></label>
