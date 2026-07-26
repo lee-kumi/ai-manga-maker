@@ -574,7 +574,7 @@ textarea{resize:vertical;min-height:72px;}
         <button class="copy-btn" onclick="copyDoc('s3text2','STEP3｜コマ割りシナリオプロンプト',this)" style="right:80px;">📄 ドキュメントへ</button>
         <pre id="s3text2"></pre>
       </div>
-      <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>章ごとに繰り返してください（章番号を2→3と変えるだけ）。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。</div>
+      <div class="info-box">💡 <strong>Gemini / Claude / ChatGPT</strong> に貼り付けて使えます。<br>章ごとに繰り返してください（章番号を2→3と変えるだけ）。<br>出力はGoogleドキュメントに保存 → STEP4に貼り付けて使えます。<br>💡 ページ数の多い章で出力が途中で止まったときは、続けて「<strong>続き</strong>」と送れば残りが出ます。</div>
     </div>
   </div>
 
@@ -1501,7 +1501,17 @@ function genScenario() {
   L.push('　　モノローグ：「心の声」　※なければ「なし」');
   L.push('　　ナレーション：「地の文」　※なければ「なし」');
   L.push('　　オノマトペ：（ドキッ・ザバーン等　なければ「なし」）');
+  L.push('　PX-コマ2（…）　※同じ形式でコマ数の分だけ続ける');
   L.push('━━━━━━━━━━━━━━━━━━');
+  L.push('【ページX+1】　※同じ形式で次のページを続ける');
+  L.push('━━━━━━━━━━━━━━━━━━');
+  L.push('');
+  L.push('【必ず守ること】');
+  L.push('・第' + chapter + '章の全ページ分を、1回の返答でまとめて出力してください');
+  L.push('・「以下同様」「中略」などで省略せず、すべてのページを1ページずつ書くこと');
+  L.push('・最後に「第' + chapter + '章 完」と書いて終わること');
+  L.push('');
+  L.push('それでは、第' + chapter + '章の1ページ目から最後のページまで、上記の形式で出力してください。');
   showOut('s3out2', L.join('\n'));
 }
 
