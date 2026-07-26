@@ -612,10 +612,14 @@ textarea{resize:vertical;min-height:72px;}
   <!-- 背景なし素材画像 -->
   <div class="card">
     <div class="card-title"><span class="icon">✂️</span> 背景なし素材画像プロンプト</div>
-    <p style="font-size:15px;color:var(--muted);margin-bottom:10px;">背景なし（白背景）でキャラクターだけを描いた素材画像を作るプロンプトです。生成したコマにCanvaなどで背景と合成したり、キャラクターだけを自由に配置したいときに使います。キャラクター情報はSTEP2の設定が使われます。</p>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:10px;">キャラクター1人だけを白背景で描いた素材画像を作るプロンプトです（コマ枠・吹き出しは入りません）。「このコマだけ背景を差し替えたい」というときに使います。キャラクター情報はSTEP2の設定が使われます。</p>
     <div id="bglessSelectorArea" style="margin-bottom:14px;display:none;">
       <label>対象キャラクター</label>
       <select id="bglessCharaSel" style="width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-size:14px;outline:none;background:#FAFAFA;font-family:inherit;"></select>
+    </div>
+    <div class="fg">
+      <label>このコマの構図・ポーズ・表情<span class="opt-badge">任意</span></label>
+      <textarea id="p4_bgless_pose" placeholder="上のシナリオから、そのコマの「構図／演出：」の行をコピーして貼り付けてください。例：窓際の席でカップを両手で持ち、外を見つめる横顔。バストアップ。　空欄なら全身の立ち絵になります。" style="min-height:70px;" oninput="autoSave()"></textarea>
     </div>
     <button class="gen-btn" onclick="genBglessPrompt()">✂️ 背景なし素材画像プロンプトを生成</button>
     <div id="bglessOut" style="display:none;">
@@ -811,7 +815,7 @@ function v(id) { var el = document.getElementById(id); return el ? el.value.trim
 function autoSave() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_fix_size','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_bgless_pose','p4_fix_size','p4_fix_detail','doc_url'];
   ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
   showSave();
 }
@@ -819,7 +823,7 @@ function autoSave() {
 function loadData() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_fix_size','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_bgless_pose','p4_fix_size','p4_fix_detail','doc_url'];
   ids.forEach(function(id) {
     var el = document.getElementById(id);
     if(el) { var val = gv(id); el.value = val !== '' ? val : el.defaultValue; }
@@ -1102,6 +1106,7 @@ function genBglessPrompt() {
   var idx = charas.length > 1 && sel ? parseInt(sel.value) : 0;
   var c = charas[idx] || charas[0];
   var art = getArtStyle();
+  var pose = (v('p4_bgless_pose') || gv('p4_bgless_pose') || '').trim();
   var L = [];
 
   L.push('以下のキャラクターを「背景なし・白背景」の素材画像として描いてください。');
@@ -1113,13 +1118,21 @@ function genBglessPrompt() {
   if(c.clothes) L.push('服装・特徴：' + c.clothes);
   if(c.other)   L.push('その他：' + c.other);
   L.push('');
+  if(pose) {
+    L.push('【このコマの構図・ポーズ・表情】');
+    L.push(pose);
+    L.push('');
+  }
   L.push('【画風】');
   L.push(art || 'キャラクターの特徴が最も伝わる自然な画風で描写する');
   L.push('');
   L.push('【描写ルール（必ず守ること）】');
   L.push('・背景：真っ白（#FFFFFF）のみ。背景要素・影・グラデーション・床・地面を一切描かない');
   L.push('・キャラクターの輪郭をはっきりと描く');
-  L.push('・全身が画像内に収まるように配置する');
+  L.push(pose
+    ? '・上の「構図・ポーズ・表情」のとおりに描く（全身でなくてよい。バストアップ等の指定があればそれに従う）'
+    : '・全身が画像内に収まるように配置する');
+  L.push('・コマ枠・吹き出し・セリフの文字・効果線は一切描かない。キャラクターだけを描くこと');
   L.push('・背景に色・影・テクスチャを一切入れないこと');
   L.push('・高解像度で出力すること');
 
