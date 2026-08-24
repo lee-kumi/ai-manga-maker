@@ -23,6 +23,7 @@ GitHub Pagesで公開されている：https://lee-kumi.github.io/ai-manga-maker
 | `docs/cover-maker-rules.md` | 表紙メーカーの思想・ルール文書 |
 | `docs/kindle-cover-design-rules.md` | **表紙設計の汎用ルール（思想の原本）**。アプリ・スキル・Agent.mdはこれを基準にする |
 | `Agent.md` | Kindle表紙設計AIの自己完結版指示書。他のAI（ChatGPT等）にそのまま貼って使う |
+| `Agent-manga.md` | **AI漫画制作AIの自己完結版指示書**。STEP1〜4（企画・キャラ・コマ割り・画像生成）を1本にまとめてある。他のAI（ChatGPT等）にそのまま貼って使う。1STEPだけ使うときは「共通の約束事」とセットで貼る |
 | `README.md` | GitHub用のプロジェクト説明（公開URL・ツール一覧） |
 | `.claude/skills/` | Claude用スキル：`/manga-scenario`・`/manga-prompt`・`/cover-design`（STEP0〜5・1案方式）・`/cover-concept`（旧3案方式・レガシー）。**docs/ の文書を原本として参照する薄い作り**にしてあり、ルール本文はスキル側に複製しない |
 
@@ -44,6 +45,7 @@ GitHub Pagesで公開されている：https://lee-kumi.github.io/ai-manga-maker
 - `v2.html` を変えたら → `docs/manga-maker-rules.md` も同時に更新
 - `cover-maker.html` の `COVER_KNOWHOW` を変えたら → `docs/cover-maker-rules.md` も同時に更新
 - 逆方向も同じ。**片方だけ変えて終わりにしない**
+- `docs/manga-maker-rules.md` のルールを変えたら → `Agent-manga.md` も同時に更新（`docs/kindle-cover-design-rules.md` ↔ `Agent.md` も同じ関係）
 
 ## 変更の流れ
 

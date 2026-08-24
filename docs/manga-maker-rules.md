@@ -199,11 +199,12 @@ lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, mode
 | 紙の本（KDPペーパーバック） | スキル `kdp-paperback-reference`（寸法・ノンブル・裁ち落とし） |
 | 印刷用の明るさ補正 | スキル `manga-print-brightness`（色を変えずVだけガンマ補正。Kindleには使わない） |
 | コマ割り・プロンプト生成スキル | `/manga-scenario` → `/manga-prompt`（Claude用。`.claude/skills/` に収録。本文書を原本として参照する） |
+| 他のAI（ChatGPT等）に貼る指示書 | `Agent-manga.md`（本文書を原本とした自己完結版。STEP1〜4を1本にまとめてある） |
 
 ---
 
 ## 更新ルール
 
 - v2.htmlのプロンプト生成ロジックを変更したら、**この文書も同時に更新**する
-- 逆に、この文書でルールを変えたら、v2.html・関連スキルにも反映する
+- 逆に、この文書でルールを変えたら、v2.html・関連スキル・`Agent-manga.md` にも反映する
 - 「思想」（なぜそうするか）と「実装」（アプリのボタンや欄）を区別して書く
