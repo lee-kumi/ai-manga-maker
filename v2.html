@@ -603,6 +603,14 @@ textarea{resize:vertical;min-height:72px;}
       <label>コマ割りシナリオ（STEP3で生成した内容を貼り付けてください）</label>
       <textarea id="p4_scenario" placeholder="AIが生成したコマ割りシナリオをここに貼り付けてください" style="min-height:120px;" oninput="autoSave()"></textarea>
     </div>
+    <div class="fg">
+      <label>吹き出しの文字（セリフ）をどうしますか？</label>
+      <div class="tog-group" id="g-text">
+        <button class="tog" onclick="pickText(this)">文字を画像に入れる（おすすめ）</button>
+        <button class="tog" onclick="pickText(this)">吹き出しを空欄にする（文字は後からCanvaで入れる）</button>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin:4px 0 0;">「文字を入れる」では、セリフを一字一句そのまま描くよう指示します。誤字・脱字が出たら、下の「③ 修正プロンプト」で文字だけ直せます。文字の多いページや、自分で文字を入れたいページは「空欄」を選んでください。</p>
+    </div>
     <button class="gen-btn" onclick="genImagePrompt()">🖼️ 画像生成プロンプトを生成</button>
     <div id="s4out2" style="display:none;">
       <div class="prompt-box">
@@ -646,6 +654,7 @@ textarea{resize:vertical;min-height:72px;}
         <button class="tog" onclick="multi(this)">背景が現代風になった</button>
         <button class="tog" onclick="multi(this)">コマの数・配置がシナリオと違う</button>
         <button class="tog" onclick="multi(this)">セリフが読みにくい</button>
+        <button class="tog" onclick="multi(this)">吹き出しの文字に誤字・脱字がある</button>
         <button class="tog" onclick="multi(this)">主人公をもっと大きく</button>
         <button class="tog" onclick="multi(this)">フォントが違う</button>
         <button class="tog" onclick="multi(this)">画像サイズが変わった</button>
@@ -658,6 +667,11 @@ textarea{resize:vertical;min-height:72px;}
       <label>出力サイズ<span class="opt-badge">任意</span></label>
       <input type="text" id="p4_fix_size" placeholder="例：1080×1350px（インスタ縦）／空欄なら 1000×1414px のまま" oninput="autoSave()">
       <p style="font-size:13px;color:var(--muted);margin:4px 0 0;">空欄なら元のサイズ（1000×1414px・A4縦）を維持。インスタ用など別サイズにしたいときはここに入力（正方形 1080×1080px／縦 1080×1350px／ストーリーズ 1080×1920px）。</p>
+    </div>
+    <div class="fg">
+      <label>文字の直し（誤字・脱字だけ直したいとき）<span class="opt-badge">任意</span></label>
+      <textarea id="p4_fix_text" placeholder="例：2コマ目の吹き出しの文字を『おっかさん、ただいま』に直す&#10;例：4コマ目のナレーションの「天宝」を『天保』に直す。ほかは変えない" style="min-height:70px;" oninput="autoSave()"></textarea>
+      <p style="font-size:13px;color:var(--muted);margin:4px 0 0;">「何コマ目の、どの吹き出しを、正しくは何という文字にするか」を1行ずつ書いてください（正しい文字は『』で囲みます）。書いた文字だけを直し、絵やほかの吹き出しは変えないよう指示します。</p>
     </div>
     <div class="fg">
       <label>その他・詳細<span class="opt-badge">任意</span></label>
@@ -818,7 +832,7 @@ function v(id) { var el = document.getElementById(id); return el ? el.value.trim
 function autoSave() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_bgless_pose','p4_fix_size','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_bgless_pose','p4_fix_size','p4_fix_text','p4_fix_detail','doc_url'];
   ids.forEach(function(id) { var el = document.getElementById(id); if(el) sv(id, el.value); });
   showSave();
 }
@@ -826,7 +840,7 @@ function autoSave() {
 function loadData() {
   var ids = ['p1_theme',
              'p1_s1','p1_s2','p1_s3','p1_s4','p1_s5','p1_pages','p1_persona','p1_honne','p1_wall','p1_key',
-             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_bgless_pose','p4_fix_size','p4_fix_detail','doc_url'];
+             'p2_voice','p2_style_custom','p3_koma','p3_koma2','p3_chapter','p3_plan_chapter','p3_page_to','p3_pageplan','p4_scenario','p4_bgless_pose','p4_fix_size','p4_fix_text','p4_fix_detail','doc_url'];
   ids.forEach(function(id) {
     var el = document.getElementById(id);
     if(el) { var val = gv(id); el.value = val !== '' ? val : el.defaultValue; }
@@ -909,6 +923,16 @@ function pick(btn, g) {
   saveToggles();
 }
 function multi(btn) { btn.classList.toggle('on'); saveToggles(); }
+// 吹き出しの文字：どちらか1つを必ず選んだ状態にする（既定は「文字を入れる」）
+function pickText(btn) {
+  document.querySelectorAll('#g-text .tog').forEach(function(b) { b.classList.remove('on'); });
+  btn.classList.add('on');
+  saveToggles();
+}
+function isTextBlank() {
+  var sel = getSelected('g-text')[0] || '';
+  return sel.indexOf('空欄') > -1;
+}
 function pickStyle(btn, g) {
   // ボタン選択時は自由入力をクリア
   document.getElementById('p2_style_custom').value = '';
@@ -928,18 +952,23 @@ function getSelected(g) {
   return s;
 }
 function saveToggles() {
-  ['g-style','g-line','g-tone','g-bg','g-fix','g-structure'].forEach(function(g) {
+  ['g-style','g-line','g-tone','g-bg','g-fix','g-structure','g-text'].forEach(function(g) {
     sv(g, JSON.stringify(getSelected(g)));
   });
   showSave();
 }
 function restoreToggles() {
-  ['g-style','g-line','g-tone','g-bg','g-fix','g-structure'].forEach(function(g) {
+  ['g-style','g-line','g-tone','g-bg','g-fix','g-structure','g-text'].forEach(function(g) {
     var saved = JSON.parse(gv(g) || '[]');
     document.querySelectorAll('#' + g + ' .tog').forEach(function(b) {
       b.classList.toggle('on', saved.indexOf(b.textContent.trim()) > -1);
     });
   });
+  // 吹き出しの文字：未選択なら「文字を入れる」を選んだ状態にする
+  if (!getSelected('g-text').length) {
+    var firstText = document.querySelector('#g-text .tog');
+    if (firstText) firstText.classList.add('on');
+  }
   // 構成の型の説明文を復元
   var sd = document.getElementById('structure-desc');
   if (sd) {
@@ -1604,6 +1633,7 @@ function genCharaSheet() {
 function genImagePrompt() {
   var scenario = v('p4_scenario') || gv('p4_scenario') || '';
   var art = getArtStyle();
+  var blank = isTextBlank();
   var L = [];
   L.push('# 漫画ページの画像生成をお願いします');
   L.push('');
@@ -1611,7 +1641,12 @@ function genImagePrompt() {
   L.push('⚠️【最重要ルール②】コマの読む順序は必ず「右上→左上→右下→左下」（日本式：右から左）にすること。左から右に読む配置は絶対禁止。シナリオの各コマに「位置」の指定がある場合は、必ずその位置に配置すること。');
   L.push('⚠️【最重要ルール③】添付した参照画像のキャラクターの外見（顔・髪型・服装・エプロン等の小物を含むすべて）を全コマで忠実に再現すること。参照画像と異なる服装・見た目は禁止。');
   L.push('⚠️【最重要ルール④】添付のキャラクターシート（四面図・全身図・表情集）は外見の参照専用。シートの内容（並んだ立ち絵など）をそのまま画像内に描かないこと。描くのはシナリオに書かれたコマだけで、コマ数はシナリオの指定と同じにし、余分なコマを追加しない。');
-  L.push('⚠️【最重要ルール⑤】吹き出し内のセリフ・モノローグ・ナレーションの文字は必ず縦書き（上から下、行は右から左）にすること。横書きは絶対禁止。吹き出しの形も縦書きに合わせて縦長にする。');
+  if (blank) {
+    L.push('⚠️【最重要ルール⑤】吹き出し・モノローグ枠・ナレーション枠の中には文字を一切描かず、空欄（純白）のままにすること。文字は後から別のアプリで縦書きで入れるので、吹き出しはシナリオのセリフが縦書きで収まる大きさ・縦長の形で描くこと。');
+  } else {
+    L.push('⚠️【最重要ルール⑤】吹き出し内のセリフ・モノローグ・ナレーションの文字は必ず縦書き（上から下、行は右から左）にすること。横書きは絶対禁止。吹き出しの形も縦書きに合わせて縦長にする。');
+    L.push('⚠️【最重要ルール⑥】セリフ・モノローグ・ナレーションは、シナリオに書かれた文字を一字一句そのまま描くこと。言い換え・省略・要約・言葉の追加は禁止。漢字・ひらがな・カタカナ・記号（！？…ー）もシナリオどおりにする。吹き出しに収まらないときは、文字を減らさずに吹き出しを大きくすること。');
+  }
   L.push('');
   L.push('以下のコマ割りシナリオをもとに、1ページの漫画を「1枚の画像」として生成してください。');
   L.push('');
@@ -1624,17 +1659,28 @@ function genImagePrompt() {
   L.push('・コマ枠は黒線・余白は白・背景色は白にする');
   L.push('⚠️ ページ番号・ノンブル（数字）は画像内に絶対に描かない。どのコマにも数字を入れないこと');
   L.push('');
-  L.push('【セリフ・文字の仕様】');
-  L.push('・文字は必ず縦書き（上から下・行は右から左）');
-  L.push('・セリフに句点（。）は使わない（漫画のルール）');
-  L.push('・吹き出し内のテキストは上端をそろえる（上揃え）');
-  L.push('・吹き出し内にセリフを入れる');
-  L.push('・フォントイメージ：Noto Sans / アンチックセザンヌ / 源英アンチック（明朝系・漫画フォント）');
-  L.push('・文字サイズ（Canva 1000×1414px基準）：');
-  L.push('　通常コマ（3〜4コマ）：26pt相当');
-  L.push('　大ゴマ（1〜2コマ）：32〜42pt相当');
-  L.push('・モノローグは角丸・薄い吹き出し、ナレーションは四角い枠で区別する');
-  L.push('・吹き出しの背景は必ず純白（#FFFFFF）にする。色をつけない・グラデーションなし・半透明禁止');
+  if (blank) {
+    L.push('【吹き出しの仕様（文字なし）】');
+    L.push('・吹き出し・モノローグ枠・ナレーション枠の中は空欄にする。文字・記号・ダミーの線は描かない');
+    L.push('・吹き出しはシナリオのセリフの数だけ描く。セリフの長さに合わせて、縦書きの文字が入る大きさ・縦長の形にする');
+    L.push('・文字の目安サイズ（1000×1414px基準）：通常コマ（3〜4コマ）26pt相当／大ゴマ（1〜2コマ）32〜42pt相当が入る余白を確保する');
+    L.push('・モノローグは角丸・薄い吹き出し、ナレーションは四角い枠で区別する');
+    L.push('・吹き出しの背景は必ず純白（#FFFFFF）にする。色をつけない・グラデーションなし・半透明禁止');
+  } else {
+    L.push('【セリフ・文字の仕様】');
+    L.push('・文字は必ず縦書き（上から下・行は右から左）');
+    L.push('・セリフ・モノローグ・ナレーションはシナリオの文字を一字一句そのまま描く（言い換え・省略・追加は禁止）');
+    L.push('・吹き出しに収まらないときは、文字を減らさず吹き出しを大きくする');
+    L.push('・セリフに句点（。）は使わない（漫画のルール）');
+    L.push('・吹き出し内のテキストは上端をそろえる（上揃え）');
+    L.push('・吹き出し内にセリフを入れる');
+    L.push('・フォントイメージ：Noto Sans / アンチックセザンヌ / 源英アンチック（明朝系・漫画フォント）');
+    L.push('・文字サイズ（Canva 1000×1414px基準）：');
+    L.push('　通常コマ（3〜4コマ）：26pt相当');
+    L.push('　大ゴマ（1〜2コマ）：32〜42pt相当');
+    L.push('・モノローグは角丸・薄い吹き出し、ナレーションは四角い枠で区別する');
+    L.push('・吹き出しの背景は必ず純白（#FFFFFF）にする。色をつけない・グラデーションなし・半透明禁止');
+  }
   L.push('');
   L.push('【コマ割りのルール】');
   L.push('・⚠️ シナリオに「コマ数」「レイアウト」の指定があるページは、必ずその指定どおりに描くこと（例：コマ数：1・大ゴマ → そのページはコマ1つだけ）。以下の一般ルールより優先する');
@@ -1662,13 +1708,19 @@ function genImagePrompt() {
   L.push('【ネガティブプロンプト】');
   L.push('lowres, bad anatomy, bad hands, extra fingers, blurry, deformed, watermark, modern objects（時代・設定に合わない現代物）');
   L.push('');
-  if(scenario) { L.push('【コマ割りシナリオ（この通りに配置・セリフを入れる）】'); L.push(scenario); L.push(''); }
+  if(scenario) {
+    L.push(blank ? '【コマ割りシナリオ（この通りに配置する。セリフは吹き出しの数と大きさの参考にし、文字は描かない）】' : '【コマ割りシナリオ（この通りに配置・セリフを一字一句そのまま入れる）】');
+    L.push(scenario); L.push('');
+  }
   else { L.push('※ STEP3で生成したコマ割りシナリオを上の欄に貼り付けてください。'); L.push(''); }
   L.push('【注意】');
   L.push('・同じキャラクターは全コマで顔・髪・服を統一する');
-  L.push('・日本語のセリフはできるだけ正確に描く');
-  L.push('・吹き出しに収まらないセリフは短く言い換えてよい');
-  L.push('・日本語文字が崩れる場合は吹き出しを空欄にして、後からCanvaで文字を入れる');
+  if (blank) {
+    L.push('・吹き出しの中は空欄のままにする（文字は後から入れる）');
+  } else {
+    L.push('・日本語のセリフは一字一句正確に描く。言い換え・省略はしない');
+    L.push('・吹き出しに収まらないときは、文字を減らさず吹き出しを大きくする');
+  }
   L.push('※キャラの四面図を参考画像として添付してください（顔ブレ防止）');
   showOut('s4out2', L.join('\n'));
 }
@@ -1677,10 +1729,19 @@ function genImagePrompt() {
 function genFixPrompt() {
   var fixes = getSelected('g-fix');
   var detail = v('p4_fix_detail') || gv('p4_fix_detail') || '';
-  if (!fixes.length && !detail) {
-    alert('修正したい項目をボタンで選ぶか、「その他・詳細」に修正内容を入力してください。');
+  var fixText = v('p4_fix_text') || gv('p4_fix_text') || '';
+  if (!fixes.length && !detail && !fixText) {
+    alert('修正したい項目をボタンで選ぶか、「文字の直し」「その他・詳細」に修正内容を入力してください。');
     return;
   }
+  var typoBtn = '吹き出しの文字に誤字・脱字がある';
+  var hasTypo = fixes.indexOf(typoBtn) > -1;
+  if (hasTypo && !fixText) {
+    alert('「文字の直し」の欄に、直したい吹き出しと正しい文字を書いてください。\n例：2コマ目の吹き出しの文字を『おっかさん、ただいま』に直す');
+    return;
+  }
+  fixes = fixes.filter(function(f) { return f !== typoBtn; });
+  var textOnly = fixText && !fixes.length && !detail;
   var art = getArtStyle();
   var fixSize = v('p4_fix_size') || gv('p4_fix_size') || '';
   var L = [];
@@ -1692,14 +1753,25 @@ function genFixPrompt() {
     L.push('⚠️【最重要ルール】画像サイズは必ず ' + getSize() + ' のまま出力すること。縦横比1:1.414を変更しない。トリミング・拡大縮小・余白の追加も禁止。指定どおりのピクセル数で出力できない画像AIの場合も、縦横比1:1.414だけは必ず守ること。');
   }
   L.push('');
-  L.push('直前に生成した画像を以下の点で修正してください。');
+  L.push(textOnly ? '直前に生成した画像の、吹き出しの文字だけを修正してください。' : '直前に生成した画像を以下の点で修正してください。');
   L.push('');
-  if(fixes.length) { L.push('【修正内容】'); fixes.forEach(function(f) { L.push('・' + f); }); }
-  if(detail) L.push('・' + detail);
-  L.push('');
+  if (fixText) {
+    L.push('【文字の修正（誤字・脱字）】');
+    fixText.split('\n').forEach(function(line) { line = line.trim(); if (line) L.push('・' + line); });
+    L.push('・『』の中の文字を一字一句そのまま描く（言い換え・省略・追加は禁止）。縦書き（上から下・行は右から左）のまま');
+    L.push('・指定した吹き出しの文字以外は変えない。絵・キャラ・背景・コマ割り・ほかの吹き出しの文字・吹き出しの位置と形はそのまま');
+    L.push('・文字が収まらないときは、文字を減らさず、その吹き出しだけを少し大きくする');
+    L.push('');
+  }
+  if(fixes.length || detail) {
+    L.push('【修正内容】');
+    fixes.forEach(function(f) { L.push('・' + f); });
+    if(detail) L.push('・' + detail);
+    L.push('');
+  }
   if(art) { L.push('【画風・スタイルは変えないでください】'); L.push(art); L.push(''); }
-  var ct = getCharaText(); if(ct) { L.push(ct); L.push(''); }
-  L.push('それ以外の部分（コマ割り・構図・他のキャラ）は変えないでください。');
+  var ct = getCharaText(); if(ct && !textOnly) { L.push(ct); L.push(''); }
+  L.push(textOnly ? '文字以外の部分（絵・キャラ・背景・コマ割り・構図）は一切変えないでください。' : 'それ以外の部分（コマ割り・構図・他のキャラ）は変えないでください。');
   L.push('画像サイズは、上の最重要ルールのとおりに必ず守ってください。');
   showOut('s4out3', L.join('\n'));
 }
