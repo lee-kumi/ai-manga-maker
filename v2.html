@@ -77,8 +77,6 @@ textarea{resize:vertical;min-height:72px;}
 .copy-btn{position:absolute;top:10px;right:10px;background:var(--primary);color:white;border:none;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;z-index:1;}
 .copy-btn:hover{background:#5954D6;}
 .copy-btn.ok{background:var(--accent);}
-.prompt-box.flash{animation:flash 1.2s ease-out;}
-@keyframes flash{0%{box-shadow:0 0 0 4px var(--accent);}100%{box-shadow:0 0 0 4px transparent;}}
 
 /* Buttons */
 .gen-btn{display:inline-flex;align-items:center;gap:7px;background:var(--primary);color:white;border:none;padding:10px 22px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-top:14px;}
@@ -603,11 +601,7 @@ textarea{resize:vertical;min-height:72px;}
     <p style="font-size:15px;color:var(--muted);margin-bottom:14px;">コマ割りシナリオをもとに、1ページずつ画像生成プロンプトを作るためのプロンプトです。</p>
     <div class="fg">
       <label>コマ割りシナリオ（STEP3で生成した内容を貼り付けてください）</label>
-      <textarea id="p4_scenario" placeholder="AIが生成したコマ割りシナリオをここに貼り付けてください" style="min-height:220px;" oninput="autoSave()" onpaste="pasteScenario(event)"></textarea>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap;">
-        <button type="button" class="tog" onclick="clearScenario()">🗑️ 欄を空にする</button>
-        <span style="font-size:13px;color:var(--muted);">次のページに進むときは、前のシナリオを消してから貼り付けてください（前の内容が残ると、プロンプトに混ざります）。</span>
-      </div>
+      <textarea id="p4_scenario" placeholder="AIが生成したコマ割りシナリオをここに貼り付けてください" style="min-height:120px;" oninput="autoSave()"></textarea>
     </div>
     <div class="fg">
       <label>吹き出しの文字（セリフ）をどうしますか？</label>
@@ -618,7 +612,6 @@ textarea{resize:vertical;min-height:72px;}
       <p style="font-size:13px;color:var(--muted);margin:4px 0 0;">「文字を入れる」では、セリフを一字一句そのまま描くよう指示します。誤字・脱字が出たら、下の「③ 修正プロンプト」で文字だけ直せます。文字の多いページや、自分で文字を入れたいページは「空欄」を選んでください。</p>
     </div>
     <button class="gen-btn" onclick="genImagePrompt()">🖼️ 画像生成プロンプトを生成</button>
-    <div id="s4warn" style="display:none;margin-top:10px;padding:12px 14px;border:2px solid #E53935;border-radius:8px;background:#FFF5F5;color:#B71C1C;font-size:14px;line-height:1.7;"></div>
     <div id="s4out2" style="display:none;">
       <div class="prompt-box">
         <button class="copy-btn" onclick="copyEl('s4text2',this)">コピー</button>
@@ -1259,16 +1252,8 @@ function copyDoc(id, label, btn) {
 }
 function showOut(id, text) {
   var box = document.getElementById(id);
-  var again = box.style.display === 'block';
   box.style.display = 'block';
   box.querySelector('pre').textContent = text;
-  // 出力は毎回同じルール文から始まるので、押したことが見て分かるように光らせて移動する
-  var pb = box.querySelector('.prompt-box');
-  if (pb) { pb.classList.remove('flash'); void pb.offsetWidth; pb.classList.add('flash'); }
-  var head = document.querySelector('.header');
-  var top = box.getBoundingClientRect().top + window.scrollY - (head ? head.offsetHeight : 0) - 12;
-  window.scrollTo({ top: top, behavior: 'smooth' });
-  showToast(again ? '✅ プロンプトを作り直しました' : '✅ プロンプトができました');
 }
 
 // ===== PROMPT BUILDERS =====
@@ -1645,35 +1630,8 @@ function genCharaSheet() {
 }
 
 // STEP4: 画像生成プロンプト
-// STEP4: シナリオ欄 — 前のページの内容が残ったまま貼り付けて混ざるのを防ぐ
-var PROMPT_MARK = '# 漫画ページの画像生成をお願いします';
-function clearScenario() {
-  var el = document.getElementById('p4_scenario');
-  el.value = '';
-  autoSave();
-  el.focus();
-}
-function pasteScenario(e) {
-  var el = e.target;
-  var whole = el.selectionStart === 0 && el.selectionEnd === el.value.length;
-  if (!el.value.trim() || whole) return;
-  if (confirm('欄に前の内容が残っています。\n前の内容を消して、貼り付けた内容に置きかえますか？\n\n「OK」＝置きかえる（おすすめ）\n「キャンセル」＝前の内容の後ろに追加する')) {
-    el.value = '';
-  }
-}
-
 function genImagePrompt() {
-  var scenario = v('p4_scenario');
-  var warn = document.getElementById('s4warn');
-  // ポップアップはブラウザで止められていると見えないので、ボタンの下に出す
-  if (scenario.indexOf(PROMPT_MARK) > -1 || scenario.indexOf('【最重要ルール') > -1) {
-    warn.innerHTML = '⚠️ <b>プロンプトを作れませんでした。</b><br>上のシナリオ欄に、このアプリで作った「画像生成プロンプト」が入っています。このままだと前の内容が混ざります。<br>「🗑️ 欄を空にする」を押してから、STEP3で作ったコマ割りシナリオ（1ページ分）だけを貼り付けて、もう一度押してください。';
-    warn.style.display = 'block';
-    document.getElementById('s4out2').style.display = 'none';
-    warn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
-  warn.style.display = 'none';
+  var scenario = v('p4_scenario') || gv('p4_scenario') || '';
   var art = getArtStyle();
   var blank = isTextBlank();
   var L = [];
